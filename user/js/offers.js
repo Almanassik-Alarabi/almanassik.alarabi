@@ -14,7 +14,7 @@ async function fetchAndDisplayOffers(filteredOffers = null) {
     try {
         let offers = filteredOffers;
         if (!offers) {
-            const response = await fetch('http://192.168.100.23:3001/api/user/offers');
+            const response = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/user/offers');
             let apiResult = await response.json();
             // دعم الاستجابة كمصفوفة أو كائن فيه data
             offers = Array.isArray(apiResult) ? apiResult : apiResult.data || [];

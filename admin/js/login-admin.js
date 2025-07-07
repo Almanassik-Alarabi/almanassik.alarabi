@@ -14,7 +14,7 @@ loginForm.addEventListener('submit', async function (e) {
   const password = document.getElementById('password').value;
 
   try {
-    const response = await fetch('http://192.168.100.23:3001/api/admin/login-admin', {
+    const response = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/admin/login-admin', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

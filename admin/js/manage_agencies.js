@@ -28,7 +28,7 @@ function previewImage(input, imgId) {
 async function fetchAgencies() {
   try {
     const token = getAuthToken();
-    const response = await fetch('http://192.168.100.23:3001/api/agencies/all', {
+    const response = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/agencies/all', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -42,7 +42,7 @@ async function fetchAgencies() {
     agencies = [];
     renderAgencies();
     // إضافة رسالة توضيحية للمشكلة
-    showErrorMessage('تعذر الاتصال بالخادم. تأكد أن السيرفر يعمل على http://192.168.100.23:3001 وأن إعدادات CORS صحيحة.');
+    showErrorMessage('تعذر الاتصال بالخادم. تأكد أن السيرفر يعمل على https://almanassik-alarabis-v0-4.onrender.com وأن إعدادات CORS صحيحة.');
   }
 }
 
@@ -163,7 +163,7 @@ async function submitAddAgency(event) {
   try {
       let response;
       if (editId) {
-        response = await fetch(`http://192.168.100.23:3001/api/agencies/update/${editId}`, {
+        response = await fetch(`https://almanassik-alarabis-v0-4.onrender.com/api/agencies/update/${editId}`, {
           method: "PUT",
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -172,7 +172,7 @@ async function submitAddAgency(event) {
           body: JSON.stringify(agencyData)
         });
       } else {
-        response = await fetch('http://192.168.100.23:3001/api/agencies/add', {
+        response = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/agencies/add', {
           method: "POST",
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -321,7 +321,7 @@ async function deleteAgency(id) {
   if (!confirm("هل أنت متأكد أنك تريد حذف هذه الوكالة وجميع عروضها؟")) return;
   try {
     const token = getAuthToken();
-    const response = await fetch(`http://192.168.100.23:3001/api/agencies/remove/${id}`, {
+    const response = await fetch(`https://almanassik-alarabis-v0-4.onrender.com/api/agencies/remove/${id}`, {
       method: "DELETE",
       headers: {
         'Authorization': `Bearer ${token}`,

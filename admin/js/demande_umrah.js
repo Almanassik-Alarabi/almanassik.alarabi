@@ -77,7 +77,7 @@ async function loadAgenciesForSelect() {
     'Authorization': 'Bearer ' + token.trim()
   };
   try {
-    const response = await fetch('http://192.168.100.23:3001/api/agencies/all', {
+    const response = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/agencies/all', {
       headers
     });
     if (response.status === 401) {
@@ -123,7 +123,7 @@ async function loadOffersForAgency(agencyId) {
     'Authorization': 'Bearer ' + token.trim()
   };
   try {
-    const response = await fetch('http://192.168.100.23:3001/api/offers/all', {
+    const response = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/offers/all', {
       headers
     });
     if (response.status === 401) {
@@ -206,7 +206,7 @@ async function handleAddBookingFormSubmit(e) {
     return;
   }
   try {
-    const response = await fetch('http://192.168.100.23:3001/api/bookings/add', {
+    const response = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/bookings/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -239,7 +239,7 @@ async function uploadPassportImage(file) {
   const formData = new FormData();
   formData.append('passport', file);
   try {
-    const response = await fetch('http://192.168.100.23:3001/api/bookings/upload/passport', {
+    const response = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/bookings/upload/passport', {
       method: 'POST',
       body: formData
     });
@@ -267,7 +267,7 @@ async function getOrdersData() {
     return [];
   }
   try {
-    const response = await fetch('http://192.168.100.23:3001/api/bookings/all', {
+    const response = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/bookings/all', {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token.trim()
@@ -400,7 +400,7 @@ function addOrderActions() {
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
         try {
           const token = localStorage.getItem('umrah_admin_token');
-          const response = await fetch(`http://192.168.100.23:3001/api/bookings/approve-by-admin/${bookingId}`, {
+          const response = await fetch(`https://almanassik-alarabis-v0-4.onrender.com/api/bookings/approve-by-admin/${bookingId}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -434,7 +434,7 @@ function addOrderActions() {
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
       try {
         const token = localStorage.getItem('umrah_admin_token');
-        const response = await fetch(`http://192.168.100.23:3001/api/bookings/reject/${bookingId}`, {
+        const response = await fetch(`https://almanassik-alarabis-v0-4.onrender.com/api/bookings/reject/${bookingId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

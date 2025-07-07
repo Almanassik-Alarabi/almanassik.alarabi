@@ -3,7 +3,7 @@ async function fetchAndDisplayGoldenOffers() {
     const offersContainer = document.querySelector('.offers-container');
     offersContainer.innerHTML = '<div style="grid-column: 1/-1; text-align:center;">جاري التحميل...</div>';
     try {
-        const response = await fetch('http://192.168.100.23:3001/api/user/offers/golden');
+        const response = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/user/offers/golden');
         const offers = await response.json();
         if (!Array.isArray(offers) || offers.length === 0) {
             offersContainer.innerHTML = '<div style="grid-column: 1/-1; text-align:center;">لا توجد عروض ذهبية حالياً</div>';

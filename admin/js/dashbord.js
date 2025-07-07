@@ -29,7 +29,7 @@ async function fetchDashboardData() {
 
 
   // جلب عدد المدراء (main + sub فقط)
-  const adminsPromise = fetch('http://192.168.100.23:3001/api/admin/all', { headers })
+  const adminsPromise = fetch('https://almanassik-alarabis-v0-4.onrender.com/api/admin/all', { headers })
     .then(r => r.json())
     .then(d => {
       if (Array.isArray(d.admins)) {
@@ -39,7 +39,7 @@ async function fetchDashboardData() {
     });
 
   // جلب عدد المدراء النشطين الآن (main + sub فقط)
-  const activeAdminsPromise = fetch('http://192.168.100.23:3001/api/admin/active-now', { headers })
+  const activeAdminsPromise = fetch('https://almanassik-alarabis-v0-4.onrender.com/api/admin/active-now', { headers })
     .then(r => r.json())
     .then(d => {
       stats.activeAdminsNow = d.count || 0;
@@ -48,24 +48,24 @@ async function fetchDashboardData() {
 
   // بقية البيانات
   const promises = [
-    fetch('http://192.168.100.23:3001/api/stats/total-agencies', { headers }).then(r => r.json()).then(d => { stats.totalAgencies = d.total || 0; updateStatsUI(); }),
-    fetch('http://192.168.100.23:3001/api/stats/total-pilgrims', { headers }).then(r => r.json()).then(d => { stats.totalPilgrims = d.total || 0; updateStatsUI(); }),
-    fetch('http://192.168.100.23:3001/api/stats/total-offers', { headers }).then(r => r.json()).then(d => { stats.totalOffers = d.total || 0; updateStatsUI(); }),
-    fetch('http://192.168.100.23:3001/api/stats/pending-requests', { headers }).then(r => r.json()).then(d => { stats.pendingRequests = d.total || 0; updateStatsUI(); }),
-    fetch('http://192.168.100.23:3001/api/stats/pending-agencies', { headers }).then(r => r.json()).then(d => { pendingAgencies = d.agencies || []; stats.pendingAgenciesCount = pendingAgencies.length; updateStatsUI(); }),
-    fetch('http://192.168.100.23:3001/api/stats/monthly-bookings', { headers }).then(r => r.json()).then(d => { months = d.months || []; monthlyBookings = d.counts || []; }),
-    fetch('http://192.168.100.23:3001/api/stats/agencies-by-wilaya', { headers }).then(r => r.json()).then(d => { agencyLabels = d.labels || []; agencyCounts = d.counts || []; }),
-    fetch('http://192.168.100.23:3001/api/stats/admin-activity', { headers }).then(r => r.json()).then(d => { adminActivityLogs = d.logs || []; stats.adminActivityCount = adminActivityLogs.length; updateStatsUI(); }),
-    fetch('http://192.168.100.23:3001/api/stats/total-approved-agencies', { headers }).then(r => r.json()).then(d => { stats.totalApprovedAgencies = d.total || 0; updateStatsUI(); }),
-    fetch('http://192.168.100.23:3001/api/stats/total-rejected-agencies', { headers }).then(r => r.json()).then(d => { stats.totalRejectedAgencies = d.total || 0; updateStatsUI(); }),
-    fetch('http://192.168.100.23:3001/api/stats/total-bookings', { headers }).then(r => r.json()).then(d => { stats.totalBookings = d.total || 0; updateStatsUI(); }),
-    fetch('http://192.168.100.23:3001/api/stats/total-accepted-bookings', { headers }).then(r => r.json()).then(d => { stats.totalAcceptedBookings = d.total || 0; updateStatsUI(); }),
-    fetch('http://192.168.100.23:3001/api/stats/total-rejected-bookings', { headers }).then(r => r.json()).then(d => { stats.totalRejectedBookings = d.total || 0; updateStatsUI(); }),
-    fetch('http://192.168.100.23:3001/api/stats/top-agencies-by-offers', { headers }).then(r => r.json()).then(d => { topAgenciesLabels = d.labels || []; topAgenciesCounts = d.counts || []; }),
-    fetch('http://192.168.100.23:3001/api/stats/top-requested-offers', { headers }).then(r => r.json()).then(d => { topOffersLabels = d.labels || []; topOffersCounts = d.counts || []; }),
-    fetch('http://192.168.100.23:3001/api/stats/total-users', { headers }).then(r => r.json()).then(d => { stats.totalUsers = d.total || 0; updateStatsUI(); }),
-    fetch('http://192.168.100.23:3001/api/stats/top-agency-by-offers-per-year', { headers }).then(r => r.json()).then(d => { topAgencyYears = d.years || []; topAgencyNames = d.topAgencies || []; topAgencyCounts = d.topCounts || []; }),
-    fetch('http://192.168.100.23:3001/api/site-stats/monthly', { headers }).then(r => r.json()).then(d => { siteVisitsMonths = d.months || []; siteVisitsCounts = d.counts || []; }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/total-agencies', { headers }).then(r => r.json()).then(d => { stats.totalAgencies = d.total || 0; updateStatsUI(); }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/total-pilgrims', { headers }).then(r => r.json()).then(d => { stats.totalPilgrims = d.total || 0; updateStatsUI(); }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/total-offers', { headers }).then(r => r.json()).then(d => { stats.totalOffers = d.total || 0; updateStatsUI(); }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/pending-requests', { headers }).then(r => r.json()).then(d => { stats.pendingRequests = d.total || 0; updateStatsUI(); }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/pending-agencies', { headers }).then(r => r.json()).then(d => { pendingAgencies = d.agencies || []; stats.pendingAgenciesCount = pendingAgencies.length; updateStatsUI(); }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/monthly-bookings', { headers }).then(r => r.json()).then(d => { months = d.months || []; monthlyBookings = d.counts || []; }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/agencies-by-wilaya', { headers }).then(r => r.json()).then(d => { agencyLabels = d.labels || []; agencyCounts = d.counts || []; }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/admin-activity', { headers }).then(r => r.json()).then(d => { adminActivityLogs = d.logs || []; stats.adminActivityCount = adminActivityLogs.length; updateStatsUI(); }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/total-approved-agencies', { headers }).then(r => r.json()).then(d => { stats.totalApprovedAgencies = d.total || 0; updateStatsUI(); }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/total-rejected-agencies', { headers }).then(r => r.json()).then(d => { stats.totalRejectedAgencies = d.total || 0; updateStatsUI(); }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/total-bookings', { headers }).then(r => r.json()).then(d => { stats.totalBookings = d.total || 0; updateStatsUI(); }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/total-accepted-bookings', { headers }).then(r => r.json()).then(d => { stats.totalAcceptedBookings = d.total || 0; updateStatsUI(); }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/total-rejected-bookings', { headers }).then(r => r.json()).then(d => { stats.totalRejectedBookings = d.total || 0; updateStatsUI(); }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/top-agencies-by-offers', { headers }).then(r => r.json()).then(d => { topAgenciesLabels = d.labels || []; topAgenciesCounts = d.counts || []; }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/top-requested-offers', { headers }).then(r => r.json()).then(d => { topOffersLabels = d.labels || []; topOffersCounts = d.counts || []; }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/total-users', { headers }).then(r => r.json()).then(d => { stats.totalUsers = d.total || 0; updateStatsUI(); }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/top-agency-by-offers-per-year', { headers }).then(r => r.json()).then(d => { topAgencyYears = d.years || []; topAgencyNames = d.topAgencies || []; topAgencyCounts = d.topCounts || []; }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/site-stats/monthly', { headers }).then(r => r.json()).then(d => { siteVisitsMonths = d.months || []; siteVisitsCounts = d.counts || []; }),
   ];
 
   await Promise.allSettled([adminsPromise, activeAdminsPromise, ...promises]);
@@ -106,7 +106,7 @@ async function fetchDashboardData() {
 
 
   // جلب عدد المدراء (main + sub فقط)
-  const adminsPromise = fetch('http://192.168.100.23:3001/api/admin/all', { headers })
+  const adminsPromise = fetch('https://almanassik-alarabis-v0-4.onrender.com/api/admin/all', { headers })
     .then(r => r.json())
     .then(d => {
       if (Array.isArray(d.admins)) {
@@ -116,7 +116,7 @@ async function fetchDashboardData() {
     });
 
   // جلب عدد المدراء النشطين الآن (main + sub فقط)
-  const activeAdminsPromise = fetch('http://192.168.100.23:3001/api/admin/active-now', { headers })
+  const activeAdminsPromise = fetch('https://almanassik-alarabis-v0-4.onrender.com/api/admin/active-now', { headers })
     .then(r => r.json())
     .then(d => {
       stats.activeAdminsNow = d.count || 0;
@@ -125,24 +125,24 @@ async function fetchDashboardData() {
 
   // بقية البيانات
   const promises = [
-    fetch('http://192.168.100.23:3001/api/stats/total-agencies', { headers }).then(r => r.json()).then(d => { stats.totalAgencies = d.total || 0; updateStatsUI(); }),
-    fetch('http://192.168.100.23:3001/api/stats/total-pilgrims', { headers }).then(r => r.json()).then(d => { stats.totalPilgrims = d.total || 0; updateStatsUI(); }),
-    fetch('http://192.168.100.23:3001/api/stats/total-offers', { headers }).then(r => r.json()).then(d => { stats.totalOffers = d.total || 0; updateStatsUI(); }),
-    fetch('http://192.168.100.23:3001/api/stats/pending-requests', { headers }).then(r => r.json()).then(d => { stats.pendingRequests = d.total || 0; updateStatsUI(); }),
-    fetch('http://192.168.100.23:3001/api/stats/pending-agencies', { headers }).then(r => r.json()).then(d => { pendingAgencies = d.agencies || []; stats.pendingAgenciesCount = pendingAgencies.length; updateStatsUI(); }),
-    fetch('http://192.168.100.23:3001/api/stats/monthly-bookings', { headers }).then(r => r.json()).then(d => { months = d.months || []; monthlyBookings = d.counts || []; }),
-    fetch('http://192.168.100.23:3001/api/stats/agencies-by-wilaya', { headers }).then(r => r.json()).then(d => { agencyLabels = d.labels || []; agencyCounts = d.counts || []; }),
-    fetch('http://192.168.100.23:3001/api/stats/admin-activity', { headers }).then(r => r.json()).then(d => { adminActivityLogs = d.logs || []; stats.adminActivityCount = adminActivityLogs.length; updateStatsUI(); }),
-    fetch('http://192.168.100.23:3001/api/stats/total-approved-agencies', { headers }).then(r => r.json()).then(d => { stats.totalApprovedAgencies = d.total || 0; updateStatsUI(); }),
-    fetch('http://192.168.100.23:3001/api/stats/total-rejected-agencies', { headers }).then(r => r.json()).then(d => { stats.totalRejectedAgencies = d.total || 0; updateStatsUI(); }),
-    fetch('http://192.168.100.23:3001/api/stats/total-bookings', { headers }).then(r => r.json()).then(d => { stats.totalBookings = d.total || 0; updateStatsUI(); }),
-    fetch('http://192.168.100.23:3001/api/stats/total-accepted-bookings', { headers }).then(r => r.json()).then(d => { stats.totalAcceptedBookings = d.total || 0; updateStatsUI(); }),
-    fetch('http://192.168.100.23:3001/api/stats/total-rejected-bookings', { headers }).then(r => r.json()).then(d => { stats.totalRejectedBookings = d.total || 0; updateStatsUI(); }),
-    fetch('http://192.168.100.23:3001/api/stats/top-agencies-by-offers', { headers }).then(r => r.json()).then(d => { topAgenciesLabels = d.labels || []; topAgenciesCounts = d.counts || []; }),
-    fetch('http://192.168.100.23:3001/api/stats/top-requested-offers', { headers }).then(r => r.json()).then(d => { topOffersLabels = d.labels || []; topOffersCounts = d.counts || []; }),
-    fetch('http://192.168.100.23:3001/api/stats/total-users', { headers }).then(r => r.json()).then(d => { stats.totalUsers = d.total || 0; updateStatsUI(); }),
-    fetch('http://192.168.100.23:3001/api/stats/top-agency-by-offers-per-year', { headers }).then(r => r.json()).then(d => { topAgencyYears = d.years || []; topAgencyNames = d.topAgencies || []; topAgencyCounts = d.topCounts || []; }),
-    fetch('http://192.168.100.23:3001/api/site-stats/monthly', { headers }).then(r => r.json()).then(d => { siteVisitsMonths = d.months || []; siteVisitsCounts = d.counts || []; }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/total-agencies', { headers }).then(r => r.json()).then(d => { stats.totalAgencies = d.total || 0; updateStatsUI(); }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/total-pilgrims', { headers }).then(r => r.json()).then(d => { stats.totalPilgrims = d.total || 0; updateStatsUI(); }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/total-offers', { headers }).then(r => r.json()).then(d => { stats.totalOffers = d.total || 0; updateStatsUI(); }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/pending-requests', { headers }).then(r => r.json()).then(d => { stats.pendingRequests = d.total || 0; updateStatsUI(); }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/pending-agencies', { headers }).then(r => r.json()).then(d => { pendingAgencies = d.agencies || []; stats.pendingAgenciesCount = pendingAgencies.length; updateStatsUI(); }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/monthly-bookings', { headers }).then(r => r.json()).then(d => { months = d.months || []; monthlyBookings = d.counts || []; }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/agencies-by-wilaya', { headers }).then(r => r.json()).then(d => { agencyLabels = d.labels || []; agencyCounts = d.counts || []; }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/admin-activity', { headers }).then(r => r.json()).then(d => { adminActivityLogs = d.logs || []; stats.adminActivityCount = adminActivityLogs.length; updateStatsUI(); }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/total-approved-agencies', { headers }).then(r => r.json()).then(d => { stats.totalApprovedAgencies = d.total || 0; updateStatsUI(); }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/total-rejected-agencies', { headers }).then(r => r.json()).then(d => { stats.totalRejectedAgencies = d.total || 0; updateStatsUI(); }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/total-bookings', { headers }).then(r => r.json()).then(d => { stats.totalBookings = d.total || 0; updateStatsUI(); }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/total-accepted-bookings', { headers }).then(r => r.json()).then(d => { stats.totalAcceptedBookings = d.total || 0; updateStatsUI(); }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/total-rejected-bookings', { headers }).then(r => r.json()).then(d => { stats.totalRejectedBookings = d.total || 0; updateStatsUI(); }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/top-agencies-by-offers', { headers }).then(r => r.json()).then(d => { topAgenciesLabels = d.labels || []; topAgenciesCounts = d.counts || []; }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/top-requested-offers', { headers }).then(r => r.json()).then(d => { topOffersLabels = d.labels || []; topOffersCounts = d.counts || []; }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/total-users', { headers }).then(r => r.json()).then(d => { stats.totalUsers = d.total || 0; updateStatsUI(); }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/stats/top-agency-by-offers-per-year', { headers }).then(r => r.json()).then(d => { topAgencyYears = d.years || []; topAgencyNames = d.topAgencies || []; topAgencyCounts = d.topCounts || []; }),
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/site-stats/monthly', { headers }).then(r => r.json()).then(d => { siteVisitsMonths = d.months || []; siteVisitsCounts = d.counts || []; }),
   ];
 
   await Promise.allSettled([adminsPromise, activeAdminsPromise, ...promises]);
@@ -175,7 +175,7 @@ async function fetchDashboardData() {
 }
 
 // عند كل زيارة للوحة التحكم (dashboard.html) يتم زيادة عداد زيارات الشهر الحالي
-fetch('http://192.168.100.23:3001/api/site-stats/visit', { method: 'POST' });
+fetch('https://almanassik-alarabis-v0-4.onrender.com/api/site-stats/visit', { method: 'POST' });
 
 // تعبئة الإحصائيات
 function renderStats(stats) {
@@ -632,7 +632,7 @@ function startAdminActivityHeartbeat() {
   const token = localStorage.getItem('umrah_admin_token');
   if (!token) return;
   function updateActivity(isActive) {
-    fetch('http://192.168.100.23:3001/api/admin/update-activity-status', {
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/admin/update-activity-status', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -657,7 +657,7 @@ async function sendHeartbeatAndLoadDashboard() {
   const token = localStorage.getItem('umrah_admin_token');
   if (token) {
     try {
-      await fetch('http://192.168.100.23:3001/api/admin/update-activity-status', {
+      await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/admin/update-activity-status', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -765,7 +765,7 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 // عند كل زيارة للوحة التحكم (dashboard.html) يتم زيادة عداد زيارات الشهر الحالي
-fetch('http://192.168.100.23:3001/api/site-stats/visit', { method: 'POST' });
+fetch('https://almanassik-alarabis-v0-4.onrender.com/api/site-stats/visit', { method: 'POST' });
 
 // تعبئة الإحصائيات
 function renderStats(stats) {
@@ -1222,7 +1222,7 @@ function startAdminActivityHeartbeat() {
   const token = localStorage.getItem('umrah_admin_token');
   if (!token) return;
   function updateActivity(isActive) {
-    fetch('http://192.168.100.23:3001/api/admin/update-activity-status', {
+    fetch('https://almanassik-alarabis-v0-4.onrender.com/api/admin/update-activity-status', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1247,7 +1247,7 @@ async function sendHeartbeatAndLoadDashboard() {
   const token = localStorage.getItem('umrah_admin_token');
   if (token) {
     try {
-      await fetch('http://192.168.100.23:3001/api/admin/update-activity-status', {
+      await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/admin/update-activity-status', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

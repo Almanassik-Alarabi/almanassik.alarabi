@@ -25,7 +25,7 @@ async function apiRequest(url, method = "GET", data = null) {
 // إضافة عرض جديد (يدعم رفع ملفات)
 async function addOffer(offerOrFormData) {
   return apiRequest(
-    "http://192.168.100.23:3001/api/offers/add",
+    "https://almanassik-alarabis-v0-4.onrender.com/api/offers/add",
     "POST",
     offerOrFormData
   );
@@ -33,13 +33,13 @@ async function addOffer(offerOrFormData) {
 
 // جلب جميع العروض
 async function getAllOffers() {
-  return apiRequest("http://192.168.100.23:3001/api/offers/all");
+  return apiRequest("https://almanassik-alarabis-v0-4.onrender.com/api/offers/all");
 }
 
 // تعديل عرض (يدعم رفع ملفات)
 async function updateOffer(id, updatedFieldsOrFormData) {
   return apiRequest(
-    `http://192.168.100.23:3001/api/offers/update/${id}`,
+    `https://almanassik-alarabis-v0-4.onrender.com/api/offers/update/${id}`,
     "PUT",
     updatedFieldsOrFormData
   );
@@ -48,7 +48,7 @@ async function updateOffer(id, updatedFieldsOrFormData) {
 // حذف عرض مع إرسال التوكن
 async function deleteOffer(id) {
   const token = localStorage.getItem("umrah_admin_token");
-  const url = `http://192.168.100.23:3001/api/offers/delete/${id}`;
+  const url = `https://almanassik-alarabis-v0-4.onrender.com/api/offers/delete/${id}`;
   const options = {
     method: "DELETE",
     headers: {
@@ -231,7 +231,7 @@ async function loadAndRenderOffers() {
   try {
     const lang = localStorage.getItem("umrah_admin_lang") || "ar";
     const token = localStorage.getItem("umrah_admin_token");
-    let url = "http://192.168.100.23:3001/api/offers/all?lang=" + lang;
+    let url = "https://almanassik-alarabis-v0-4.onrender.com/api/offers/all?lang=" + lang;
     const response = await fetch(url, {
       headers: {
         Authorization: token ? "Bearer " + token : "",
@@ -465,7 +465,7 @@ async function showOfferDetailsById(offerId) {
     const token = localStorage.getItem("umrah_admin_token");
     // جلب العروض
     const offersRes = await fetch(
-      `http://192.168.100.23:3001/api/offers/all?lang=${lang}`,
+      `https://almanassik-alarabis-v0-4.onrender.com/api/offers/all?lang=${lang}`,
       {
         headers: {
           Authorization: token ? "Bearer " + token : "",
@@ -481,7 +481,7 @@ async function showOfferDetailsById(offerId) {
     let agencyName = "";
     let agencyEmail = "";
     if (offer.agency_id) {
-      const agenciesRes = await fetch('http://192.168.100.23:3001/api/agencies/all', {
+      const agenciesRes = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/agencies/all', {
         headers: {
           Authorization: token ? "Bearer " + token : "",
           "Content-Type": "application/json",
@@ -721,7 +721,7 @@ async function populateAgenciesSelect() {
       select.innerHTML = '<option value="">يجب تسجيل الدخول أولاً</option>';
       return;
     }
-    const res = await fetch('http://192.168.100.23:3001/api/agencies/all', {
+    const res = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/agencies/all', {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + token,
@@ -757,7 +757,7 @@ async function populateAirlinesSelect() {
   select.innerHTML = '<option value="">جاري التحميل...</option>';
   try {
     const token = localStorage.getItem('umrah_admin_token');
-    const res = await fetch('http://192.168.100.23:3001/api/airlines/all', {
+    const res = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/airlines/all', {
       method: 'GET',
       headers: {
         'Authorization': token ? 'Bearer ' + token : '',
@@ -868,7 +868,7 @@ if (addOfferForm) {
       }
 
       // إرسال البيانات كـ JSON
-      const response = await fetch("http://192.168.100.23:3001/api/offers/add", {
+      const response = await fetch("https://almanassik-alarabis-v0-4.onrender.com/api/offers/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -937,7 +937,7 @@ if (exportBtn) {
   exportBtn.onclick = async function () {
     const lang = localStorage.getItem("umrah_admin_lang") || "ar";
     const token = localStorage.getItem("umrah_admin_token");
-    let url = "http://192.168.100.23:3001/api/offers/all?lang=" + lang;
+    let url = "https://almanassik-alarabis-v0-4.onrender.com/api/offers/all?lang=" + lang;
     try {
       const response = await fetch(url, {
         headers: {

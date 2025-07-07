@@ -120,7 +120,7 @@ if (statusFilterInput) {
 // === Load All Agencies ===
 async function loadAllAgencies() {
   try {
-    const response = await fetch('http://192.168.100.23:3001/api/agencies/all');
+    const response = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/agencies/all');
     if (!response.ok) return [];
     return await response.json();
   } catch (err) {
@@ -139,7 +139,7 @@ async function loadAgencyRequests(filter = "") {
     const headers = token
       ? { "Content-Type": "application/json", "Authorization": "Bearer " + token }
       : { "Content-Type": "application/json" };
-    const response = await fetch('http://192.168.100.23:3001/api/agencies/pending', { headers });
+    const response = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/agencies/pending', { headers });
     if (!response.ok) {
       table.innerHTML = "<tr><td colspan='7' style='color:red;'>فشل تحميل البيانات</td></tr>";
       return;
@@ -184,7 +184,7 @@ async function approveAgency(id, isApproved) {
   if (isApproved) {
     if (!confirm("هل أنت متأكد من قبول هذا الطلب؟")) return;
     try {
-      const response = await fetch(`http://192.168.100.23:3001/api/agencies/status/${id}`, {
+      const response = await fetch(`https://almanassik-alarabis-v0-4.onrender.com/api/agencies/status/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -205,7 +205,7 @@ async function approveAgency(id, isApproved) {
   } else {
     if (!confirm("هل أنت متأكد من رفض (وحذف) هذا الطلب؟ سيتم حذف الوكالة نهائياً!")) return;
     try {
-      const response = await fetch(`http://192.168.100.23:3001/api/agencies/${id}`, {
+      const response = await fetch(`https://almanassik-alarabis-v0-4.onrender.com/api/agencies/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -232,7 +232,7 @@ async function showAgencyDetails(id) {
     const headers = token
       ? { "Content-Type": "application/json", "Authorization": "Bearer " + token }
       : { "Content-Type": "application/json" };
-    const response = await fetch(`http://192.168.100.23:3001/api/agencies/all`, { headers });
+    const response = await fetch(`https://almanassik-alarabis-v0-4.onrender.com/api/agencies/all`, { headers });
     if (!response.ok) return alert("فشل تحميل بيانات الوكالة");
     const agencies = await response.json();
     const agency = Array.isArray(agencies) ? agencies.find(a => a.id === id) : (agencies.agencies || []).find(a => a.id === id);

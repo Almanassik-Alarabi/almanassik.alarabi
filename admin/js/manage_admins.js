@@ -1,6 +1,6 @@
 
 // إعداد رابط الـ API الأساسي (يعمل على المنفذ 3001)
-const API_BASE = 'http://192.168.100.23:3001/api/admin';
+const API_BASE = 'https://almanassik-alarabis-v0-4.onrender.com/api/admin';
 
 // جلب التوكن من localStorage (متوافق مع بقية الصفحات)
 const token = localStorage.getItem('umrah_admin_token');

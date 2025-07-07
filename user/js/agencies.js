@@ -4,7 +4,7 @@ async function loadAgencies() {
     const grid = document.getElementById('agencies-grid');
     grid.innerHTML = '<div style="text-align:center;padding:30px;">جاري التحميل...</div>';
     try {
-        const res = await fetch('http://192.168.100.23:3001/api/user/agencies');
+        const res = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/user/agencies');
         const data = await res.json();
         if (data.status === 'ok' && Array.isArray(data.agencies)) {
             allAgencies = data.agencies;
@@ -125,7 +125,7 @@ function createAgencyCard(agency) {
     content.appendChild(offersList);
 
     // جلب العروض المتاحة من API (المسار الصحيح)
-    fetch(`http://192.168.100.23:3001/api/user/agency/${agency.id}/active-offers`)
+    fetch(`https://almanassik-alarabis-v0-4.onrender.com/api/user/agency/${agency.id}/active-offers`)
         .then(res => res.json())
         .then(data => {
             if (data.status === 'ok' && Array.isArray(data.offers) && data.offers.length > 0) {
