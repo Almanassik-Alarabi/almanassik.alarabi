@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الخروج</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <style>
+        body { display: flex; align-items: center; justify-content: center; height: 100vh; background: #f5f7fa; }
+        .logout-box { background: #fff; padding: 40px 30px; border-radius: 16px; box-shadow: 0 2px 16px #bfa66922; text-align: center; }
+        .logout-box h2 { color: #176a3d; margin-bottom: 18px; }
+        .logout-box p { color: #555; margin-bottom: 22px; }
+        .logout-box a { background: #176a3d; color: #fff; padding: 10px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; transition: background 0.2s; }
+        .logout-box a:hover { background: #0f3f26; }
+    </style>
+</head>
+<body>
+    <div class="logout-box">
+        <h2>تم تسجيل الخروج بنجاح</h2>
+        <p>تم تسجيل خروجك من لوحة الإدارة.</p>
+        <a href="login_admin.html">تسجيل الدخول مرة أخرى</a>
+    </div>
+    <script>
+      // حذف التوكنات من التخزين المحلي
+      localStorage.removeItem('umrah_admin_token');
+      localStorage.removeItem('umrah_admin_lang');
+      // يمكن إضافة أي متغيرات أخرى متعلقة بالجلسة هنا
+    </script>
+</body>
+</html>

@@ -134,6 +134,18 @@ async function submitAddAgency(event) {
   event.preventDefault();
   const form = event.target;
 
+  // تعطيل الأزرار وإظهار المؤشر
+  const submitBtn = document.getElementById('submitAddAgencyBtn');
+  const cancelBtn = document.getElementById('cancelAddAgencyBtn');
+  const spinner = document.getElementById('submitAddAgencySpinner');
+  const btnText = document.getElementById('submitAddAgencyBtnText');
+  if (submitBtn && spinner && btnText) {
+    submitBtn.disabled = true;
+    if (cancelBtn) cancelBtn.disabled = true;
+    spinner.style.display = 'inline-block';
+    btnText.style.opacity = '0.5';
+  }
+
   // إظهار مؤشر جاري التنفيذ
   showNotification('جاري إرسال البيانات ...', 'info');
 
@@ -194,6 +206,14 @@ async function submitAddAgency(event) {
       showSuccessMessage(editId ? "تم تعديل الوكالة بنجاح" : "تمت إضافة الوكالة بنجاح");
     } catch (err) {
       showErrorMessage(err.message || "حدث خطأ أثناء الحفظ");
+    } finally {
+      // إعادة تفعيل الأزرار وإخفاء المؤشر
+      if (submitBtn && spinner && btnText) {
+        submitBtn.disabled = false;
+        if (cancelBtn) cancelBtn.disabled = false;
+        spinner.style.display = 'none';
+        btnText.style.opacity = '1';
+      }
     }
 }
 

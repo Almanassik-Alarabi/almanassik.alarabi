@@ -27,7 +27,14 @@ function renderAgencies(agencies) {
         return;
     }
     agencies.forEach(agency => {
-        grid.appendChild(createAgencyCard(agency));
+        const card = createAgencyCard(agency);
+        card.classList.add('agency-card-clickable'); // بدلاً من style.cursor
+        card.onclick = () => {
+            // إرسال بيانات الوكالة إلى الصفحة الأخرى عبر localStorage
+            localStorage.setItem('selectedAgency', JSON.stringify(agency));
+            window.location.href = 'agency-details.html';
+        };
+        grid.appendChild(card);
     });
 }
 
@@ -44,14 +51,13 @@ function createAgencyCard(agency) {
     const card = document.createElement('div');
     card.className = 'agency-card';
 
-    // شارة الاعتماد
-    if (agency.is_approved) {
-        const badge = document.createElement('span');
-        badge.className = 'card-badge approved-badge';
-        badge.innerHTML = '<i class="fas fa-check-circle"></i> <span>معتمدة</span>';
-        card.appendChild(badge);
-    }
-
+    // شارة الاعتماد (تمت إزالتها لأن جميع الوكالات معتمدة)
+    // if (agency.is_approved) {
+    //     const badge = document.createElement('span');
+    //     badge.className = 'card-badge approved-badge';
+    //     badge.innerHTML = '<i class="fas fa-check-circle"></i> <span>معتمدة</span>';
+    //     card.appendChild(badge);
+    // }
 
     // صورة الغلاف
     const bg = document.createElement('img');
@@ -60,31 +66,19 @@ function createAgencyCard(agency) {
     bg.alt = agency.name;
     card.appendChild(bg);
 
-    // الشعار بشكل دائري فوق صورة الغلاف في الجانب الأيمن
+    // الشعار بشكل دائري صغير وقابل للنقر
     if (agency.logo_url) {
         const logoWrapper = document.createElement('div');
         logoWrapper.className = 'agency-logo-wrapper';
-        logoWrapper.style.position = 'absolute';
-        logoWrapper.style.top = '18px';
-        logoWrapper.style.right = '18px';
-        logoWrapper.style.zIndex = '3';
-        logoWrapper.style.background = '#fff';
-        logoWrapper.style.borderRadius = '50%';
-        logoWrapper.style.boxShadow = '0 2px 8px rgba(0,0,0,0.10)';
-        logoWrapper.style.padding = '4px';
-        logoWrapper.style.width = '62px';
-        logoWrapper.style.height = '62px';
-        logoWrapper.style.display = 'flex';
-        logoWrapper.style.alignItems = 'center';
-        logoWrapper.style.justifyContent = 'center';
-
+        // إزالة جميع الأنماط المدمجة، فقط الكلاسات
+        logoWrapper.title = 'تفاصيل الوكالة';
+        logoWrapper.onclick = () => {
+            window.location.href = `agency-details.html?id=${agency.id}`;
+        };
         const logo = document.createElement('img');
         logo.src = agency.logo_url;
         logo.alt = agency.name + ' logo';
-        logo.style.width = '54px';
-        logo.style.height = '54px';
-        logo.style.objectFit = 'cover';
-        logo.style.borderRadius = '50%';
+        logo.className = 'agency-logo-img'; // بدلاً من الأنماط المدمجة
         logoWrapper.appendChild(logo);
         card.appendChild(logoWrapper);
     }
@@ -93,7 +87,7 @@ function createAgencyCard(agency) {
     const content = document.createElement('div');
     content.className = 'agency-content';
 
-    // العنوان فقط بدون تقييم
+    // العنوان فقط
     const title = document.createElement('div');
     title.className = 'agency-title';
     const h3 = document.createElement('h3');
@@ -107,62 +101,25 @@ function createAgencyCard(agency) {
     meta.innerHTML = '<i class="fas fa-map-marker-alt"></i> <span>' + (agency.location_name || '-') + '</span>';
     content.appendChild(meta);
 
-    // وصف مختصر
-    // تم حذف السطر النصي "الوكالة متواجدة في ولاية ..."
-
-
-    // ميزات افتراضية (ترخيص)
-    const features = document.createElement('div');
-    features.className = 'agency-features';
-    features.innerHTML = '<span class="feature-badge">ترخيص: ' + (agency.license_number || '-') + '</span>';
-    content.appendChild(features);
-
-    // عنصر العروض المتاحة (سيتم تعبئته لاحقاً)
-    const offersList = document.createElement('div');
-    offersList.className = 'agency-active-offers';
-    offersList.style.margin = '10px 0 0 0';
-    offersList.innerHTML = '<span style="color:#888;font-size:14px;">جاري جلب العروض المتاحة...</span>';
-    content.appendChild(offersList);
-
-    // جلب العروض المتاحة من API (المسار الصحيح)
+    // عدد العروض
+    const offersCount = document.createElement('div');
+    offersCount.className = 'agency-offers-count';
+    // إزالة الأنماط المدمجة
+    offersCount.textContent = 'عدد العروض: ...';
+    content.appendChild(offersCount);
+    // جلب عدد العروض
     fetch(`https://almanassik-alarabis-v0-4.onrender.com/api/user/agency/${agency.id}/active-offers`)
         .then(res => res.json())
         .then(data => {
-            if (data.status === 'ok' && Array.isArray(data.offers) && data.offers.length > 0) {
-                offersList.innerHTML = '<span style="color:#388e3c;font-weight:500;font-size:15px;">العروض المتاحة:</span>' +
-                    '<ul style="margin:7px 0 0 0;padding-right:18px;list-style:square inside;color:#222;font-size:14px;">' +
-                    data.offers.map(o => `<li><i class=\'fas fa-gift\' style=\'color:var(--primary-color);margin-left:5px;\'></i> <span style=\'font-weight:500;\'>${o.title || o.name}</span> <span style=\'color:#888;font-size:13px;\'>${o.departure_date ? '(المغادرة: ' + o.departure_date.split('T')[0] + ')' : ''}</span></li>`).join('') + '</ul>';
+            if (data.status === 'ok' && Array.isArray(data.offers)) {
+                offersCount.textContent = `عدد العروض: ${data.offers.length}`;
             } else {
-                offersList.innerHTML = '<span style="color:#888;font-size:14px;">لا توجد عروض متاحة حالياً</span>';
+                offersCount.textContent = 'عدد العروض: 0';
             }
         })
         .catch(() => {
-            offersList.innerHTML = '<span style="color:#c00;font-size:14px;">تعذر جلب العروض</span>';
+            offersCount.textContent = 'عدد العروض: ؟';
         });
-
-    // الفوتر (زر العروض وزر الموقع)
-    const footer = document.createElement('div');
-    footer.className = 'agency-footer';
-    // زر العروض
-    const offersBtn = document.createElement('button');
-    offersBtn.className = 'view-btn';
-    offersBtn.innerHTML = '<i class="fas fa-gift"></i> عروض الوكالة';
-    offersBtn.onclick = () => {
-        window.location.href = `offers.html?agency=${agency.id}`;
-    };
-    footer.appendChild(offersBtn);
-    // زر الموقع بتنسيق جميل
-    if (agency.latitude && agency.longitude) {
-        const mapBtn = document.createElement('a');
-        mapBtn.className = 'map-btn';
-        mapBtn.title = 'عرض موقع الوكالة على الخريطة';
-        mapBtn.href = `https://www.google.com/maps/search/?api=1&query=${agency.latitude},${agency.longitude}`;
-        mapBtn.target = '_blank';
-        mapBtn.rel = 'noopener';
-        mapBtn.innerHTML = '<i class="fas fa-map-marker-alt"></i> الموقع';
-        footer.appendChild(mapBtn);
-    }
-    content.appendChild(footer);
 
     card.appendChild(content);
     return card;

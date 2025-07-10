@@ -26,18 +26,18 @@
         <div class="header">
           <div class="header-left">
             <h1
-              data-ar="إدارة الوكالات السياحية"
-              data-en="Manage Travel Agencies"
-              data-fr="Gérer les Agences de Voyage"
+              data-ar="ادارة المعتمرين"
+              data-en="Manage Pilgrims"
+              data-fr="Gérer les Pèlerins"
             >
-              إدارة الوكالات السياحية
+            ادارة المعتمرين
             </h1>
             <p
-              data-ar="عرض وإدارة جميع الوكالات المسجلة في النظام"
-              data-en="View and manage all registered agencies in the system"
-              data-fr="Voir et gérer toutes les agences enregistrées dans le système"
+              data-ar="عرض وإدارة جميع المعتمرين المسجلين في النظام"
+              data-en="View and manage all registered pilgrims in the system"
+              data-fr="Voir et gérer tous les pèlerins enregistrés dans le système"
             >
-              عرض وإدارة جميع الوكالات المسجلة في النظام
+              عرض وإدارة المعتمرين النظام
             </p>
           </div>
           <div class="header-right">
@@ -151,8 +151,15 @@
                   <!-- JS fills offers when agency selected -->
                 </select>
               </div>
-              <button type="submit" class="submit-btn">إضافة معتمر</button>
+              <div style="display:flex; gap:1rem; align-items:center;">
+                <button type="submit" class="submit-btn" id="addPilgrimSubmitBtn">إضافة معتمر</button>
+                <button type="button" id="cancelAddPilgrimBtn" class="btn btn-danger" style="background:#c0392b; color:#fff; padding:10px 22px; border-radius:8px; border:none; font-size:1rem;">إلغاء</button>
+              </div>
               <div id="bookingFormMessage" style="margin-top:1rem;"></div>
+              <div id="bookingFormLoader" style="margin-top:1rem; display:none; text-align:center;">
+                <span class="loader" style="display:inline-block; width:32px; height:32px; border:4px solid #eee; border-top:4px solid #176a3d; border-radius:50%; animation:spin 1s linear infinite; vertical-align:middle;"></span>
+                <span style="margin-right:10px; font-size:1.1em; color:#176a3d;">جاري إضافة المعتمر...</span>
+              </div>
             </form>
           </div>
         </div>

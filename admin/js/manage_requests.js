@@ -205,7 +205,7 @@ async function approveAgency(id, isApproved) {
   } else {
     if (!confirm("هل أنت متأكد من رفض (وحذف) هذا الطلب؟ سيتم حذف الوكالة نهائياً!")) return;
     try {
-      const response = await fetch(`https://almanassik-alarabis-v0-4.onrender.com/api/agencies/${id}`, {
+      const response = await fetch(`https://almanassik-alarabis-v0-4.onrender.com/api/agencies/remove/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -238,6 +238,10 @@ async function showAgencyDetails(id) {
     const agency = Array.isArray(agencies) ? agencies.find(a => a.id === id) : (agencies.agencies || []).find(a => a.id === id);
     if (!agency) return alert("لم يتم العثور على بيانات الوكالة");
     let html = `
+      <div style="display:flex;gap:2rem;align-items:center;justify-content:${(agency.logo_url||agency.background_url)?'flex-start':'flex-start'};margin-bottom:1rem;">
+        ${agency.logo_url ? `<div><img src="${agency.logo_url}" alt="شعار الوكالة" style="max-width:90px;max-height:90px;border-radius:10px;border:1px solid #eee;background:#fff;box-shadow:0 1px 4px #0001;"></div>` : ''}
+        ${agency.background_url ? `<div><img src="${agency.background_url}" alt="غلاف الوكالة" style="max-width:160px;max-height:90px;border-radius:10px;border:1px solid #eee;background:#fff;box-shadow:0 1px 4px #0001;"></div>` : ''}
+      </div>
       <div><b>اسم الوكالة:</b> ${agency.name || ""}</div>
       <div><b>اسم المسؤول:</b> ${agency.manager_name || ""}</div>
       <div><b>الهاتف:</b> ${agency.phone || ""}</div>

@@ -30,7 +30,7 @@ async function fetchAndDisplayOffers(filteredOffers = null) {
 async function fetchAgenciesAndAirports(offers) {
     // جلب الوكالات والمطارات من API موحد
     try {
-        const res = await fetch('http://localhost:3001/api/user/with-offers-and-airports');
+        const res = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/user/with-offers-and-airports');
         const data = await res.json();
         agencySet = new Set();
         airportSet = new Set();
@@ -114,10 +114,10 @@ async function fetchAgenciesAndAirports(offers) {
             } else if (offer.exit) {
                 locationHtml = `<span class="offer-location"><i class="fas fa-sign-out-alt" title="خروج"></i> ${offer.exit}</span>`;
             }
-            // شارة أفضل عرض
-            let bestBadge = (offer.id === bestOfferId) ? `<div class="offer-badge best-offer"><i class='fas fa-crown'></i> أفضل عرض</div>` : '';
+            // شارة أفضل عرض (تاج فقط)
+            let bestBadge = (offer.id === bestOfferId) ? `<div class="offer-badge best-offer"><i class='fas fa-crown'></i></div>` : '';
             return `
-            <div class="offer-card">
+            <div class="offer-card" style="max-width: 400px;">
                 ${bestBadge}
                 <img src="${mainImage}" alt="${offer.title || ''}" class="offer-image">
                 <div class="offer-content">

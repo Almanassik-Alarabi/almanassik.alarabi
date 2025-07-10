@@ -373,7 +373,15 @@ function renderOffers(offers) {
             <div class="price-val">${priceQuint} <span class="da">DA</span></div>
           </div>
         ` : `<div class="price-circle no-price">لا يوجد</div>`;
-        // --- المعلومات الأساسية فقط ---
+
+        // زر التبديل بين ذهبي وعادي
+        let isGolden = offer.is_golden === true || offer.is_golden === 1;
+        let goldenBtnClass = isGolden ? 'btn-golden' : 'btn-normal';
+        let goldenBtnText = isGolden ? 'ذهبي' : 'عادي';
+        let goldenBtnIcon = isGolden ? '★' : '☆';
+        // الزر يرسل الطلب ويعيد تحميل العروض
+        let goldenBtn = `<button class="btn ${goldenBtnClass} btn-sm" style="margin-left:7px;min-width:70px;" onclick="toggleGoldenOffer('${offer.id}', this)">${goldenBtnIcon} ${goldenBtnText}</button>`;
+
         return `
       <div class="agency-card">
         <div class="agency-header" style="background-image:url('${mainImage}')"></div>
@@ -392,6 +400,7 @@ function renderOffers(offers) {
           </div>
           <div class="agency-actions">
             <button class="btn btn-info btn-sm" onclick="showOfferDetailsById('${offer.id}')"><i class="fas fa-eye"></i> تفاصيل</button>
+            ${goldenBtn}
             <button class="btn btn-danger btn-sm" onclick="(function(){if(confirm('هل أنت متأكد أنك تريد حذف هذا العرض؟')){deleteOffer('${offer.id}').then(()=>{alert('تم حذف العرض بنجاح');loadAndRenderOffers();}).catch(()=>{alert('فشل حذف العرض');});}})();"><i class="fas fa-trash-alt"></i> حذف</button>
           </div>
         </div>
@@ -400,6 +409,57 @@ function renderOffers(offers) {
       }
     )
     .join("");
+}
+
+// دالة التبديل بين ذهبي وعادي
+async function toggleGoldenOffer(offerId, btn) {
+  const token = localStorage.getItem("umrah_admin_token");
+  if (!token) {
+    showShortMessage("يجب تسجيل الدخول كمدير", "error");
+    return;
+  }
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner" style="display:inline-block;width:16px;height:16px;border:2px solid #fff;border-top:2px solid #fbc02d;border-radius:50%;animation:spin 1s linear infinite;vertical-align:middle;margin-left:7px;"></span> ...';
+  try {
+    const res = await fetch(`https://almanassik-alarabis-v0-4.onrender.com/api/offers/toggle-golden/${offerId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+    if (!res.ok) {
+      let errMsg = "فشل تغيير حالة العرض";
+      try {
+        const err = await res.clone().json();
+        if (err && (err.message || err.error)) errMsg = err.message || err.error;
+      } catch {}
+      showShortMessage(errMsg, "error");
+      btn.disabled = false;
+      btn.innerHTML = btn.innerHTML.includes('★') ? '★ ذهبي' : '☆ عادي';
+      return;
+    }
+    // تحديث الزر فقط بدون إعادة تحميل كل العروض
+    const result = await res.json();
+    const newIsGolden = result.data && result.data[0] && result.data[0].is_golden;
+    if (typeof newIsGolden !== 'undefined') {
+      if (newIsGolden) {
+        btn.classList.remove('btn-normal');
+        btn.classList.add('btn-golden');
+        btn.innerHTML = '★ ذهبي';
+      } else {
+        btn.classList.remove('btn-golden');
+        btn.classList.add('btn-normal');
+        btn.innerHTML = '☆ عادي';
+      }
+    }
+    showShortMessage("تم تغيير حالة العرض بنجاح", "success");
+    btn.disabled = false;
+  } catch (e) {
+    showShortMessage("فشل الاتصال بالخادم", "error");
+    btn.disabled = false;
+    btn.innerHTML = btn.innerHTML.includes('★') ? '★ ذهبي' : '☆ عادي';
+  }
 }
 
 // تفعيل البحث الفوري
@@ -813,6 +873,13 @@ if (addOfferForm) {
     const token = localStorage.getItem("umrah_admin_token");
     const addOfferModal = document.getElementById("addOfferModal");
 
+    // تعطيل زر الحفظ وإظهار مؤشر جاري التنفيذ
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalBtnContent = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="spinner" style="display:inline-block;width:18px;height:18px;border:3px solid #fff;border-top:3px solid #2196f3;border-radius:50%;animation:spin 1s linear infinite;vertical-align:middle;margin-left:7px;"></span> يرجى الانتظار...';
+    showShortMessage('جاري إرسال البيانات ...', 'info', 3000);
+
     // بناء كائن البيانات
     const offerData = {
       agency_id: form.agency_id ? form.agency_id.value : "",
@@ -885,6 +952,8 @@ if (addOfferForm) {
           else if (err && err.error) errMsg = err.error;
         } catch {}
         showShortMessage(errMsg, 'error');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnContent;
         return;
       }
 
@@ -896,8 +965,19 @@ if (addOfferForm) {
       addOfferForm.reset();
       loadAndRenderOffers();
       showShortMessage("تمت إضافة العرض بنجاح", 'success');
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnContent;
     } catch (err) {
       showShortMessage("حدث خطأ أثناء معالجة الصور أو إرسال البيانات", 'error');
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnContent;
+  // أنيميشن دوران للزر (مرة واحدة فقط)
+  if (!document.getElementById('offerSpinnerStyle')) {
+    const style = document.createElement('style');
+    style.id = 'offerSpinnerStyle';
+    style.innerHTML = `@keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }`;
+    document.head.appendChild(style);
+  }
     }
   }
 }
@@ -1150,6 +1230,29 @@ if (exportBtn) {
       transition: background 0.15s, color 0.15s, box-shadow 0.15s;
       box-shadow: 0 1px 4px #176a3d11;
       font-weight: 500;
+    }
+    .agency-card .btn-golden {
+      background: #fffbe6;
+      color: #fbc02d;
+      border: 1.5px solid #fbc02d;
+      font-weight: bold;
+      box-shadow: 0 2px 8px #fbc02d22;
+    }
+    .agency-card .btn-golden:hover {
+      background: #fff9c4;
+      color: #bfa100;
+      box-shadow: 0 2px 12px #fbc02d44;
+    }
+    .agency-card .btn-normal {
+      background: #f4f7fb;
+      color: #888;
+      border: 1.5px solid #bfc7ce;
+      font-weight: bold;
+    }
+    .agency-card .btn-normal:hover {
+      background: #e2e6ea;
+      color: #176a3d;
+      box-shadow: 0 2px 8px #bfc7ce44;
     }
     .agency-card .btn-danger {
       background: #fbe9e9;

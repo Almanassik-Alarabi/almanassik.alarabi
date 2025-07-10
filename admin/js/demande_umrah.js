@@ -40,6 +40,15 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('offerSelect').innerHTML = '<option value="">اختر العرض</option>';
     document.getElementById('offerSelect').disabled = true;
   });
+
+  // زر إلغاء في نافذة إضافة معتمر
+  document.getElementById('cancelAddPilgrimBtn').addEventListener('click', function() {
+    document.getElementById('addPilgrimModal').style.display = 'none';
+    document.getElementById('addBookingForm').reset();
+    document.getElementById('bookingFormMessage').textContent = '';
+    document.getElementById('offerSelect').innerHTML = '<option value="">اختر العرض</option>';
+    document.getElementById('offerSelect').disabled = true;
+  });
   // عند تغيير الوكالة، جلب عروضها
   document.getElementById('agencySelect').addEventListener('change', function() {
     var agencyId = this.value;
@@ -175,7 +184,12 @@ async function handleAddBookingFormSubmit(e) {
     showBookingFormMessage('يرجى ملء جميع الحقول واختيار صورة الجواز', false);
     return;
   }
-  // رفع الصورة أولاً
+  // إظهار مؤشر الانتظار وتعطيل زر الإضافة
+  document.getElementById('bookingFormLoader').style.display = 'block';
+  var addBtn = document.getElementById('addPilgrimSubmitBtn');
+  addBtn.disabled = true;
+  addBtn.style.opacity = '0.6';
+  addBtn.style.cursor = 'not-allowed';
   var passportImageUrl = '';
   try {
     document.getElementById('passportImageUploadStatus').textContent = 'جاري رفع صورة الجواز...';
@@ -183,12 +197,14 @@ async function handleAddBookingFormSubmit(e) {
     if (!passportImageUrl) {
       showBookingFormMessage('فشل رفع صورة الجواز. يرجى المحاولة مرة أخرى.', false);
       document.getElementById('passportImageUploadStatus').textContent = '';
+      document.getElementById('bookingFormLoader').style.display = 'none';
       return;
     }
     document.getElementById('passportImageUploadStatus').textContent = 'تم رفع الصورة بنجاح';
   } catch (err) {
     showBookingFormMessage('حدث خطأ أثناء رفع صورة الجواز', false);
     document.getElementById('passportImageUploadStatus').textContent = '';
+    document.getElementById('bookingFormLoader').style.display = 'none';
     return;
   }
   // تجهيز البيانات
@@ -230,6 +246,11 @@ async function handleAddBookingFormSubmit(e) {
   } catch (err) {
     showBookingFormMessage('فشل الاتصال بالخادم', false);
   }
+  // إخفاء مؤشر الانتظار وتمكين زر الإضافة
+  document.getElementById('bookingFormLoader').style.display = 'none';
+  addBtn.disabled = false;
+  addBtn.style.opacity = '';
+  addBtn.style.cursor = '';
 
 }
 

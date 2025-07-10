@@ -144,11 +144,11 @@
 
         .agencies-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-            /* إصلاح مشكلة آخر عنصر مخفي خلف الشريط السفلي */
-            padding-bottom: 90px;
+            direction: rtl;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* عمودان على الأقل ويزيد حسب المساحة */
+            gap: 8px;
+            padding-bottom: 40px;
+            justify-items: stretch;
         }
 
         /* إجبار وجود عمودين كحد أدنى مهما كان حجم الشاشة */
@@ -159,23 +159,38 @@
         }
         @media (max-width: 600px) {
             .agencies-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+            .agency-card {
+                max-width: 100%;
+                min-width: 0;
             }
         }
         @media (max-width: 400px) {
             .agencies-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(2, 1fr) !important;
             }
         }
 
         .agency-card {
+            margin: 0;
+          
+            min-width: 0;
+            max-height: 220px;
+            min-height: 120px;
+            width: 90%;
+            height: 90%;
+              max-width: 300px;
             background: white;
-            border-radius: 12px;
+            border-radius: 10px;
             overflow: hidden;
             box-shadow: var(--shadow);
             transition: var(--transition);
             position: relative;
+            padding: 5px 5px 5px 5px;
+            margin: 0 auto auto auto; /* تقليل المسافة بين البطاقات */
         }
+        
 
         .agency-card:hover {
             transform: translateY(-10px);
@@ -184,15 +199,18 @@
 
         /* شارة الاعتماد الجديدة */
 .card-badge.approved-badge {
+    display: none !important;
+}
+.card-badge.approved-badge {
     position: absolute;
-    top: 15px;
-    left: 15px;
+    top: 5px;
+    left: 5px;
     background: #fff;
     color: var(--primary-color);
-    padding: 6px 16px 6px 12px;
-    border-radius: 18px;
+    padding: 2px 6px 2px 4px;
+    border-radius: 10px;
     font-weight: bold;
-    font-size: 15px;
+    font-size: 0.7rem;
     box-shadow: 0 2px 8px rgba(76,175,80,0.10);
     border: 2px solid var(--primary-color);
     display: flex;
@@ -202,40 +220,37 @@
 }
 .card-badge.approved-badge i {
     color: var(--primary-color);
-    font-size: 18px;
-    margin-left: 4px;
+    font-size: 12px;
+    margin-left: 2px;
 }
 
         .card-badge {
             position: absolute;
-            top: 15px;
-            left: 15px;
+            top: 5px;
+            left: 5px;
             background: var(--gold-color);
             color: var(--primary-color);
-            padding: 5px 12px;
-            border-radius: 20px;
+            padding: 2px 6px;
+            border-radius: 10px;
             font-weight: bold;
-            font-size: 12px;
+            font-size: 0.6rem;
             z-index: 2;
         }
 
         .agency-image {
-            height: 200px;
+            height: 50px;
             width: 100%;
             object-fit: cover;
+            border-radius: 8px;
         }
 
         .agency-content {
-            padding: 14px 16px 14px 16px;
+            padding: 6px 6px 6px 6px;
         }
 
         .agency-title {
-            font-size: 1.2rem;
-            color: var(--primary-color);
-            margin-bottom: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            font-size: 0.8rem;
+            margin-bottom: 2px;
         }
 
         .agency-rating {
@@ -256,8 +271,9 @@
         .agency-meta {
             display: flex;
             align-items: center;
-            margin-bottom: 7px;
+            margin-bottom: 2px;
             color: #666;
+            font-size: 0.7rem;
         }
 
         .agency-meta i {
@@ -274,16 +290,16 @@
         .agency-features {
             display: flex;
             flex-wrap: wrap;
-            gap: 7px;
-            margin-bottom: 10px;
+            gap: 2px;
+            margin-bottom: 2px;
         }
 
         .feature-badge {
             background: rgba(76, 175, 80, 0.08);
             color: var(--primary-color);
-            padding: 5px 12px;
+            padding: 2px 6px;
             border-radius: 20px;
-            font-size: 13px;
+            font-size: 0.7rem;
         }
 
         .agency-footer {
@@ -291,8 +307,8 @@
             justify-content: flex-start;
             align-items: center;
             border-top: 1px solid #eee;
-            padding-top: 10px;
-            gap: 8px;
+            padding-top: 2px;
+            gap: 2px;
         }
 
         .agency-price {
@@ -311,14 +327,14 @@
             background: var(--primary-color);
             color: white;
             border: none;
-            padding: 8px 18px;
-            border-radius: 5px;
+            padding: 4px 8px;
+            border-radius: 4px;
             cursor: pointer;
             transition: var(--transition);
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 15px;
+            font-size: 0.7rem;
         }
 
         .view-btn:hover {
@@ -330,13 +346,13 @@
             background: #fff;
             color: var(--primary-color);
             border: 1.5px solid var(--primary-color);
-            padding: 8px 16px;
-            border-radius: 5px;
+            padding: 4px 8px;
+            border-radius: 4px;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 7px;
-            font-size: 15px;
+            font-size: 0.7rem;
             text-decoration: none;
             transition: background 0.2s, color 0.2s, border 0.2s;
         }
@@ -449,3 +465,18 @@
                 font-size: 18px;
             }
         }
+
+        .agency-logo-wrapper {
+   
+}
+
+.agency-logo-img {
+    width: 22px;
+    height: 22px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.agency-card-clickable {
+    cursor: pointer;
+}

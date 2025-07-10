@@ -163,8 +163,8 @@
               </div>
               <div>
                 <div style="font-weight: 600">المدير العام</div>
-                <div style="font-size: 0.9rem; color: var(--text-secondary)">
-                  admin@umrah.com
+                <div style="font-size: 0.9rem; color: var(--text-secondary)" id="adminEmailDisplay">
+                  <!-- سيتم تعبئة البريد من جافاسكريبت -->
                 </div>
               </div>
             </div>
@@ -359,15 +359,15 @@
             <label>الحالة</label>
             <input type="checkbox" name="approuve" /> نشطة
           </div>
-          <div style="text-align: left; margin-top: 10px">
-            <button type="submit" class="btn btn-primary">حفظ</button>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              onclick="closeAddModal()"
-            >
-              إلغاء
+          <div style="display: flex; gap: 10px; justify-content: flex-end; align-items: center; margin-top: 10px">
+            <button type="button" class="btn btn-secondary" onclick="closeAddModal()" id="cancelAddAgencyBtn">إلغاء</button>
+            <button type="submit" class="btn btn-primary" id="submitAddAgencyBtn">
+              <span id="submitAddAgencyBtnText">حفظ</span>
+              <span id="submitAddAgencySpinner" style="display:none;margin-right:8px;vertical-align:middle;">
+                <i class="fas fa-spinner fa-spin"></i>
+              </span>
             </button>
+          </div>
           </div>
         </form>
       </div>

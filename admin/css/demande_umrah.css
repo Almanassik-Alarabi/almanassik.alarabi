@@ -1,3 +1,7 @@
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 /* خطوط وأساسيات */
 body {
   font-family: "Cairo", "Inter", Arial, sans-serif;
