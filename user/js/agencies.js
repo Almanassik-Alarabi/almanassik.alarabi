@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // زر سجل وكالتك
             const loginDiv = document.createElement('div');
             loginDiv.className = 'login-agencie';
-            loginDiv.innerHTML = `<a href="/public/agencie/login_agencie.html" class="register-agency-btn"><span class="register-agency-text"></span></a>`;
+            loginDiv.innerHTML = `<a href="/agencie/login_agencie.html" class="register-agency-btn"><span class="register-agency-text"></span></a>`;
             // البحث
             const searchForm = document.createElement('form');
             searchForm.className = 'search-bar1';
@@ -235,4 +235,5 @@ document.addEventListener('DOMContentLoaded', () => {
     // تأكد من تحديث نص زر الأقرب إليك بعد تحميل الصفحة مباشرة
     setTimeout(updateRegisterBtnLang, 100);
 });
+
 
