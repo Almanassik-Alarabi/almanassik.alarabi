@@ -26,7 +26,94 @@ function loadSidebar() {
 
 document.addEventListener('DOMContentLoaded', function() {
   loadSidebar();
-  renderOrdersTable();
+  renderOrdersTable().then(function() {
+    // تطبيق اللغة مرة ثانية بعد جلب البيانات بالكامل
+    var lang = localStorage.getItem('umrah_admin_lang') || 'ar';
+    if (typeof applyLanguage === 'function') {
+      applyLanguage(lang);
+    }
+  });
+  // تفعيل نظام تغيير اللغة الموحد
+  function applyLanguage(lang) {
+    document.querySelectorAll('[data-ar], [data-en], [data-fr]').forEach(function(el) {
+      if (el.tagName === 'OPTION') {
+        if (lang === 'ar' && el.hasAttribute('data-ar')) {
+          el.textContent = el.getAttribute('data-ar');
+        } else if (lang === 'en' && el.hasAttribute('data-en')) {
+          el.textContent = el.getAttribute('data-en');
+        } else if (lang === 'fr' && el.hasAttribute('data-fr')) {
+          el.textContent = el.getAttribute('data-fr');
+        }
+      } else if (el.tagName === 'BUTTON') {
+        // تحديث جميع العناصر داخل الزر التي تحمل خصائص اللغة
+        el.querySelectorAll('[data-ar], [data-en], [data-fr]').forEach(function(child) {
+          if (lang === 'ar' && child.hasAttribute('data-ar')) {
+            child.textContent = child.getAttribute('data-ar');
+          } else if (lang === 'en' && child.hasAttribute('data-en')) {
+            child.textContent = child.getAttribute('data-en');
+          } else if (lang === 'fr' && child.hasAttribute('data-fr')) {
+            child.textContent = child.getAttribute('data-fr');
+          }
+        });
+        // دعم زر إضافة معتمر إذا كان النص مباشرة داخل الزر وليس داخل span
+        if (!el.querySelector('[data-ar], [data-en], [data-fr]')) {
+          if (lang === 'ar' && el.hasAttribute('data-ar')) {
+            el.textContent = el.getAttribute('data-ar');
+          } else if (lang === 'en' && el.hasAttribute('data-en')) {
+            el.textContent = el.getAttribute('data-en');
+          } else if (lang === 'fr' && el.hasAttribute('data-fr')) {
+            el.textContent = el.getAttribute('data-fr');
+          }
+        }
+      } else {
+        if (lang === 'ar' && el.hasAttribute('data-ar')) {
+          el.textContent = el.getAttribute('data-ar');
+        } else if (lang === 'en' && el.hasAttribute('data-en')) {
+          el.textContent = el.getAttribute('data-en');
+        } else if (lang === 'fr' && el.hasAttribute('data-fr')) {
+          el.textContent = el.getAttribute('data-fr');
+        }
+      }
+      if (el.placeholder !== undefined) {
+        if (lang === 'ar' && el.hasAttribute('data-ar-placeholder')) {
+          el.placeholder = el.getAttribute('data-ar-placeholder');
+        } else if (lang === 'en' && el.hasAttribute('data-en-placeholder')) {
+          el.placeholder = el.getAttribute('data-en-placeholder');
+        } else if (lang === 'fr' && el.hasAttribute('data-fr-placeholder')) {
+          el.placeholder = el.getAttribute('data-fr-placeholder');
+        }
+      }
+    });
+    // تحديث زر إضافة معتمر بشكل صريح إذا لم يتغير نصه
+    var addBtn = document.getElementById('addPilgrimSubmitBtn');
+    if (addBtn) {
+      var span = addBtn.querySelector('span[data-ar]');
+      if (span) {
+        if (lang === 'ar' && span.hasAttribute('data-ar')) {
+          span.textContent = span.getAttribute('data-ar');
+        } else if (lang === 'en' && span.hasAttribute('data-en')) {
+          span.textContent = span.getAttribute('data-en');
+        } else if (lang === 'fr' && span.hasAttribute('data-fr')) {
+          span.textContent = span.getAttribute('data-fr');
+        }
+      }
+    }
+    document.querySelectorAll('.lang-btn').forEach(function(btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+    });
+    localStorage.setItem('umrah_admin_lang', lang);
+  }
+
+  // تفعيل أزرار اللغة
+  document.querySelectorAll('.lang-btn').forEach(function(btn) {
+    btn.onclick = function() {
+      var lang = btn.getAttribute('data-lang');
+      if (lang) applyLanguage(lang);
+    };
+  });
+  // تفعيل اللغة المحفوظة أو الافتراضية
+  var lang = localStorage.getItem('umrah_admin_lang') || 'ar';
+  applyLanguage(lang);
   // تحميل الوكالات عند فتح نافذة الإضافة
   document.getElementById('openAddPilgrimModalBtn').addEventListener('click', function() {
     document.getElementById('addPilgrimModal').style.display = 'flex';
@@ -37,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('addPilgrimModal').style.display = 'none';
     document.getElementById('addBookingForm').reset();
     document.getElementById('bookingFormMessage').textContent = '';
-    document.getElementById('offerSelect').innerHTML = '<option value="">اختر العرض</option>';
+    document.getElementById('offerSelect').innerHTML = '<option value="" data-ar="اختر العرض" data-en="Select Offer" data-fr="Choisir l\'offre">اختر العرض</option>';
     document.getElementById('offerSelect').disabled = true;
   });
 
@@ -46,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('addPilgrimModal').style.display = 'none';
     document.getElementById('addBookingForm').reset();
     document.getElementById('bookingFormMessage').textContent = '';
-    document.getElementById('offerSelect').innerHTML = '<option value="">اختر العرض</option>';
+    document.getElementById('offerSelect').innerHTML = '<option value="" data-ar="اختر العرض" data-en="Select Offer" data-fr="Choisir l\'offre">اختر العرض</option>';
     document.getElementById('offerSelect').disabled = true;
   });
   // عند تغيير الوكالة، جلب عروضها
@@ -55,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (agencyId) {
       loadOffersForAgency(agencyId);
     } else {
-      document.getElementById('offerSelect').innerHTML = '<option value="">اختر العرض</option>';
+      document.getElementById('offerSelect').innerHTML = '<option value="" data-ar="اختر العرض" data-en="Select Offer" data-fr="Choisir l\'offre">اختر العرض</option>';
       document.getElementById('offerSelect').disabled = true;
     }
   });
@@ -75,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // جلب الوكالات المقبولة وملء القائمة
 async function loadAgenciesForSelect() {
   var agencySelect = document.getElementById('agencySelect');
-  agencySelect.innerHTML = '<option value="">اختر الوكالة</option>';
+  agencySelect.innerHTML = '<option value="" data-ar="اختر الوكالة" data-en="Select Agency" data-fr="Choisir l\'agence">اختر الوكالة</option>';
   const token = localStorage.getItem('umrah_admin_token');
   if (!token || !token.trim()) {
     showBookingFormMessage('يرجى تسجيل الدخول أو إعادة تحميل الصفحة بعد تسجيل الدخول.', false);
@@ -86,7 +173,7 @@ async function loadAgenciesForSelect() {
     'Authorization': 'Bearer ' + token.trim()
   };
   try {
-    const response = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/agencies/all', {
+    const response = await fetch('https://almanassik-alarabi-server-v-01.onrender.com/api/admin/agencies/all', {
       headers
     });
     if (response.status === 401) {
@@ -112,18 +199,18 @@ async function loadAgenciesForSelect() {
     showBookingFormMessage('فشل الاتصال بالخادم أو التوكن غير صالح', false);
   }
   // تعطيل قائمة العروض حتى اختيار وكالة
-  document.getElementById('offerSelect').innerHTML = '<option value="">اختر العرض</option>';
+  document.getElementById('offerSelect').innerHTML = '<option value="" data-ar="اختر العرض" data-en="Select Offer" data-fr="Choisir l\'offre">اختر العرض</option>';
   document.getElementById('offerSelect').disabled = true;
 }
 
 // جلب عروض وكالة محددة وملء القائمة
 async function loadOffersForAgency(agencyId) {
   var offerSelect = document.getElementById('offerSelect');
-  offerSelect.innerHTML = '<option value="">جاري التحميل...</option>';
+  offerSelect.innerHTML = '<option value="" data-ar="جاري التحميل..." data-en="Loading..." data-fr="Chargement...">جاري التحميل...</option>';
   offerSelect.disabled = true;
   const token = localStorage.getItem('umrah_admin_token');
   if (!token || !token.trim()) {
-    offerSelect.innerHTML = '<option value="">يرجى تسجيل الدخول</option>';
+    offerSelect.innerHTML = '<option value="" data-ar="يرجى تسجيل الدخول" data-en="Please login" data-fr="Veuillez vous connecter">يرجى تسجيل الدخول</option>';
     offerSelect.disabled = true;
     return;
   }
@@ -132,12 +219,12 @@ async function loadOffersForAgency(agencyId) {
     'Authorization': 'Bearer ' + token.trim()
   };
   try {
-    const response = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/offers/all', {
+    const response = await fetch('https://almanassik-alarabi-server-v-01.onrender.com/api/admin/offers/all', {
       headers
     });
     if (response.status === 401) {
       localStorage.removeItem('umrah_admin_token');
-      offerSelect.innerHTML = '<option value="">انتهت الجلسة، سيتم تحويلك لتسجيل الدخول...</option>';
+      offerSelect.innerHTML = '<option value="" data-ar="انتهت الجلسة، سيتم تحويلك لتسجيل الدخول..." data-en="Session expired, redirecting to login..." data-fr="Session expirée, redirection vers la connexion...">انتهت الجلسة، سيتم تحويلك لتسجيل الدخول...</option>';
       offerSelect.disabled = true;
       setTimeout(function() {
         window.location.href = 'login_admin.html';
@@ -148,7 +235,7 @@ async function loadOffersForAgency(agencyId) {
     if (response.ok && result.offers) {
       var offers = result.offers.filter(o => o.agency_id === agencyId);
       if (offers.length) {
-        offerSelect.innerHTML = '<option value="">اختر العرض</option>';
+        offerSelect.innerHTML = '<option value="" data-ar="اختر العرض" data-en="Select Offer" data-fr="Choisir l\'offre">اختر العرض</option>';
         offers.forEach(function(offer) {
           var opt = document.createElement('option');
           opt.value = offer.id;
@@ -157,7 +244,7 @@ async function loadOffersForAgency(agencyId) {
         });
         offerSelect.disabled = false;
       } else {
-        offerSelect.innerHTML = '<option value="">لا توجد عروض متاحة</option>';
+        offerSelect.innerHTML = '<option value="" data-ar="لا توجد عروض متاحة" data-en="No offers available" data-fr="Aucune offre disponible">لا توجد عروض متاحة</option>';
         offerSelect.disabled = true;
       }
     } else if (result.error) {
@@ -165,7 +252,7 @@ async function loadOffersForAgency(agencyId) {
       offerSelect.disabled = true;
     }
   } catch (err) {
-    offerSelect.innerHTML = '<option value="">فشل التحميل</option>';
+    offerSelect.innerHTML = '<option value="" data-ar="فشل التحميل" data-en="Failed to load" data-fr="Échec du chargement">فشل التحميل</option>';
     offerSelect.disabled = true;
   }
 }
@@ -222,7 +309,7 @@ async function handleAddBookingFormSubmit(e) {
     return;
   }
   try {
-    const response = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/bookings/add', {
+    const response = await fetch('https://almanassik-alarabi-server-v-01.onrender.com/api/admin/bookings/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -260,7 +347,7 @@ async function uploadPassportImage(file) {
   const formData = new FormData();
   formData.append('passport', file);
   try {
-    const response = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/bookings/upload/passport', {
+    const response = await fetch('https://almanassik-alarabi-server-v-01.onrender.com/api/admin/bookings/upload/passport', {
       method: 'POST',
       body: formData
     });
@@ -284,11 +371,11 @@ function showBookingFormMessage(msg, success) {
 async function getOrdersData() {
   const token = localStorage.getItem('umrah_admin_token');
   if (!token || !token.trim()) {
-    window.location.href = 'login_admin.html';
+    window.location.href = '';
     return [];
   }
   try {
-    const response = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/bookings/all', {
+    const response = await fetch('https://almanassik-alarabi-server-v-01.onrender.com/api/bookings/all', {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token.trim()
@@ -297,7 +384,7 @@ async function getOrdersData() {
     if (response.status === 401) {
       localStorage.removeItem('umrah_admin_token');
       setTimeout(function() {
-        window.location.href = 'login_admin.html';
+        window.location.href = '';
       }, 500);
       return [];
     }
@@ -363,27 +450,33 @@ async function renderOrdersTable() {
   orders.forEach(function(order) {
     // إعداد متغيرات زر الإرسال حسب حالة الطلب
     let sendBtnClass = 'btn-action btn-send';
-    let sendBtnText = '';
+    let sendBtnSpan = '';
     let sendBtnDisabled = '';
     let sendBtnStyle = '';
+    let sendBtnIcon = '';
     if (order.status === 'قيد الانتظار') {
       sendBtnClass += ' gold';
-      sendBtnText = '<i class="fas fa-paper-plane"></i> إرسال إلى الوكالة';
+      sendBtnIcon = '<i class="fas fa-paper-plane"></i> ';
+      sendBtnSpan = `<span data-ar="إرسال إلى الوكالة" data-en="Send to Agency" data-fr="Envoyer à l'agence">إرسال إلى الوكالة</span>`;
       sendBtnDisabled = '';
       sendBtnStyle = '';
     } else if (order.status === 'بانتظار موافقة الوكالة') {
       sendBtnClass += ' pending';
-      sendBtnText = '<i class="fas fa-clock"></i> بانتظار موافقة الوكالة';
+      sendBtnIcon = '<i class="fas fa-clock"></i> ';
+      sendBtnSpan = `<span data-ar="بانتظار موافقة الوكالة" data-en="Pending Agency Approval" data-fr="En attente de l'approbation de l'agence">بانتظار موافقة الوكالة</span>`;
       sendBtnDisabled = 'disabled style="pointer-events:none; background:#bbb; color:#fff;"';
       sendBtnStyle = '';
     } else if (order.status === 'مقبول') {
       sendBtnClass += ' accepted';
-      sendBtnText = '<i class="fas fa-check-circle"></i> تم قبول الطلب';
+      sendBtnIcon = '<i class="fas fa-check-circle"></i> ';
+      sendBtnSpan = `<span data-ar="تم قبول الطلب" data-en="Request Accepted" data-fr="Demande acceptée">تم قبول الطلب</span>`;
       sendBtnDisabled = 'disabled style="pointer-events:none; background:#27ae60; color:#fff;"';
       sendBtnStyle = '';
     } else {
-      sendBtnText = '<i class="fas fa-paper-plane"></i> إرسال إلى الوكالة';
+      sendBtnIcon = '<i class="fas fa-paper-plane"></i> ';
+      sendBtnSpan = `<span data-ar="إرسال إلى الوكالة" data-en="Send to Agency" data-fr="Envoyer à l'agence">إرسال إلى الوكالة</span>`;
     }
+    
     var tr = document.createElement('tr');
     tr.setAttribute('data-passport-url', order.passport_image_url || '');
     tr.innerHTML = `
@@ -400,8 +493,8 @@ async function renderOrdersTable() {
           <button class="btn-action btn-details" title="تفاصيل" data-id="${order.id}" style="min-width:44px;max-width:44px;background:#2980b9;color:#fff;border:1.5px solid #2471a3;font-weight:bold;">
             <i class="fas fa-eye"></i>
           </button>
-          <button class="${sendBtnClass}" title="${sendBtnText.replace(/<[^>]+>/g, '')}" data-id="${order.id}" ${sendBtnDisabled} style="${sendBtnStyle}min-width:150px;max-width:180px;font-weight:bold;border:1.5px solid #b7950b;${order.status==='قيد الانتظار' ? 'background:#f1c40f;color:#333;' : ''}">
-            ${sendBtnText}
+          <button class="${sendBtnClass}" title="" data-id="${order.id}" ${sendBtnDisabled} style="${sendBtnStyle}min-width:150px;max-width:180px;font-weight:bold;border:1.5px solid #b7950b;${order.status==='قيد الانتظار' ? 'background:#f1c40f;color:#333;' : ''}">
+            ${sendBtnIcon}${sendBtnSpan}
           </button>
         </div>
       </td>
@@ -421,7 +514,7 @@ function addOrderActions() {
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
         try {
           const token = localStorage.getItem('umrah_admin_token');
-          const response = await fetch(`https://almanassik-alarabis-v0-4.onrender.com/api/bookings/approve-by-admin/${bookingId}`, {
+          const response = await fetch(`https://almanassik-alarabi-server-v-01.onrender.com/api/bookings/approve-by-admin/${bookingId}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -455,8 +548,8 @@ function addOrderActions() {
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
       try {
         const token = localStorage.getItem('umrah_admin_token');
-        const response = await fetch(`https://almanassik-alarabis-v0-4.onrender.com/api/bookings/reject/${bookingId}`, {
-          method: 'PUT',
+        const response = await fetch(`https://almanassik-alarabi-server-v-01.onrender.com/api/bookings/reject/${bookingId}`, {
+          method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + token

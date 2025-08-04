@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+  <!-- لا تضع سكريبت اللغة هنا، سيتم تحميله في الصفحة الرئيسية فقط -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>منصة العمرة | حجوزات العمرة المميزة</title>
+  <title id="pageTitle">منصة المناسك العربي | حجوزات العمرة المميزة</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
@@ -27,8 +28,7 @@
       font-family: 'Tajawal', sans-serif;
       background-color: #f9f9f9;
       color: var(--text-dark);
-      overflow-x: hidden;
-      touch-action: manipulation;
+     
     }
 
     /* الشريط العلوي المثبت */
@@ -80,6 +80,18 @@
       margin: 0 10px;
       position: relative;
       min-width: 0;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    body.hide-search-bar .search-container {
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+      height: 0 !important;
+      width: 0 !important;
+      min-width: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: block !important;
     }
 
     .search-bar {
@@ -197,14 +209,25 @@ height: 30px;
   </style>
 </head>
 <body>
+  <script>
+    // إضافة كلاس إخفاء شريط البحث مباشرة قبل تحميل الشريط العلوي
+    (function(){
+      var mainPages = ['home1.html', 'index.html'];
+      var currentPath = window.location.pathname;
+      var isMain = mainPages.some(function(page){ return currentPath.includes(page); });
+      if (!isMain) {
+        document.body.classList.add('hide-search-bar');
+      }
+    })();
+  </script>
   <!-- الشريط العلوي المثبت -->
   <div class="top-bar">
     <div class="logo" onclick="goToHome()">
-      <img src="img/images.jpeg" alt="شعار منصة العمرة" class="logo-img" />
-      <span class="logo-text">منصة العمرة</span>
+      <img src="img/images.jpeg" alt="شعار منصة المناسك العربي" class="logo-img" />
+      <span class="logo-text">منصة المناسك العربي</span>
     </div>
 
-    <div class="search-container">
+    <div class="search-container" id="searchBarContainer">
       <input type="text" class="search-bar" placeholder="ابحث..." id="searchInput">
       <i class="fas fa-search search-icon"></i>
     </div>
@@ -212,13 +235,13 @@ height: 30px;
     <div class="actions">
       <button class="lang-btn" onclick="toggleLanguage()">
         <i class="fas fa-globe"></i>
-        <span>EN</span>
+        <span>FR</span>
       </button>
-    
     </div>
   </div>
 
  
+  <!-- لا تضع سكريبت اللغة هنا، سيتم تحميله في الصفحة الرئيسية فقط -->
   <script>
     // الذهاب للصفحة الرئيسية
     function goToHome() {
@@ -228,46 +251,117 @@ height: 30px;
       });
     }
 
-    // تبديل اللغة
-    function toggleLanguage() {
-      const langBtn = document.querySelector('.lang-btn');
-      const currentLang = langBtn.querySelector('span');
-      
-      if (currentLang.textContent === 'EN') {
-        currentLang.textContent = 'AR';
-        langBtn.style.background = 'var(--islamic-green)';
-        langBtn.style.color = 'var(--white)';
+    // دالة لفحص وإخفاء شريط البحث حسب الصفحة
+    function checkSearchBarVisibility() {
+      var mainPages = ['home1.html', 'index.html'];
+      var currentPath = window.location.pathname;
+      var isMain = mainPages.some(function(page){ return currentPath.includes(page); });
+      if (!isMain) {
+        document.body.classList.add('hide-search-bar');
       } else {
-        currentLang.textContent = 'EN';
-        langBtn.style.background = 'var(--golden)';
-        langBtn.style.color = 'var(--islamic-green)';
+        document.body.classList.remove('hide-search-bar');
       }
     }
 
-  
-
     // البحث
-    document.getElementById('searchInput').addEventListener('keypress', function (e) {
-      if (e.key === 'Enter') {
-        performSearch(this.value);
-      }
-    });
+    var searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+      searchInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+          performSearch(this.value);
+        }
+      });
+    }
 
     function performSearch(query) {
       if (query.trim() !== '') {
-        console.log('بحث عن:', query);
+        // البحث في الصفحة الرئيسية فقط
+        var body = document.body;
+        var text = query.trim().toLowerCase();
+        // ابحث عن أول عنصر يحتوي على الكلمة
+        var found = null;
+        // ابحث في العناصر النصية فقط
+        var tags = ['h1','h2','h3','h4','h5','h6','p','span','div','li','section'];
+        for (var t=0; t<tags.length; t++) {
+          var els = document.getElementsByTagName(tags[t]);
+          for (var i=0; i<els.length; i++) {
+            var el = els[i];
+            if (el.innerText && el.innerText.toLowerCase().includes(text)) {
+              found = el;
+              break;
+            }
+          }
+          if (found) break;
+        }
+        if (found) {
+          found.scrollIntoView({behavior:'smooth',block:'center'});
+          // إبراز العنصر مؤقتاً
+          var oldBg = found.style.backgroundColor;
+          found.style.backgroundColor = '#fffbe6';
+          found.style.transition = 'background-color 0.7s';
+          setTimeout(function(){
+            found.style.backgroundColor = oldBg || '';
+          }, 1800);
+        } else {
+          // إظهار رسالة أعلى الصفحة بدلاً من alert
+          var msgId = 'search-not-found-msg';
+          var oldMsg = document.getElementById(msgId);
+          if (oldMsg) oldMsg.remove();
+          var msg = document.createElement('div');
+          msg.id = msgId;
+          msg.textContent = 'لم يتم العثور على نتيجة مطابقة';
+          msg.style.position = 'fixed';
+          msg.style.top = '65px';
+          msg.style.left = '50%';
+          msg.style.transform = 'translateX(-50%)';
+          msg.style.background = '#fffbe6';
+          msg.style.color = '#bfa12e';
+          msg.style.fontWeight = 'bold';
+          msg.style.fontSize = '1.08em';
+          msg.style.padding = '10px 22px';
+          msg.style.borderRadius = '18px';
+          msg.style.boxShadow = '0 2px 8px #f5e6a8';
+          msg.style.zIndex = '9999';
+          document.body.appendChild(msg);
+          setTimeout(function(){ msg.remove(); }, 2200);
+        }
       }
     }
 
-    // منع التكبير/التصغير بالضغط المزدوج
-    document.addEventListener('dblclick', function(e) {
-      e.preventDefault();
-    }, { passive: false });
+    // تغيير نصوص الشريط العلوي حسب اللغة من lang.js
+    function updateTopBarTexts(lang) {
+      document.querySelector('.logo-text').textContent = window.langTexts[lang].platform;
+      document.getElementById('searchInput').placeholder = window.langTexts[lang].search;
+      document.querySelector('.lang-btn span').textContent = window.langTexts[lang].lang;
+      document.documentElement.lang = lang === 'ar' ? 'ar' : 'fr';
+      document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    }
 
-    // تحسين الأداء على الأجهزة المحمولة
-    document.addEventListener('touchmove', function(e) {
-      e.preventDefault();
-    }, { passive: false });
+    // عند تحميل الشريط العلوي بعد إدراجه ديناميكياً
+    function initTopBarLang() {
+      const lang = window.getCurrentLang();
+      updateTopBarTexts(lang);
+      // ربط زر اللغة
+      document.querySelector('.lang-btn').onclick = function() {
+        window.toggleLanguage();
+      };
+      // تحقق من إظهار/إخفاء شريط البحث بعد إدراج الشريط العلوي
+      checkSearchBarVisibility();
+    }
+    // إذا كانت langTexts متوفرة (تم تحميل lang.js في الصفحة الرئيسية)
+    if (window.langTexts) {
+      initTopBarLang();
+    } else {
+      // انتظر حتى تحميل lang.js من الصفحة الرئيسية
+      const langInterval = setInterval(function() {
+        if (window.langTexts) {
+          clearInterval(langInterval);
+          initTopBarLang();
+        }
+      }, 50);
+    }
+
+    // يمكن إضافة أي كود إضافي هنا عند الحاجة
   </script>
 </body>
 </html>

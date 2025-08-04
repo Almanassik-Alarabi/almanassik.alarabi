@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ملف الوكالة</title>
+        <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/profile_agencies.css">
+        <script src="js/authGuard.js"></script>
+    <script src="js/agencyTokenRefresher.js"></script>
+</head>
+<body>
+    <div class="main-wrapper">
+        <!-- الشريط الجانبي -->
+        <div id="sidebar-container">
+            <!-- سيتم إدراج محتوى sidebar.html هنا عبر جافاسكريبت -->
+        </div>
+        <div class="profile-container">
+            <h2>ملف الوكالة</h2>
+            <form id="agencyProfileForm">
+                <div class="profile-header">
+                    <div class="profile-logo-bg">
+                        <div class="img-edit-block">
+                            <img id="backgroundPreview" src="" alt="خلفية الملف" class="background-img">
+                            <label class="img-edit-btn">
+                                <i class="fas fa-pen"></i> تغيير الخلفية
+                                <input type="file" id="background_url" name="background_url" accept="image/*" style="display:none">
+                            </label>
+                        </div>
+                        <div class="img-edit-block logo-block">
+                            <img id="logoPreview" src="" alt="شعار الوكالة" class="logo-img">
+                            <label class="img-edit-btn">
+                                <i class="fas fa-pen"></i> تغيير الشعار
+                                <input type="file" id="logo_url" name="logo_url" accept="image/*" style="display:none">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                <div class="form-group">
+                    <label for="password">كلمة السر الجديدة:</label>
+                    <input type="password" id="password" name="password" minlength="6" autocomplete="new-password" placeholder="اتركه فارغاً إذا لا تريد التغيير">
+                </div>
+                    <div class="form-group">
+                        <label for="name">اسم الوكالة:</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="wilaya">الولاية:</label>
+                        <input type="text" id="wilaya" name="wilaya" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="license_number">رقم الرخصة:</label>
+                        <input type="text" id="license_number" name="license_number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">الهاتف:</label>
+                        <input type="text" id="phone" name="phone" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bank_account">رقم الحساب البنكي:</label>
+                        <input type="text" id="bank_account" name="bank_account">
+                    </div>
+                    <div class="form-group">
+                        <label for="location_name">الموقع:</label>
+                        <input type="text" id="location_name" name="location_name" autocomplete="off" placeholder="ابحث عن الموقع (الولاية، الشارع ...)">
+                        <div id="location-suggestions" class="suggestions-list"></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="latitude">خط العرض:</label>
+                        <input type="number" step="any" id="latitude" name="latitude">
+                    </div>
+                    <div class="form-group">
+                        <label for="longitude">خط الطول:</label>
+                        <input type="number" step="any" id="longitude" name="longitude">
+                    </div>
+                </div>
+                <!-- قائمة المطارات المرتبطة -->
+                <div class="form-row">
+                  <div class="form-group" style="width:100%">
+                    <label>المطارات المرتبطة:</label>
+                    <button type="button" id="show-airports-btn" style="margin-bottom:10px">عرض جميع المطارات</button>
+                    <div id="agency-airports-list"></div>
+                  </div>
+                </div>
+                <!-- تم نقل أزرار تغيير الصور للأعلى بجانب الصور -->
+                <button type="submit" class="save-btn">حفظ التعديلات</button>
+            </form>
+            <div id="message"></div>
+        </div>
+    </div>
+    <script>
+    // إدراج الشريط الجانبي من ملف sidebar.html
+    fetch('sidebar.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('sidebar-container').innerHTML = html;
+      });
+    </script>
+    <script src="js/profile_agencies.js"></script>
+    <script src="js/agencyTokenRefresher.js"></script>
+</body>
+</html>

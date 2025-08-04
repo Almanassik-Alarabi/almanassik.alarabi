@@ -3,184 +3,503 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="منصة العمرة - خدمات حجز العمرة المتكاملة">
+    <meta name="description" content="منصة المناسك العربي - خدمات حجز العمرة المتكاملة">
     <meta name="theme-color" content="#004d40">
-    <title>منصة العمرة - الصفحة الرئيسية</title>
+    <title>منصة المناسك العربي - الصفحة الرئيسية</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
-     <link rel="stylesheet" href="css/home1.css">
-    
+    <link rel="stylesheet" href="css/home1.css">
+    <style>
+      /* بطاقات عصرية مع تحريك دخول ورسوم متحركة */
+      .card-section {
+        background: linear-gradient(135deg, #fffbe6 0%, #f5e6a8 100%);
+        border-radius: 22px;
+        padding: 34px 22px 60px 22px;
+        margin: 34px 0 22px 0;
+        border: 2.5px solid #d4af37;
+        box-shadow: 0 18px 48px -12px rgba(212,175,55,0.18), 0 2px 0 #f5e6a8, inset 0 2px 18px #f5e6a8;
+        position: relative;
+        overflow: hidden;
+        transition: box-shadow 0.3s, border-color 0.3s, transform 0.3s;
+        opacity: 0;
+        transform: translateY(40px) scale(0.98);
+        animation: cardFadeIn 0.8s cubic-bezier(.4,0,.2,1) forwards;
+      }
+      .card-section:not(:last-child)::after {
+        content: '';
+        display: block;
+        height: 2px;
+        width: 80%;
+        margin: 0 auto;
+        background: linear-gradient(90deg, #d4af37 0%, #fffbe6 100%);
+        border-radius: 2px;
+        position: absolute;
+        left: 10%;
+        bottom: -18px;
+        z-index: 2;
+      }
+      .card-section .golden-wave {
+        position: absolute;
+        left: 0; right: 0; bottom: 0;
+        width: 100%;
+        height: 32px;
+        pointer-events: none;
+        z-index: 1;
+      }
+      .card-section:hover {
+        box-shadow: 0 32px 72px -8px rgba(212,175,55,0.22), 0 2px 0 #d4af37, inset 0 2px 18px #d4af37;
+        border-color: #bfa12e;
+        transform: translateY(-4px) scale(1.01) rotate(0deg);
+      }
+      .card-section:hover .icon-animate {
+        color: #bfa12e;
+        filter: drop-shadow(0 2px 8px #d4af37);
+      }
+      .card-section {
+        box-shadow: 0 18px 48px -12px rgba(212,175,55,0.18), 0 2px 0 #f5e6a8, inset 0 2px 18px #f5e6a8;
+      }
+      .card-section:nth-child(1) { animation-delay: 0.1s; }
+      .card-section:nth-child(2) { animation-delay: 0.3s; }
+      .card-section:nth-child(3) { animation-delay: 0.5s; }
+      .card-section:nth-child(4) { animation-delay: 0.7s; }
+      .card-section:nth-child(5) { animation-delay: 0.9s; }
+      .card-section {
+        will-change: transform, opacity;
+      }
+      .card-section:hover {
+        box-shadow: 0 32px 72px -8px rgba(212,175,55,0.22), 0 2px 0 #d4af37;
+        border-color: #bfa12e;
+        transform: translateY(-4px) scale(1.01);
+      }
+      .card-section:hover {
+        box-shadow: 0 18px 56px rgba(212,175,55,0.18);
+        transform: translateY(-4px) scale(1.01);
+      }
+      @keyframes cardFadeIn {
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      .section-title {
+        font-size: 1.55rem;
+        color: var(--islamic-green);
+        margin-bottom: 22px;
+        font-family: 'Amiri', serif;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        position: relative;
+      }
+      .section-title .icon-animate {
+        display: inline-block;
+        font-size: 1.5em;
+        color: var(--golden);
+        margin-left: 7px;
+        animation: iconBounce 1.2s infinite alternate;
+      }
+      @keyframes iconBounce {
+        0% { transform: translateY(0) scale(1); }
+        60% { transform: translateY(-7px) scale(1.12); }
+        100% { transform: translateY(0) scale(1); }
+      }
+      /* شهادات العملاء */
+      .testimonial {
+        background: linear-gradient(90deg, #f5e6a8 0%, #fffbe6 100%);
+        border-radius: 12px;
+        padding: 15px 18px;
+        margin-bottom: 1.2em;
+        box-shadow: 0 2px 10px rgba(212,175,55,0.07);
+        font-size: 1.05em;
+        color: #333;
+        border-right: 4px solid var(--golden);
+        position: relative;
+      }
+      .testimonial strong {
+        color: var(--islamic-green);
+        font-size: 1.08em;
+      }
+      /* FAQ Accordion عصري */
+      .faq-item {
+        margin-bottom: 13px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        background: #fff;
+        transition: box-shadow 0.2s;
+        border: 1px solid #f5e6a8;
+      }
+      .faq-item.active {
+        box-shadow: 0 8px 24px rgba(0,0,0,0.13);
+        border-color: var(--golden);
+      }
+      .faq-question {
+        background: var(--white);
+        padding: 15px 18px;
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        font-size: 1.13em;
+        color: var(--islamic-green);
+        border-bottom: 1px solid #f0f0f0;
+        transition: background 0.2s;
+        position: relative;
+      }
+      .faq-question i {
+        transition: transform 0.3s;
+      }
+      .faq-item.active .faq-question i {
+        transform: rotate(180deg);
+        color: var(--golden);
+      }
+      .faq-question:hover {
+        background: #f5f5f5;
+      }
+      .faq-answer {
+        background: var(--light-gray);
+        padding: 0 18px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s cubic-bezier(.4,0,.2,1), padding 0.3s;
+        color: #444;
+        font-size: 1em;
+        line-height: 1.8;
+        white-space: pre-line;
+        display: block;
+        /* لإخفاء شريط التمرير إلا عند الحاجة */
+        scrollbar-width: thin;
+        scrollbar-color: var(--golden) #eee;
+        border-top: 1px solid #f0e0a0;
+        word-break: break-word;
+        direction: inherit;
+        box-sizing: border-box;
+      }
+      .faq-item.active .faq-answer {
+        padding: 15px 18px;
+        max-height: 10000px;
+        overflow-y: auto;
+        /* دعم الإجابات الطويلة جداً */
+        min-height: 40px;
+        /* إظهار شريط تمرير فقط عند الحاجة */
+        scrollbar-width: thin;
+        scrollbar-color: var(--golden) #eee;
+      }
+      @media (max-width: 600px) {
+        .card-section {
+          padding: 13px 3px 38px 3px;
+          margin: 13px 0 18px 0;
+          border-radius: 14px;
+        }
+        .section-title { font-size: 1.18rem; gap: 7px; }
+        .testimonial { padding: 10px 7px; font-size: 0.97em; }
+        .faq-question { font-size: 1em; padding: 11px 10px; }
+        .faq-answer { font-size: 0.95em; padding: 0 10px; }
+        .faq-item.active .faq-answer { padding: 11px 10px; }
+      }
+    </style>
+    <!-- سكريبتات اللغة يجب أن تسبق إدراج الشريط العلوي -->
+    <script src="components/lang.js"></script>
+    <!-- <script src="../user/lang/top-bar.js"></script> -->
+    <script src="../user/lang/lang_home1.js"></script>
 </head>
 <body>
-      <img src="img/img1.jpeg" alt="خلفية منصة العمرة" class="hero-bg-full" />
+    <img src="img/home.jpg" alt="خلفية منصة المناسك العربي" class="hero-bg-full" />
     <div class="overlay-bg"></div>
 
     <!-- Fixed Top Bar -->
     <div id="top-bar-placeholder"></div>
-
+    <script>
+      // إدراج الشريط العلوي ديناميكياً بعد تحميل ملفات اللغة
+      fetch('components/top-bar.html')
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById('top-bar-placeholder').innerHTML = html;
+        });
+    </script>
 
     <!-- Hero Section -->
     <section class="hero-section" id="heroSection">
-        <div class="hero-bg" id="heroBg"></div>
-        <div class="hero-overlay"></div>
-        
-        <div class="hero-content">
-            
-            <div class="hero-buttons">
-                <a href="#" class="hero-btn gold-btn">
-                    <i class="fas fa-gem"></i>
-                    العروض الذهبية
-                </a>
-                <a href="#" class="hero-btn green-btn">
-                    <i class="fas fa-kaaba"></i>
-                    تصفح الرحلات
-                </a>
-            </div>
+      <div class="hero-bg" id="heroBg"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content" style="margin-bottom:100px;">
+    <h1 class="landing-title" style="font-size:2rem;text-align:center;margin-bottom:0.5em;">🕋✨ <span id="landingTitle"></span></h1>
+        <div class="hero-buttons">
+          <a href="golden.html" class="hero-btn gold-btn">
+            <i class="fas fa-gem"></i>
+            <span id="goldBtnText">العروض الذهبية</span>
+          </a>
+          <a href="offers.html" class="hero-btn green-btn">
+            <i class="fas fa-kaaba"></i>
+            <span id="tripsBtnText">تصفح الرحلات</span>
+          </a>
         </div>
+      </div>
     </section>
 
-    <!-- المحتوى الرئيسي -->
-    <div class="main-content" id="mainContent">
-        <!-- قسم المميزات -->
-        <section class="card-section">
-            <h2 class="section-title">مميزات المنصة</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-mosque"></i>
-                    </div>
-                    <h3>حجز سهل وآمن</h3>
-                    <p>احجز رحلة عمرتك بخطوات بسيطة وآمنة</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-hand-holding-heart"></i>
-                    </div>
-                    <h3>خدمة متميزة</h3>
-                    <p>دعم متواصل على مدار الساعة</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h3>عروض حصرية</h3>
-                    <p>باقات متنوعة تناسب جميع الميزانيات</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>ضمان الجودة</h3>
-                    <p>نضمن لك أفضل تجربة مع شركائنا</p>
-                </div>
-            </div>
-        </section>
+    <main class="main-content" id="mainContent">
+      <section class="card-section" style="margin-top:1.5em;">
+        <h2 class="section-title"><span class="icon-animate"><i class="fas fa-book-open"></i></span> <span id="storyTitle"></span></h2>
+        <div class="story-content" id="storyContent" style="white-space:pre-line;line-height:1.85;font-size:1.08em;color:var(--text-dark);text-align:center;margin-bottom:0.7em;"></div>
+        <div class="golden-wave">
+          <svg viewBox="0 0 400 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 24C50 48 150 0 200 24C250 48 350 0 400 24V48H0V24Z" fill="#f5e6a8"/><path d="M0 36C50 48 150 12 200 36C250 48 350 12 400 36V48H0V36Z" fill="#d4af37"/></svg>
+        </div>
+      </section>
 
-        <!-- الإحصائيات -->
-        <section class="card-section">
-            <h2 class="section-title">أرقامنا تتحدث</h2>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-number">10,000+</div>
-                    <div class="stat-label">معتمر سعيد</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">100+</div>
-                    <div class="stat-label">وكالة معتمدة</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">50+</div>
-                    <div class="stat-label">برنامج عمرة</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">24/7</div>
-                    <div class="stat-label">دعم متواصل</div>
-                </div>
-            </div>
-        </section>
+      <section class="card-section">
+        <h2 class="section-title"><span class="icon-animate"><i class="fas fa-star"></i></span> <span id="featuresTitle"></span></h2>
+        <ul class="features-list" id="featuresList" style="padding-right:0;list-style:none;"></ul>
+        <div class="golden-wave">
+          <svg viewBox="0 0 400 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 24C50 48 150 0 200 24C250 48 350 0 400 24V48H0V24Z" fill="#f5e6a8"/><path d="M0 36C50 48 150 12 200 36C250 48 350 12 400 36V48H0V36Z" fill="#d4af37"/></svg>
+        </div>
+      </section>
 
-        <!-- الأسئلة الشائعة -->
-        <section class="card-section">
-            <h2 class="section-title">الأسئلة الشائعة</h2>
-            <div class="faq-item">
-                <div class="faq-question">
-                    كيف يمكنني حجز رحلة عمرة؟
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="faq-answer">
-                    يمكنك حجز رحلة العمرة بسهولة من خلال موقعنا. اختر الباقة المناسبة، أدخل بياناتك، واختر طريقة الدفع المناسبة.
-                </div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">
-                    هل يمكنني تعديل أو إلغاء الحجز؟
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="faq-answer">
-                    نعم، يمكنك تعديل أو إلغاء الحجز وفقًا لسياسة الإلغاء الخاصة بالمنصة.
-                </div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">
-                    ما هي طرق الدفع المتاحة؟
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="faq-answer">
-                    نوفر عدة طرق دفع آمنة تشمل البطاقات البنكية، التحويل البنكي، والدفع الإلكتروني.
-                </div>
-            </div>
-        </section>
+      <section class="card-section">
+        <h2 class="section-title"><span class="icon-animate"><i class="fas fa-medal"></i></span> <span id="goldenTitle"></span></h2>
+        <div class="golden-block" id="goldenBlock" style="border-radius:18px;padding:22px 12px 18px 12px;background:var(--light-gray);box-shadow:none;position:relative;overflow:hidden;">
+          <!-- سيتم ملء عناصر العرض الذهبي ديناميكياً مع أيقونات وعناوين فرعية -->
+          <!-- موجة ذهبية أسفل البطاقة -->
+          <div class="golden-wave" style="position:absolute;left:0;right:0;bottom:0;width:100%;height:32px;pointer-events:none;z-index:1;">
+            <svg viewBox="0 0 400 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 24C50 48 150 0 200 24C250 48 350 0 400 24V48H0V24Z" fill="#f5e6a8"/><path d="M0 36C50 48 150 12 200 36C250 48 350 12 400 36V48H0V36Z" fill="#d4af37"/></svg>
+          </div>
+        </div>
+      </section>
 
-        <!-- معلومات الاتصال -->
-        <section class="card-section">
-            <h2 class="section-title">تواصل معنا</h2>
-            <div class="contact-grid">
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <i class="fas fa-phone-alt"></i>
-                    </div>
-                    <div class="contact-info">
-                        <h3>رقم الهاتف</h3>
-                        <p>+966 50 000 0000</p>
-                    </div>
-                </div>
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <i class="fab fa-whatsapp"></i>
-                    </div>
-                    <div class="contact-info">
-                        <h3>واتساب</h3>
-                        <p>+966 50 000 0000</p>
-                    </div>
-                </div>
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <div class="contact-info">
-                        <h3>البريد الإلكتروني</h3>
-                        <p>info@umrah.com</p>
-                    </div>
-                </div>
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <i class="fab fa-twitter"></i>
-                    </div>
-                    <div class="contact-info">
-                        <h3>تويتر</h3>
-                        <p>@umrahplatform</p>
-                    </div>
-                </div>
+      <section class="card-section">
+        <h2 class="section-title" id="testimonialsTitle"></h2>
+        <div id="testimonials"></div>
+        <div class="golden-wave">
+          <svg viewBox="0 0 400 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 24C50 48 150 0 200 24C250 48 350 0 400 24V48H0V24Z" fill="#f5e6a8"/><path d="M0 36C50 48 150 12 200 36C250 48 350 12 400 36V48H0V36Z" fill="#d4af37"/></svg>
+        </div>
+      </section>
+
+      <section class="card-section">
+        <h2 class="section-title" id="faqTitle"></h2>
+        <div id="faqs"></div>
+        <div class="golden-wave">
+          <svg viewBox="0 0 400 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 24C50 48 150 0 200 24C250 48 350 0 400 24V48H0V24Z" fill="#f5e6a8"/><path d="M0 36C50 48 150 12 200 36C250 48 350 12 400 36V48H0V36Z" fill="#d4af37"/></svg>
+        </div>
+      </section>
+
+      <!-- Contact Card Section (dynamic, multi-language) -->
+      <section class="card-section" style="margin-bottom:2em;">
+        <h2 class="section-title"><span class="icon-animate"><i class="fas fa-headset"></i></span> <span id="contactTitle"></span></h2>
+        <div class="contact-grid" id="contactGrid"></div>
+      </section>
+    </main>
+
+    <script>
+      fetch('https://almanassik-alarabi-server-v-01.onrender.com/api/site-stats/visit', { method: 'POST' });
+
+      // ربط نصوص الصفحة الرئيسية ديناميكياً
+      function fillHome1Texts() {
+        if (!window.home1Texts) return;
+        const lang = window.getCurrentLang ? window.getCurrentLang() : 'ar';
+        const t = window.home1Texts[lang];
+        // تواصل معنا (ديناميكي)
+        document.getElementById('contactTitle').textContent = t.contactTitle;
+        const contactGrid = document.getElementById('contactGrid');
+        contactGrid.innerHTML = '';
+        t.contactMethods.forEach(method => {
+          const a = document.createElement('a');
+          a.className = 'contact-card';
+          a.href = method.href;
+          a.target = '_blank';
+          a.style.textDecoration = 'none';
+          a.innerHTML = `
+            <span class="contact-icon"><i class="${method.icon}"></i></span>
+            <div class="contact-info">
+              <h3>${method.label}</h3>
+              <p>${method.value}</p>
             </div>
-        </section>
-    </div>
+          `;
+          contactGrid.appendChild(a);
+        });
+        document.getElementById('landingTitle').textContent = t.landingTitle;
+        // تحديث نص الأزرار الرئيسية
+        var goldBtn = document.getElementById('goldBtnText');
+        if (goldBtn) goldBtn.textContent = t.goldBtnText || '';
+        var tripsBtn = document.getElementById('tripsBtnText');
+        if (tripsBtn) tripsBtn.textContent = t.tripsBtnText || '';
+        document.getElementById('storyTitle').textContent = t.storyTitle;
+        document.getElementById('storyContent').textContent = t.storyContent;
+        document.getElementById('featuresTitle').textContent = t.featuresTitle;
+        // مميزات (عناوين فرعية مع أيقونات جمالية)
+        const featuresList = document.getElementById('featuresList');
+        featuresList.innerHTML = '';
+        // أيقونات جمالية متحركة لكل ميزة حسب العنوان
+        const featureIcons = [
+          'fas fa-eye',         // الشفافية الكاملة
+          'fas fa-user-check',  // سهولة الاستخدام
+          'fas fa-shield-alt',  // عروض حقيقية من وكالات موثوقة
+          'fas fa-gift',        // هدية المناسك العربي
+          'fas fa-sliders-h',   // ترتيب ذكي للعروض
+          'fas fa-credit-card'  // طرق دفع مرنة
+        ];
+        t.features.forEach((f, i) => {
+          const div = document.createElement('div');
+          div.style.display = 'flex';
+          div.style.flexDirection = 'column';
+          div.style.alignItems = 'center';
+          div.style.justifyContent = 'center';
+          div.style.marginBottom = '1.1em';
+          div.innerHTML = `
+            <span class="feature-animate-icon" style="font-size:2em;color:var(--golden);margin-bottom:0.2em;display:inline-block;">
+              <i class="${featureIcons[i] || 'fas fa-star'}"></i>
+            </span>
+            <span style="font-size:1.13em;font-weight:600;text-align:center;line-height:1.7;">${f.title}</span>
+            <span style="font-size:1em;font-weight:400;text-align:center;line-height:1.7;margin-top:0.3em;">${f.text}</span>
+          `;
+          featuresList.appendChild(div);
+        });
+
+        // تحريك جميع الأيقونات معاً
+        document.querySelectorAll('.feature-animate-icon').forEach((el, idx) => {
+          el.style.animation = `iconBounce 1.2s ${0.1 * idx}s infinite alternate`;
+        });
+        // الذهبي (عناوين فرعية مع أيقونات متحركة جمالية)
+        document.getElementById('goldenTitle').textContent = t.goldenTitle;
+        const goldenBlock = document.getElementById('goldenBlock');
+        goldenBlock.innerHTML = '';
+        // تعريف الأيقونات لكل عنصر
+        const goldenIcons = [
+          'fas fa-gem',         // ما هو العرض الذهبي
+          'fas fa-star',        // لماذا العرض الذهبي
+          'fas fa-crown',       // أفضل من كل الجوانب
+          'fas fa-magic',       // كيف تستفيد
+          'fas fa-user-shield'  // لماذا أنت
+        ];
+        // عناصر العرض الذهبي: عناوين فرعية مع أيقونات متحركة
+        const goldenSections = [
+          { icon: goldenIcons[0], title: t.goldenWhat, content: t.goldenWhatContent },
+          { icon: goldenIcons[1], title: t.goldenWhy, content: t.goldenWhyContent },
+          // نقاط "أفضل من كل الجوانب" كعناوين فرعية مع أيقونات
+          { icon: goldenIcons[2], title: t.goldenPointsTitle || '', points: t.goldenPoints },
+          { icon: goldenIcons[3], title: t.goldenHow, content: t.goldenHowContent },
+          { icon: goldenIcons[4], title: t.goldenWhyYou, content: t.goldenWhyYouContent }
+        ];
+        goldenSections.forEach((sec, idx) => {
+          const sectionDiv = document.createElement('div');
+          sectionDiv.style.display = 'flex';
+          sectionDiv.style.flexDirection = 'column';
+          sectionDiv.style.alignItems = 'center';
+          sectionDiv.style.justifyContent = 'center';
+          sectionDiv.style.marginBottom = '1.1em';
+          // أيقونة متحركة
+          sectionDiv.innerHTML = `
+            <span class="golden-animate-icon" style="font-size:2em;color:var(--golden);margin-bottom:0.2em;display:inline-block;">
+              <i class="${sec.icon}"></i>
+            </span>
+            <span style="font-size:1.13em;font-weight:600;text-align:center;line-height:1.7;">${sec.title}</span>
+          `;
+          // محتوى نصي أو نقاط
+          if (sec.points && Array.isArray(sec.points)) {
+            // نقاط "أفضل من كل الجوانب" كعناوين فرعية مع أيقونات
+            const pointsList = document.createElement('ul');
+            pointsList.style.paddingRight = '0';
+            pointsList.style.listStyle = 'none';
+            pointsList.style.marginTop = '0.7em';
+            // أيقونات لكل نقطة
+            const pointIcons = [
+              'fas fa-check-circle',
+              'fas fa-bolt',
+              'fas fa-heart',
+              'fas fa-thumbs-up',
+              'fas fa-hand-holding-usd',
+              'fas fa-award'
+            ];
+            sec.points.forEach((pt, i) => {
+              const li = document.createElement('li');
+              li.style.display = 'flex';
+              li.style.alignItems = 'center';
+              li.style.gap = '8px';
+              li.style.marginBottom = '0.5em';
+              li.innerHTML = `
+                <span class="golden-point-icon" style="font-size:1.2em;color:var(--golden);display:inline-block;animation:iconBounce 1.2s ${0.1 * i}s infinite alternate;">
+                  <i class="${pointIcons[i % pointIcons.length]}"></i>
+                </span>
+                <span style="font-size:1em;">${pt.replace(/✅|✔️|💵|🎁/g, '')}</span>
+              `;
+              pointsList.appendChild(li);
+            });
+            sectionDiv.appendChild(pointsList);
+          } else if (sec.content) {
+            const p = document.createElement('p');
+            p.style.textAlign = 'center';
+            p.style.margin = '0.7em 0 0.2em 0';
+            p.textContent = sec.content;
+            sectionDiv.appendChild(p);
+          }
+          goldenBlock.appendChild(sectionDiv);
+        });
+        // تحريك جميع أيقونات العرض الذهبي معاً
+        document.querySelectorAll('.golden-animate-icon').forEach((el, idx) => {
+          el.style.animation = `iconBounce 1.2s ${0.1 * idx}s infinite alternate`;
+        });
+        // شهادات
+        document.getElementById('testimonialsTitle').textContent = t.testimonialsTitle;
+        const testimonials = document.getElementById('testimonials');
+        testimonials.innerHTML = '';
+        t.testimonials.forEach(tm => {
+          const div = document.createElement('div');
+          div.className = 'testimonial';
+          // استخدم الصور الثابتة prs1.jpeg, prs2.jpeg, prs3.jpeg حسب الترتيب
+          const fixedImgs = ['prs1.jpeg', 'prs2.jpeg', 'prs3.jpeg'];
+          const idx = testimonials.childElementCount % fixedImgs.length;
+          const imgSrc = 'img/' + fixedImgs[idx];
+          div.innerHTML = `
+            <div style="display:flex;align-items:center;gap:13px;">
+              <div style="width:64px;height:64px;display:flex;align-items:center;justify-content:center;">
+                <div style="width:54px;height:54px;background:#fffbe6;border:2px solid #d4af37;box-shadow:0 2px 8px #f5e6a8;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+                  <img src="${imgSrc}" alt="${tm.name}" style="width:44px;height:44px;object-fit:cover;border-radius:0;">
+                </div>
+              </div>
+              <div>
+                <strong style="font-size:1.08em;color:var(--islamic-green);">${tm.name}</strong>
+                <div style="font-size:1em;color:#333;margin-top:2px;">${tm.text}</div>
+              </div>
+            </div>
+          `;
+          div.style.marginBottom = '1em';
+          testimonials.appendChild(div);
+        });
+        // الأسئلة الشائعة
+        document.getElementById('faqTitle').textContent = t.faqTitle;
+        const faqs = document.getElementById('faqs');
+        faqs.innerHTML = '';
+        t.faqs.forEach((faq, idx) => {
+          const qDiv = document.createElement('div');
+          qDiv.className = 'faq-item';
+          qDiv.innerHTML = `<div class='faq-question'>${faq.q} <i class="fas fa-chevron-down"></i></div><div class='faq-answer'>${faq.a}</div>`;
+          faqs.appendChild(qDiv);
+        });
+        // تفعيل إظهار/إخفاء الأجوبة بشكل ديناميكي مع حركة سلسة
+        document.querySelectorAll('.faq-item').forEach(item => {
+          const question = item.querySelector('.faq-question');
+          const answer = item.querySelector('.faq-answer');
+          answer.style.maxHeight = '0';
+          answer.style.display = 'block';
+          item.classList.remove('active');
+          question.onclick = function() {
+            const isActive = item.classList.contains('active');
+            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+            if (!isActive) {
+              item.classList.add('active');
+            }
+          };
+        });
+      }
+      // عند تحميل الصفحة أو تغيير اللغة
+      document.addEventListener('DOMContentLoaded', fillHome1Texts);
+      window.addEventListener('storage', fillHome1Texts);
+    </script>
 
     <!-- يتم استدعاء الشريط السفلي من ملف خارجي -->
       <!-- Fixed Bottom Navigation -->
     <div id="bottom-bar-placeholder"></div>
 
-    <!-- Scroll to Top Button -->
-    <button class="scroll-top" onclick="scrollToTop()">↑</button>
+    <!-- Scroll to Top Button تم حذفه -->
   
     <script src="components/include-bars.js"></script>
     <script src="js/home1.js"></script>

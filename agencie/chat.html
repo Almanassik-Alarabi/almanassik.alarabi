@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>دردشة الوكالة</title>
+    <link rel="stylesheet" href="css/chat.css" />
+       <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      // منع تغيير خصائص html و dashboard-container عند تغيير اللغة
+      window.preventContainerLangChange = true;
+    </script>
+    <script src="js/languageSwitcher.js"></script>
+    <script src="js/agencyTokenRefresher.js"></script>
+        <script src="js/authGuard.js"></script>
+
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <div id="sidebar-container"></div>
+      <script src="js/sidebar.js"></script>
+      <script>
+        // تحميل الشريط الجانبي المشترك ديناميكيًا
+        document.addEventListener("DOMContentLoaded", function () {
+          var sidebarContainer = document.getElementById("sidebar-container");
+          if (!sidebarContainer) return;
+          fetch("sidebar.html")
+            .then((res) => res.text())
+            .then((html) => {
+              sidebarContainer.innerHTML = html;
+              if (typeof initSidebar === 'function') initSidebar();
+            });
+        });
+      </script>
+      <div class="chat-container">
+        <!-- Header -->
+        <div class="header">
+          <div class="header-left">
+            <h1
+              data-ar="صفحة التواصل مع الدعم "
+              data-en="Support Chat Page"
+              data-fr="Page de support"
+             > صفحة التواصل مع الدعم  </h1>
+          </div>
+        </div>
+        <!-- لم يعد هناك اختيار محادثة أو زر تحديث، الدردشة دائماً مع الإدارة -->
+        <div class="messages-list" id="messagesList"></div>
+        <form id="sendMessageForm" class="chat-input-row" autocomplete="off">
+          <input
+            type="text"
+            id="messageInput"
+            placeholder="اكتب رسالتك..."
+            style="flex:1;"
+          />
+          <label for="imageInput" style="margin:0 8px;cursor:pointer;">
+            <i class="fas fa-image" style="font-size:1.3em;color:#176a3d;"></i>
+          </label>
+          <input type="file" id="imageInput" accept="image/*" style="display:none;" />
+          <button type="submit">إرسال</button>
+        </form>
+      </div>
+    </div>
+    <script src="js/chat.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var emailSpan = document.getElementById('agencyEmailValue');
+      var agency = null;
+      try {
+        agency = JSON.parse(localStorage.getItem('agency_data'));
+      } catch(e) {}
+      if (agency && agency.name) {
+        if (emailSpan) emailSpan.textContent = agency.name;
+      } else {
+        if (emailSpan) emailSpan.textContent = 'لا يوجد اسم وكالة';
+      }
+    });
+    </script>
+  </body>
+</html>

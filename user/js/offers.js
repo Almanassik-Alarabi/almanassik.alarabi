@@ -4,7 +4,6 @@ let agencySet = new Set();
 let airportSet = new Set();
 async function fetchAndDisplayOffers(filteredOffers = null) {
     // تشخيص: طباعة بيانات العروض في الكونسول
-    console.log('allOffers (قبل):', allOffers, 'filteredOffers:', filteredOffers);
     // إذا كان filteredOffers حدث (Event) تجاهله
     if (filteredOffers && typeof filteredOffers === 'object' && filteredOffers instanceof Event) {
         filteredOffers = null;
@@ -14,7 +13,7 @@ async function fetchAndDisplayOffers(filteredOffers = null) {
     try {
         let offers = filteredOffers;
         if (!offers) {
-            const response = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/user/offers');
+            const response = await fetch('https://almanassik-alarabi-server-v-01.onrender.com/api/user/offers');
             let apiResult = await response.json();
             // دعم الاستجابة كمصفوفة أو كائن فيه data
             offers = Array.isArray(apiResult) ? apiResult : apiResult.data || [];
@@ -26,27 +25,30 @@ async function fetchAndDisplayOffers(filteredOffers = null) {
         if (!filteredOffers) {
             offers = allOffers;
         }
+        // فلترة العروض حسب تاريخ الذهاب (العروض المستقبلية فقط)
+        const now = new Date();
+        offers = offers.filter(offer => {
+            if (!offer.departure_date) return false;
+            const depDate = new Date(offer.departure_date);
+            // فقط العروض التي تاريخ الذهاب اليوم أو بعد اليوم
+            return depDate >= now.setHours(0,0,0,0);
+        });
 // جلب الوكالات والمطارات من API وتعبئة القوائم
 async function fetchAgenciesAndAirports(offers) {
     // جلب الوكالات والمطارات من API موحد
     try {
-        const res = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/user/with-offers-and-airports');
+        const res = await fetch('https://almanassik-alarabi-server-v-01.onrender.com/api/user/offers'); // <-- تعديل هنا
         const data = await res.json();
         agencySet = new Set();
         airportSet = new Set();
-        if (data && data.status === 'ok' && Array.isArray(data.agencies)) {
-            // حفظ الوكالات والمطارات في متغير عام لاستخدامه في الفلترة
-            window.lastAgenciesWithAirports = data.agencies;
-            data.agencies.forEach(agency => {
-                if (agency.name) agencySet.add(agency.name);
-                // المطارات الخاصة بالوكالة (من agency.airports)
-                if (Array.isArray(agency.airports)) {
-                    agency.airports.forEach(ap => {
-                        if (ap && ap.name) airportSet.add(ap.name);
-                    });
-                }
-            });
-        }
+        // دعم الاستجابة كمصفوفة أو كائن فيه data
+        const offersData = Array.isArray(data) ? data : data.data || [];
+        // بناء قائمة الوكالات والمطارات من بيانات العروض
+        offersData.forEach(offer => {
+            if (offer.agencies && offer.agencies.name) agencySet.add(offer.agencies.name);
+            if (offer.departure_airport) airportSet.add(offer.departure_airport);
+            else if (offer.airport) airportSet.add(offer.airport);
+        });
         airportSet.delete(undefined); airportSet.delete(null); airportSet.delete("");
         updateAgencyAndAirportLists();
     } catch (e) {
@@ -75,84 +77,54 @@ async function fetchAgenciesAndAirports(offers) {
                 bestOfferId = offer.id;
             }
         });
+        const lang = localStorage.getItem('lang') || document.documentElement.lang || 'ar';
+        const t = window.offersTexts && window.offersTexts[lang] ? window.offersTexts[lang] : window.offersTexts['ar'];
         offersContainer.innerHTML = offers.map(offer => {
-            // الخدمات (services) كأيقونات مع اسم الخدمة أسفل كل أيقونة
-            let servicesHtml = '';
-            if (offer.services && typeof offer.services === 'object') {
-                servicesHtml = Object.keys(offer.services).filter(key => offer.services[key]).map(key => {
-                    let icon = '', label = '';
-                    if (key === 'visa') {
-                        icon = '<i class="fas fa-passport" title="تأشيرة"></i>';
-                        label = 'تأشيرة';
-                    } else if (key === 'meals') {
-                        icon = '<i class="fas fa-utensils" title="وجبات"></i>';
-                        label = 'وجبات';
-                    } else if (key === 'transport') {
-                        icon = '<i class="fas fa-bus" title="نقل"></i>';
-                        label = 'نقل';
-                    } else {
-                        icon = '<i class="fas fa-check-circle"></i>';
-                        label = key;
-                    }
-                    return `<span class="offer-detail service-icon-with-label">${icon}<span class="service-label">${label}</span></span>`;
-                }).join(' ');
-            }
-            // اسم الوكالة الحقيقي
-            let agencyName = offer.agencies && offer.agencies.name ? offer.agencies.name : '';
-            // صورة العرض واسمها
-            let mainImage = offer.main_image || (offer.hotel_images && offer.hotel_images[0]) || '';
-            let imageName = mainImage ? mainImage.split('/').pop() : '';
-            // الموقع (entry/exit) كأيقونات مع اسم المدينة
-            let locationHtml = '';
-            if (offer.entry && offer.exit) {
-                locationHtml = `
-                  <span class="offer-location"><i class="fas fa-sign-in-alt" title="دخول"></i> ${offer.entry}</span>
-                  <span class="offer-location"><i class="fas fa-sign-out-alt" title="خروج"></i> ${offer.exit}</span>
-                `;
-            } else if (offer.entry) {
-                locationHtml = `<span class="offer-location"><i class="fas fa-sign-in-alt" title="دخول"></i> ${offer.entry}</span>`;
-            } else if (offer.exit) {
-                locationHtml = `<span class="offer-location"><i class="fas fa-sign-out-alt" title="خروج"></i> ${offer.exit}</span>`;
-            }
-            // شارة أفضل عرض (تاج فقط)
-            let bestBadge = (offer.id === bestOfferId) ? `<div class="offer-badge best-offer"><i class='fas fa-crown'></i></div>` : '';
+            const agencyLogo = offer.agencies && offer.agencies.logo_url ? `<img src='${offer.agencies.logo_url}' alt='logo'>` : '';
+            const price = Number(offer.price_quint) ? offer.price_quint + ' ' + (t.dzd || 'د.ج') : t.cardUnavailable;
+            const dateFormatted = offer.departure_date ? new Date(offer.departure_date).toLocaleDateString('en-GB').split('/').reverse().join('-') : '';
+            const distance = offer.hotel_distance ? `${offer.hotel_distance} M` : '';
+            const showCrown = offer.type === 'golden' || offer.is_golden;
+            const gpsBtn = (offer.agencies && (offer.agencies.latitude || offer.agencies.longitude)) ?
+                `<a href='https://www.google.com/maps/search/?api=1&query=${offer.agencies.latitude},${offer.agencies.longitude}' target='_blank' class='location-btn' title='${t.cardLocation}'><i class='fas fa-map-marker-alt'></i></a>` : '';
+            // عرض اسم الموقع من offer.agencies.location_name إذا كان موجوداً
+            const locationName = offer.agencies && offer.agencies.location_name
+                ? offer.agencies.location_name
+                : (offer.location_name && offer.location_name !== t.cardUnavailable ? offer.location_name : `<span style=\"color:#d32f2f\">${t.cardUnavailable}</span>`);
+            // بناء الكارت بدون زر التفاصيل
             return `
-            <div class="offer-card" style="max-width: 400px;">
-                ${bestBadge}
-                <img src="${mainImage}" alt="${offer.title || ''}" class="offer-image">
-                <div class="offer-content">
-                    
-                    <h3 class="offer-title">${offer.title || ''}</h3>
-                    <div class="offer-agency-location-row" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
-                        <div class="offer-agency"><i class="fas fa-building"></i> ${agencyName}</div>
-                        <div class="offer-location-group" style="display:flex; gap:7px; align-items:center;">${locationHtml}</div>
-                    </div>
-                    <div class="offer-details">
-                        ${servicesHtml}
-                    </div>
-                    <div class="offer-price">
-                      <button class="offer-btn" style="order:1; margin-left:0px;" onclick="window.location.href='offer-details.html?id=${offer.id}'"><i class="fas fa-eye"></i> تفاصيل</button>
-                      <span class="price-amount" style="display: flex; flex-direction: column; align-items: flex-end; order:2; margin-right: 0px;">
-                          <span style="display: inline-block; text-align: center; line-height: 1; margin-bottom: 0px;">
-                            <span style="display: flex; justify-content: center; gap: 3px;">
-                              <i class="fas fa-user" style="color:#d4af37;"></i>
-                              <i class="fas fa-user" style="color:#d4af37;"></i>
-                              <i class="fas fa-user" style="color:#d4af37;"></i>
-                            </span>
-                            <span style="display: flex; justify-content: center; gap: 3px; margin-top: 3px;">
-                              <i class="fas fa-user" style="color:#d4af37;"></i>
-                              <i class="fas fa-user" style="color:#d4af37;"></i>
-                            </span>
-                          </span>
-                          <span style="font-weight: bold; color: #004d40; font-size: 1.05rem;">
-                            ${Number(offer.price_quint) ? offer.price_quint + ' DA' : '<span style="color:#bfa338;font-size:0.98em">غير متوفر</span>'}
-                          </span>
-                      </span>
-                    </div>
-                </div>
-            </div>
+<div class="card_box" data-offer-id="${offer.id}">
+  <div class="card_box__header-row">
+    <div class="agency-logo">${agencyLogo}</div>
+    ${showCrown ? '<span class="details-btn-crown"><i class="fas fa-crown"></i></span>' : ''}
+  </div>
+  <span class="charite" data-price="${price}"></span>
+  <div class="card_box__body">
+    <div class="date-box">
+      <span class="date-value">${t.cardDate}: ${dateFormatted}</span>
+    </div>
+    <div class="distance"><i class="fas fa-hotel"></i> ${t.cardDistance}: ${distance}</div>
+    <div class="details-btn-row">
+      <a class="details-btn" href="offer-details.html?id=${offer.id}">${t.cardDetails}</a>
+    </div>
+    <div class="gps-btn-row">
+      ${gpsBtn} <div class="location-name">${locationName}</div>
+    </div>
+  </div>
+</div>
             `;
         }).join('');
+
+        // إسناد حدث الضغط على زر التفاصيل بعد إنشاء العناصر
+        document.querySelectorAll('.card_box .details-btn-row .details-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const card = btn.closest('.card_box');
+                const offerId = card && card.getAttribute('data-offer-id');
+                if (offerId) {
+                    recordOfferView(e, offerId);
+                }
+            });
+        });
     } catch (err) {
         offersContainer.innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:red;">حدث خطأ أثناء جلب العروض</div>';
     }
@@ -193,6 +165,24 @@ function applyFilters() {
 function updateAgencyAndAirportLists() {
     const agencySelect = document.getElementById('agencyName');
     const airportSelect = document.getElementById('airport');
+    const wilayaSelect = document.getElementById('filter-wilaya');
+    // بناء قائمة الولايات من العروض
+    let wilayaSet = new Set();
+    allOffers.forEach(offer => {
+        // أضف الولاية من offer.wilaya إذا كانت موجودة
+        if (offer.wilaya) wilayaSet.add(offer.wilaya);
+        // أضف الولاية من offer.agencies.wilaya إذا كانت موجودة
+        if (offer.agencies && offer.agencies.wilaya) wilayaSet.add(offer.agencies.wilaya);
+    });
+    if (wilayaSelect) {
+        const selected = wilayaSelect.value;
+        // استخدم الترجمة من window.offersTexts حسب اللغة
+        const lang = localStorage.getItem('lang') || document.documentElement.lang || 'ar';
+        const t = window.offersTexts && window.offersTexts[lang] ? window.offersTexts[lang] : window.offersTexts['ar'];
+        wilayaSelect.innerHTML = `<option value="">${t.filterWilaya || 'الولاية'}</option>` +
+            Array.from(wilayaSet).filter(Boolean).map(w => `<option value="${w}">${w}</option>`).join('');
+        if (selected) wilayaSelect.value = selected;
+    }
     if (agencySelect) {
         // احفظ القيمة المختارة
         const selected = agencySelect.value;
@@ -209,15 +199,65 @@ function updateAgencyAndAirportLists() {
 }
 
 // زر الأقرب للحرم
-const nearestBtn = document.getElementById('nearestHaramBtn');
-if (nearestBtn) {
-    nearestBtn.addEventListener('click', function() {
-        let filtered = [...allOffers];
-        filtered = filtered.filter(o => o.hotel_distance !== undefined && o.hotel_distance !== null);
-        filtered = filtered.sort((a, b) => Number(a.hotel_distance) - Number(b.hotel_distance));
-        fetchAndDisplayOffers(filtered);
-    });
-}
+
+// فلاتر الأزرار الجديدة
+document.addEventListener('DOMContentLoaded', function() {
+    const bestPriceBtn = document.getElementById('filter-best-price');
+    if (bestPriceBtn) {
+        bestPriceBtn.onclick = function() {
+            let filtered = [...allOffers].sort((a, b) => Number(a.price_quint) - Number(b.price_quint));
+            fetchAndDisplayOffers(filtered);
+        };
+    }
+    const nearestHaramBtn = document.getElementById('filter-nearest-haram');
+    if (nearestHaramBtn) {
+        nearestHaramBtn.onclick = function() {
+            let filtered = [...allOffers].filter(o => o.hotel_distance !== undefined && o.hotel_distance !== null);
+            filtered.sort((a, b) => Number(a.hotel_distance) - Number(b.hotel_distance));
+            fetchAndDisplayOffers(filtered);
+        };
+    }
+    const nearestTripsBtn = document.getElementById('filter-nearest-trips');
+    if (nearestTripsBtn) {
+        nearestTripsBtn.onclick = function() {
+            let filtered = [...allOffers].sort((a, b) => new Date(a.departure_date) - new Date(b.departure_date));
+            fetchAndDisplayOffers(filtered);
+        };
+    }
+    const locationBtn = document.getElementById('filter-location');
+    if (locationBtn) {
+        locationBtn.onclick = function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(pos) {
+                    let userLat = pos.coords.latitude, userLng = pos.coords.longitude;
+                    let filtered = [...allOffers].map(o => {
+                        if (o.hotel_lat && o.hotel_lng) {
+                            o._distance = Math.sqrt(Math.pow(o.hotel_lat - userLat, 2) + Math.pow(o.hotel_lng - userLng, 2));
+                        } else {
+                            o._distance = Infinity;
+                        }
+                        return o;
+                    });
+                    filtered.sort((a, b) => a._distance - b._distance);
+                    fetchAndDisplayOffers(filtered);
+                });
+            }
+        };
+    }
+    const wilayaSelect = document.getElementById('filter-wilaya');
+    if (wilayaSelect) {
+        wilayaSelect.onchange = function(e) {
+            let wilaya = e.target.value;
+            let filtered = wilaya
+                ? allOffers.filter(o =>
+                    (o.wilaya === wilaya) ||
+                    (o.agencies && o.agencies.wilaya === wilaya)
+                  )
+                : [...allOffers];
+            fetchAndDisplayOffers(filtered);
+        };
+    }
+});
 
 // زر تصفية العروض (زر يدوي فقط)
 const filterBtn = document.getElementById('applyFilters');
@@ -244,3 +284,28 @@ updateAgencyAndAirportLists = function() {
 
 // تحميل العروض عند بدء الصفحة فقط
 document.addEventListener('DOMContentLoaded', function() { fetchAndDisplayOffers(); });
+
+// دالة لتسجيل زيارة العرض عند الضغط على التفاصيل
+window.recordOfferView = function(event, offerId) {
+    // منع الانتقال الفوري
+    if (event) {
+        event.preventDefault();
+        // تعطيل الزر حتى لا يتكرر الطلب
+        if (event.target) {
+            event.target.disabled = true;
+            event.target.classList.add('disabled');
+        }
+    }
+    // منع التكرار عبر متغير عام
+    if (window.__offerViewSent && window.__offerViewSent[offerId]) return;
+    if (!window.__offerViewSent) window.__offerViewSent = {};
+    window.__offerViewSent[offerId] = true;
+    fetch('https://almanassik-alarabi-server-v-01.onrender.com/api/site-stats/offer-view', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ offer_id: offerId })
+    }).catch(()=>{}).finally(() => {
+        // الانتقال بعد الإرسال
+        window.location.href = `offer-details.html?id=${offerId}`;
+    });
+};

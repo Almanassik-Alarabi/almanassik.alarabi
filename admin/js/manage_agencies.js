@@ -28,7 +28,7 @@ function previewImage(input, imgId) {
 async function fetchAgencies() {
   try {
     const token = getAuthToken();
-    const response = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/agencies/all', {
+    const response = await fetch('https://almanassik-alarabi-server-v-01.onrender.com/api/admin/agencies/all', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -42,7 +42,7 @@ async function fetchAgencies() {
     agencies = [];
     renderAgencies();
     // إضافة رسالة توضيحية للمشكلة
-    showErrorMessage('تعذر الاتصال بالخادم. تأكد أن السيرفر يعمل على https://almanassik-alarabis-v0-4.onrender.com وأن إعدادات CORS صحيحة.');
+    showErrorMessage('تعذر الاتصال بالخادم. تأكد أن السيرفر يعمل على https://almanassik-alarabi-server-v-01.onrender.com وأن إعدادات CORS صحيحة.');
   }
 }
 
@@ -66,7 +66,6 @@ function renderAgencies(filtered = null) {
             <h3 class="agency-name">${agency.name || ""}</h3>
             <div class="agency-email"><i class="fas fa-envelope"></i> ${agency.email || ""}</div>
             <div class="agency-info">
-              <div class="agency-phone"><i class="fas fa-phone"></i> ${agency.phone || ""}</div>
               <span class="agency-status status-${agency.is_approved ? "active" : "pending"}">
                 <span data-ar="${agency.is_approved ? "نشط" : "معلق"}" data-en="${agency.is_approved ? "Active" : "Pending"}" data-fr="${agency.is_approved ? "Actif" : "En attente"}">${agency.is_approved ? "نشط" : "معلق"}</span>
               </span>
@@ -100,6 +99,8 @@ function renderAgencies(filtered = null) {
         })
         .join("")
     : `<div style="text-align:center;color:#888;padding:40px;">لا توجد وكالات حاليا</div>`;
+  // تطبيق اللغة بعد إعادة رسم العناصر
+  applyLanguage(localStorage.getItem('umrah_admin_lang') || 'ar');
 }
 
 // فتح نافذة إضافة وكالة
@@ -175,7 +176,7 @@ async function submitAddAgency(event) {
   try {
       let response;
       if (editId) {
-        response = await fetch(`https://almanassik-alarabis-v0-4.onrender.com/api/agencies/update/${editId}`, {
+        response = await fetch(`https://almanassik-alarabi-server-v-01.onrender.com/api/admin/agencies/update/${editId}`, {
           method: "PUT",
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -184,7 +185,7 @@ async function submitAddAgency(event) {
           body: JSON.stringify(agencyData)
         });
       } else {
-        response = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/agencies/add', {
+        response = await fetch('https://almanassik-alarabi-server-v-01.onrender.com/api/admin/agencies/add', {
           method: "POST",
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -219,6 +220,8 @@ async function submitAddAgency(event) {
 
 // عند تحميل الصفحة
 document.addEventListener("DOMContentLoaded", function () {
+  // تطبيق اللغة مباشرة عند تحميل الصفحة
+  applyLanguage(localStorage.getItem('umrah_admin_lang') || 'ar');
   document
     .getElementById("addAgencyForm")
     .addEventListener("submit", submitAddAgency);
@@ -341,14 +344,26 @@ async function deleteAgency(id) {
   if (!confirm("هل أنت متأكد أنك تريد حذف هذه الوكالة وجميع عروضها؟")) return;
   try {
     const token = getAuthToken();
-    const response = await fetch(`https://almanassik-alarabis-v0-4.onrender.com/api/agencies/remove/${id}`, {
+    const response = await fetch(`https://almanassik-alarabi-server-v-01.onrender.com/api/admin/agencies/remove/${id}`, {
       method: "DELETE",
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       }
     });
-    if (!response.ok) throw new Error("فشل حذف الوكالة من الخادم");
+    if (!response.ok) {
+      let errorMsg = "فشل حذف الوكالة من الخادم";
+      try {
+        const data = await response.json();
+        if (data && data.error) {
+          errorMsg = data.error;
+          if (data.details) errorMsg += `: ${data.details}`;
+        }
+      } catch (e) {
+        // إذا لم تكن الاستجابة JSON
+      }
+      throw new Error(errorMsg);
+    }
     fetchAgencies();
     showSuccessMessage("تم حذف الوكالة وجميع عروضها بنجاح");
   } catch (err) {

@@ -120,7 +120,7 @@ if (statusFilterInput) {
 // === Load All Agencies ===
 async function loadAllAgencies() {
   try {
-    const response = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/agencies/all');
+    const response = await fetch('https://almanassik-alarabi-server-v-01.onrender.com/api/admin/agencies/all');
     if (!response.ok) return [];
     return await response.json();
   } catch (err) {
@@ -139,7 +139,7 @@ async function loadAgencyRequests(filter = "") {
     const headers = token
       ? { "Content-Type": "application/json", "Authorization": "Bearer " + token }
       : { "Content-Type": "application/json" };
-    const response = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/agencies/pending', { headers });
+    const response = await fetch('https://almanassik-alarabi-server-v-01.onrender.com/api/admin/agencies/pending', { headers });
     if (!response.ok) {
       table.innerHTML = "<tr><td colspan='7' style='color:red;'>فشل تحميل البيانات</td></tr>";
       return;
@@ -184,7 +184,7 @@ async function approveAgency(id, isApproved) {
   if (isApproved) {
     if (!confirm("هل أنت متأكد من قبول هذا الطلب؟")) return;
     try {
-      const response = await fetch(`https://almanassik-alarabis-v0-4.onrender.com/api/agencies/status/${id}`, {
+      const response = await fetch(`https://almanassik-alarabi-server-v-01.onrender.com/api/admin/agencies/status/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -205,7 +205,9 @@ async function approveAgency(id, isApproved) {
   } else {
     if (!confirm("هل أنت متأكد من رفض (وحذف) هذا الطلب؟ سيتم حذف الوكالة نهائياً!")) return;
     try {
-      const response = await fetch(`https://almanassik-alarabis-v0-4.onrender.com/api/agencies/remove/${id}`, {
+      // حذف جميع صفوف agency_airports المرتبطة قبل حذف الوكالة
+      await deleteAgencyAirports(id);
+      const response = await fetch(`https://almanassik-alarabi-server-v-01.onrender.com/api/admin/agencies/remove/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -225,6 +227,22 @@ async function approveAgency(id, isApproved) {
   }
 }
 
+// === Delete Agency Airports ===
+async function deleteAgencyAirports(agencyId) {
+  try {
+    const token = localStorage.getItem('umrah_admin_token');
+    const headers = token
+      ? { "Content-Type": "application/json", "Authorization": "Bearer " + token }
+      : { "Content-Type": "application/json" };
+    await fetch(`https://almanassik-alarabi-server-v-01.onrender.com/api/agency_airports/delete_by_agency/${agencyId}`, {
+      method: "DELETE",
+      headers
+    });
+  } catch (err) {
+    // ignore errors here
+  }
+}
+
 // === Show Agency Details Modal ===
 async function showAgencyDetails(id) {
   const token = localStorage.getItem('umrah_admin_token');
@@ -232,7 +250,7 @@ async function showAgencyDetails(id) {
     const headers = token
       ? { "Content-Type": "application/json", "Authorization": "Bearer " + token }
       : { "Content-Type": "application/json" };
-    const response = await fetch(`https://almanassik-alarabis-v0-4.onrender.com/api/agencies/all`, { headers });
+    const response = await fetch(`https://almanassik-alarabi-server-v-01.onrender.com/api/admin/agencies/all`, { headers });
     if (!response.ok) return alert("فشل تحميل بيانات الوكالة");
     const agencies = await response.json();
     const agency = Array.isArray(agencies) ? agencies.find(a => a.id === id) : (agencies.agencies || []).find(a => a.id === id);
@@ -264,7 +282,6 @@ document.addEventListener('DOMContentLoaded', function() {
   if (document.getElementById("requestsTable")) loadRequests();
   if (document.getElementById("agencyRequestsTable")) loadAgencyRequests();
 
-  // No sidebar or language switcher logic here; handled in HTML.
   fetch('sidebar.html')
     .then(response => response.text())
     .then(html => {
@@ -286,36 +303,20 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       }, 10);
 
-      // Language switcher logic
-      setupLanguageSwitcher();
-    });
-
-  // Language switcher functions
-  function applyLanguage(lang) {
-    document.querySelectorAll('[data-ar], [data-en], [data-fr]').forEach(function(el) {
-      if (el.dataset[lang]) {
-        el.textContent = el.dataset[lang];
+      // تفعيل نظام تغيير اللغة بعد تحميل الشريط الجانبي
+      if (window.applyLanguage) {
+        const lang = localStorage.getItem('umrah_admin_lang') || 'ar';
+        window.applyLanguage(lang);
       }
-    });
-    document.querySelectorAll('[data-ar-placeholder], [data-en-placeholder], [data-fr-placeholder]').forEach(function(input) {
-      if (input.dataset[lang + 'Placeholder']) {
-        input.placeholder = input.dataset[lang + 'Placeholder'];
-      }
-    });
-    document.querySelectorAll('.lang-btn').forEach(function(btn) {
-      btn.classList.toggle('active', btn.dataset.lang === lang);
-    });
-    localStorage.setItem('umrah_admin_lang', lang);
-  }
-  function setupLanguageSwitcher() {
-    var lang = localStorage.getItem('umrah_admin_lang') || 'ar';
-    applyLanguage(lang);
-    document.querySelectorAll('.lang-btn').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        applyLanguage(btn.dataset.lang);
+      // ربط أزرار اللغة من جديد بعد تحميل الشريط الجانبي
+      document.querySelectorAll('.lang-btn').forEach(function(btn) {
+        btn.onclick = function() {
+          const lang = btn.getAttribute('data-lang');
+          if (lang) {
+            localStorage.setItem('umrah_admin_lang', lang);
+            if (window.applyLanguage) window.applyLanguage(lang);
+          }
+        };
       });
     });
-  }
-  // If sidebar loads after DOMContentLoaded, also run language switcher for main content
-  setupLanguageSwitcher();
 });

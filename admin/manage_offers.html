@@ -13,6 +13,8 @@
       href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+        <script src="js/adminTokenRefresher.js"></script>
+
     <link rel="stylesheet" href="css/manage_offers.css" />
   </head>
   <body>
@@ -72,13 +74,15 @@
             />
           </div>
           <div class="action-buttons">
-            <button class="btn btn-primary" id="openAddOfferModalBtn">
+            <button class="btn btn-primary" id="openAddOfferModalBtn"
+              data-ar="إضافة عرض" data-en="Add Offer" data-fr="Ajouter une offre">
               <i class="fas fa-plus"></i>
-              <span>إضافة عرض</span>
+              <span data-ar="إضافة عرض" data-en="Add Offer" data-fr="Ajouter une offre">إضافة عرض</span>
             </button>
-            <button class="btn btn-success" id="exportOffersBtn">
+            <button class="btn btn-success" id="exportOffersBtn"
+              data-ar="تصدير البيانات" data-en="Export Data" data-fr="Exporter les données">
               <i class="fas fa-download"></i>
-              <span>تصدير البيانات</span>
+              <span data-ar="تصدير البيانات" data-en="Export Data" data-fr="Exporter les données">تصدير البيانات</span>
             </button>
           </div>
         </div>
@@ -95,7 +99,7 @@
         <div class="modal-header">
           <h2 class="modal-title">
             <i class="fas fa-gift"></i>
-            <span>إضافة عرض جديد</span>
+            <span data-ar="إضافة عرض جديد" data-en="Add New Offer" data-fr="Ajouter une nouvelle offre">إضافة عرض جديد</span>
           </h2>
           <span class="close" id="closeAddOfferModalBtn">&times;</span>
         </div>
@@ -105,48 +109,56 @@
           enctype="multipart/form-data"
         >
           <div class="form-group">
-            <label>اسم العرض</label>
-            <input type="text" name="title" required />
+            <label data-ar="اسم العرض" data-en="Offer Name" data-fr="Nom de l'offre">اسم العرض</label>
+            <input type="text" name="title" required
+              placeholder="اسم العرض"
+              data-ar-placeholder="اسم العرض" data-en-placeholder="Offer Name" data-fr-placeholder="Nom de l'offre" />
           </div>
-            <div class="form-group">
-            <label>الوكالة</label>
+          <div class="form-group">
+            <label data-ar="الوكالة" data-en="Agency" data-fr="Agence">الوكالة</label>
             <select name="agency_id" id="agencySelect" required></select>
           </div>
           <div class="form-group">
-            <label>شركة الطيران</label>
+            <label data-ar="شركة الطيران" data-en="Airline" data-fr="Compagnie aérienne">شركة الطيران</label>
             <select name="airline_id" id="airlineSelect">
-              <option value="">بدون</option>
+              <option value="" data-ar="بدون" data-en="None" data-fr="Aucune">بدون</option>
             </select>
           </div>
           <div class="form-group">
-            <label>نوع الرحلة</label>
+            <label data-ar="نوع الرحلة" data-en="Flight Type" data-fr="Type de vol">نوع الرحلة</label>
             <select name="flight_type" required>
-              <option value="مباشرة">مباشرة</option>
-              <option value="غير مباشرة">غير مباشرة</option>
+              <option value="مباشرة" data-ar="مباشرة" data-en="Direct" data-fr="Direct">مباشرة</option>
+              <option value="غير مباشرة" data-ar="غير مباشرة" data-en="Indirect" data-fr="Indirect">غير مباشرة</option>
             </select>
           </div>
           <div class="form-group">
-            <label>تاريخ الذهاب</label>
+            <label data-ar="تاريخ الذهاب" data-en="Departure Date" data-fr="Date de départ">تاريخ الذهاب</label>
             <input type="date" name="departure_date" required />
           </div>
           <div class="form-group">
-            <label>تاريخ العودة</label>
+            <label data-ar="تاريخ العودة" data-en="Return Date" data-fr="Date de retour">تاريخ العودة</label>
             <input type="date" name="return_date" required />
           </div>
           <div class="form-group">
-            <label>مدة الرحلة (أيام)</label>
-            <input type="number" name="duration_days" min="1" required />
+            <label data-ar="مدة الرحلة (أيام)" data-en="Duration (days)" data-fr="Durée (jours)">مدة الرحلة (أيام)</label>
+            <input type="number" name="duration_days" min="1" required
+              placeholder="مدة الرحلة"
+              data-ar-placeholder="مدة الرحلة" data-en-placeholder="Duration" data-fr-placeholder="Durée" />
           </div>
           <div class="form-group">
-            <label>اسم الفندق</label>
-            <input type="text" name="hotel_name" />
+            <label data-ar="اسم الفندق" data-en="Hotel Name" data-fr="Nom de l'hôtel">اسم الفندق</label>
+            <input type="text" name="hotel_name"
+              placeholder="اسم الفندق"
+              data-ar-placeholder="اسم الفندق" data-en-placeholder="Hotel Name" data-fr-placeholder="Nom de l'hôtel" />
           </div>
           <div class="form-group">
-            <label>المسافة إلى الحرم (متر)</label>
-            <input type="number" name="hotel_distance" min="0" />
+            <label data-ar="المسافة إلى الحرم (متر)" data-en="Distance to Haram (m)" data-fr="Distance au Haram (m)">المسافة إلى الحرم (متر)</label>
+            <input type="number" name="hotel_distance" min="0"
+              placeholder="المسافة إلى الحرم"
+              data-ar-placeholder="المسافة إلى الحرم" data-en-placeholder="Distance to Haram" data-fr-placeholder="Distance au Haram" />
           </div>
           <div class="form-group">
-            <label>صور الفندق</label>
+            <label data-ar="صور الفندق" data-en="Hotel Images" data-fr="Images de l'hôtel">صور الفندق</label>
             <input
               type="file"
               name="hotel_images_file"
@@ -155,55 +167,66 @@
             />
           </div>
           <div class="form-group">
-            <label>الخدمات</label>
+            <label data-ar="الخدمات" data-en="Services" data-fr="Services">الخدمات</label>
             <div id="servicesIconsContainer" style="margin-bottom:8px;"></div>
             <input type="hidden" name="services" id="servicesInput" />
           </div>
           <div class="form-group">
-            <label>الوصف</label>
-            <textarea name="description" rows="3"></textarea>
+            <label data-ar="الوصف" data-en="Description" data-fr="Description">الوصف</label>
+            <textarea name="description" rows="3"
+              placeholder="الوصف"
+              data-ar-placeholder="الوصف" data-en-placeholder="Description" data-fr-placeholder="Description"></textarea>
           </div>
           <div class="form-group">
-            <label>الدخول/الخروج</label>
+            <label data-ar="الدخول/الخروج" data-en="Entry/Exit" data-fr="Entrée/Sortie">الدخول/الخروج</label>
             <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
-              <span>الدخول:</span>
+              <span data-ar="الدخول:" data-en="Entry:" data-fr="Entrée:">الدخول:</span>
               <select name="entry" required style="min-width:90px;">
-                <option value="مكة">مكة</option>
-                <option value="المدينة">المدينة</option>
+                <option value="مكة" data-ar="مكة" data-en="Makkah" data-fr="La Mecque">مكة</option>
+                <option value="المدينة" data-ar="المدينة" data-en="Madinah" data-fr="Médine">المدينة</option>
               </select>
-              <span>الخروج:</span>
+              <span data-ar="الخروج:" data-en="Exit:" data-fr="Sortie:">الخروج:</span>
               <select name="exit" required style="min-width:90px;">
-                <option value="مكة">مكة</option>
-                <option value="المدينة">المدينة</option>
+                <option value="مكة" data-ar="مكة" data-en="Makkah" data-fr="La Mecque">مكة</option>
+                <option value="المدينة" data-ar="المدينة" data-en="Madinah" data-fr="Médine">المدينة</option>
               </select>
             </div>
           </div>
           <div class="form-group">
-            <label>السعر (غرفة مزدوجة)</label>
-            <input type="number" name="price_double" min="0" />
+            <label data-ar="السعر (غرفة مزدوجة)" data-en="Price (Double Room)" data-fr="Prix (Chambre double)">السعر (غرفة مزدوجة)</label>
+            <input type="number" name="price_double" min="0"
+              placeholder="السعر (غرفة مزدوجة)"
+              data-ar-placeholder="السعر (غرفة مزدوجة)" data-en-placeholder="Price (Double Room)" data-fr-placeholder="Prix (Chambre double)" />
           </div>
           <div class="form-group">
-            <label>السعر (غرفة ثلاثية)</label>
-            <input type="number" name="price_triple" min="0" />
+            <label data-ar="السعر (غرفة ثلاثية)" data-en="Price (Triple Room)" data-fr="Prix (Chambre triple)">السعر (غرفة ثلاثية)</label>
+            <input type="number" name="price_triple" min="0"
+              placeholder="السعر (غرفة ثلاثية)"
+              data-ar-placeholder="السعر (غرفة ثلاثية)" data-en-placeholder="Price (Triple Room)" data-fr-placeholder="Prix (Chambre triple)" />
           </div>
           <div class="form-group">
-            <label>السعر (غرفة رباعية)</label>
-            <input type="number" name="price_quad" min="0" />
+            <label data-ar="السعر (غرفة رباعية)" data-en="Price (Quad Room)" data-fr="Prix (Chambre quadruple)">السعر (غرفة رباعية)</label>
+            <input type="number" name="price_quad" min="0"
+              placeholder="السعر (غرفة رباعية)"
+              data-ar-placeholder="السعر (غرفة رباعية)" data-en-placeholder="Price (Quad Room)" data-fr-placeholder="Prix (Chambre quadruple)" />
           </div>
           <div class="form-group">
-            <label>السعر (غرفة خماسية)</label>
-            <input type="number" name="price_quint" min="0" />
+            <label data-ar="السعر (غرفة خماسية)" data-en="Price (Quint Room)" data-fr="Prix (Chambre quintuple)">السعر (غرفة خماسية)</label>
+            <input type="number" name="price_quint" min="0"
+              placeholder="السعر (غرفة خماسية)"
+              data-ar-placeholder="السعر (غرفة خماسية)" data-en-placeholder="Price (Quint Room)" data-fr-placeholder="Prix (Chambre quintuple)" />
           </div>
           <div class="form-group">
-            <label>الصورة الرئيسية</label>
+            <label data-ar="الصورة الرئيسية" data-en="Main Image" data-fr="Image principale">الصورة الرئيسية</label>
             <input type="file" name="main_image_file" accept="image/*" />
           </div>
           <div style="text-align: left; margin-top: 10px">
-            <button type="submit" class="btn btn-primary">حفظ</button>
+            <button type="submit" class="btn btn-primary" data-ar="حفظ" data-en="Save" data-fr="Enregistrer">حفظ</button>
             <button
               type="button"
               class="btn btn-secondary"
               id="cancelAddOfferBtn"
+              data-ar="إلغاء" data-en="Cancel" data-fr="Annuler"
             >
               إلغاء
             </button>

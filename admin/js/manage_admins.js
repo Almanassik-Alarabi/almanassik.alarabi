@@ -1,6 +1,6 @@
 
 // إعداد رابط الـ API الأساسي (يعمل على المنفذ 3001)
-const API_BASE = 'https://almanassik-alarabis-v0-4.onrender.com/api/admin';
+const API_BASE = 'https://almanassik-alarabi-server-v-01.onrender.com/api/admin';
 
 // جلب التوكن من localStorage (متوافق مع بقية الصفحات)
 const token = localStorage.getItem('umrah_admin_token');
@@ -117,12 +117,18 @@ function renderActions(admin) {
         const permissionsStr = encodeURIComponent(JSON.stringify(admin.permissions || {}));
         const fullNameSafe = admin.full_name.replace(/"/g, '&quot;');
         return `
-            <button class="btn btn-sm btn-primary me-1" 
+            <button class="btn btn-sm btn-primary me-1"
                 data-admin-id="${admin.id}"
                 data-full-name="${fullNameSafe}"
                 data-permissions="${permissionsStr}"
-                onclick="openEditAdminModal(this)">تعديل</button>
-            <button class="btn btn-sm btn-danger" onclick="deleteAdmin('${admin.id}')">حذف</button>
+                onclick="openEditAdminModal(this)"
+                data-ar="تعديل" data-en="Edit" data-fr="Modifier">
+                <i class="fas fa-user-edit"></i> <span data-ar="تعديل" data-en="Edit" data-fr="Modifier">تعديل</span>
+            </button>
+            <button class="btn btn-sm btn-danger" onclick="deleteAdmin('${admin.id}')"
+                data-ar="حذف" data-en="Delete" data-fr="Supprimer">
+                <i class="fas fa-trash-alt"></i> <span data-ar="حذف" data-en="Delete" data-fr="Supprimer">حذف</span>
+            </button>
         `;
     }
     return '-';

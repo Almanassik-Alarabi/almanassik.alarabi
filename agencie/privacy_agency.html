@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سياسة الشروط والخصوصية - المناسك العربي</title>
+    <link rel="stylesheet" href="css/login.css">
+    <script src="js/languageSwitcher.js"></script>
+    <script src="js/authGuard.js"></script>
+
+    <style>
+        body {background:#f7f7f7; font-family:'Cairo',sans-serif;}
+        .privacy-container {max-width:700px;margin:40px auto;background:#fff;padding:32px 24px;border-radius:12px;box-shadow:0 2px 16px #0002;direction:rtl;}
+        .privacy-title {font-size:1.5rem;font-weight:700;margin-bottom:18px;color:#198754;text-align:center;}
+        .privacy-content {font-size:1.1rem;line-height:2.1;color:#222;margin-bottom:24px;white-space:pre-line;}
+        .privacy-btn {display:block;width:100%;max-width:320px;margin:24px auto 0;background:#198754;color:#fff;font-size:1.1rem;padding:12px 0;border:none;border-radius:6px;cursor:pointer;font-weight:600;transition:0.2s;}
+        .privacy-btn:active {background:#14532d;}
+        .privacy-congrats {font-size:1.2rem;color:#27ae60;text-align:center;margin-bottom:18px;}
+    </style>
+</head>
+<body>
+    <div class="privacy-container">
+        <div class="privacy-title">سياسة الشروط والخصوصية الخاصة بتسجيل الوكالات السياحية على منصة "المناسك العربي"</div>
+        <div class="privacy-congrats">تهانينا ..<br>لقد تم تسجيل الوكالة السياحية <span id="agencyNameSpan" style="color:#198754;font-weight:bold"></span> ضمن قائمة الوكالات المعتمدة والمرخص لها بالولوج لمنصة المناسك العربي</div>
+        <div class="privacy-content">
+لتفعيل حسابكم يرجى منكم الاطلاع على محتوى سياسة الشروط والخصوصية والموافقة عليها
+
+تهدف هذه السياسة الى تنظيم العلاقة بين منصة "المناسك العربي" ووكالة "<span id="agencyNameSpan2" style="color:#198754;font-weight:bold"></span>" الراغبة في تقديم عروض العمرة عبر المنصة.
+تعتبر وكالة "<span id="agencyNameSpan3" style="color:#198754;font-weight:bold"></span>" شريكاً موثوقاً لنا، وتمنح له بموجب هاته الاتفاقية حساباً مجانياً مخصصاً لعرض وتحديث عروض العمرة.
+تتكفل المنصة بخدمة الترويج، التوجيه الرقمي، دعم الحجز، بينما تلتزم وكالة "<span id="agencyNameSpan4" style="color:#198754;font-weight:bold"></span>" بضمان جودة الخدمات المقدمة للمعتمرين.
+تقوم وكالة "<span id="agencyNameSpan5" style="color:#198754;font-weight:bold"></span>" بعرض أسعار العمرة على المنصة بنفسها، كما تلتزم بشفافية عرض الأسعار كما هو مطروح في الوكالة.
+بإمكان الوكالة إرسال عروض العمرة لبريد المنصة من أجل نشرها على حساب الوكالة.
+يتفق الطرفان على عمولة الحجز للمنصة لاحقاً.
+ترسل المنصة إشعارات فورية الى وكالتكم بطلب الحجز عبر البريد الإلكتروني والمنصة.
+تعتبر المنصة فضاءً ملائماً لتأكيد الحجوزات.
+يتم الدفع مباشرة في مكتب الوكالة أو عبر حسابكم الخاص.
+تقدم عمولة للمنصة من طرف وكالتكم "<span id="agencyNameSpan6" style="color:#198754;font-weight:bold"></span>" نظير حجز المعتمر عن طريقنا.
+يتم تحصيل عمولة الحجز عن طريق صبها عبر حساب المنصة أو عن طريق التواصل مع أحد فروعنا.
+يمكن لأي طرف إنهاء علاقة العمل بإشعار مسبق عبر البريد قبل 30 يوماً، ما لم يخالف أحد الطرفين أحد البنود.
+يتعهد الطرفان بحماية بيانات العملاء وعدم استخدامها خارج نطاق المنصة.
+تخضع هاته الاتفاقية للشروط المعمول بها ويسري العمل بها ابتداءً من الموافقة عليها.
+
+التواصل الرسمي:
+• البريد الإلكتروني: Contact@Almanassik-alarabi.com
+• الهاتف: +213 770993282
+• المنصة: Almanassik-alarabi.com
+• حساب الفايس بوك: منصة المناسك العربي
+        </div>
+        <button class="privacy-btn" id="acceptPrivacyBtn" onclick="document.getElementById('acceptPrivacy').checked = true;">أوافق على الشروط والخصوصية وأكمل التسجيل</button>
+    </div>
+    <script>
+    // عند تحميل الصفحة، إذا كان المستخدم وافق على الشروط من قبل، يتم تفعيل مربع الموافقة تلقائياً
+    </script>
+    <script>
+    // جلب اسم الوكالة من localStorage وعرضه في النص
+    let agency = null;
+    try { agency = JSON.parse(localStorage.getItem('agency_data')); } catch(e){}
+    if (agency && agency.name) {
+        document.querySelectorAll('#agencyNameSpan,#agencyNameSpan2,#agencyNameSpan3,#agencyNameSpan4,#agencyNameSpan5,#agencyNameSpan6').forEach(function(el){
+            el.textContent = agency.name;
+        });
+    }
+    
+    </script>
+</body>
+</html>

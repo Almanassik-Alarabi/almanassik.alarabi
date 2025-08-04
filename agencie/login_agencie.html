@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل دخول الوكالات</title>
+    <link rel="stylesheet" href="css/login.css">
+    <script src="js/languageSwitcher.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    
+</head>
+<body>
+    <div class="section">
+        <!-- زر تبديل بين تسجيل الدخول وإنشاء حساب سيتم وضعه داخل النماذج -->
+        <div class="container">
+            <div class="row full-height justify-content-center">
+                <div class="col-12 text-center align-self-center py-5">
+                    <div class="section pb-5 pt-5 pt-sm-2 text-center">
+                        <div class="card-3d-wrap mx-auto">
+                            <div class="card-3d-wrapper">
+                                <!-- واجهة تسجيل الدخول -->
+                                <div class="card-front">
+                                    <div class="center-wrap">
+                                        <form id="loginForm" autocomplete="off">
+                                            <h4 class="mb-4 pb-3">تسجيل الدخول للوكالات</h4>
+                                            <div class="form-group">
+                                                <label for="agencyEmail"><i class="input-icon uil uil-at"></i>البريد الإلكتروني</label>
+                                                <input type="email" id="agencyEmail" name="email" class="form-style" placeholder="أدخل البريد الإلكتروني" required>
+                                                
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <label for="agencyPassword"><i class="input-icon uil uil-lock-alt"></i> كلمة المرور</label>
+                                                <input type="password" id="agencyPassword" name="password" class="form-style" placeholder="أدخل كلمة المرور">
+                                                
+                                            </div>
+                                            <button type="submit" class="btn mt-4">دخول</button>
+                                            <div>
+                                                <span style="font-size:19px;color:#666; margin-left: 0px;">
+                                                    ليس لديك حساب؟ 
+                                                    <button id="toggleToRegisterBtn" type="button" style="background:none;border:none;color:var(--primary-dark);font-weight:700;cursor:pointer;padding:0;">إنشاء حساب</button>
+                                                </span>
+                                            </div>
+                                            <div class="login-message" id="loginMessage" style="margin-top:1rem;"></div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <!-- واجهة إنشاء حساب -->
+                                <div class="card-back">
+                                    <div class="center-wrap">
+                                        <form id="registerForm" autocomplete="off" enctype="multipart/form-data">
+                                            <h4 class="mb-4 pb-3">إنشاء حساب وكالة</h4>
+                                            <div class="form-group">
+                                                <label for="registerName"><i class="input-icon uil uil-user"></i> اسم الوكالة</label>
+                                                <input type="text" id="registerName" name="name" class="form-style" placeholder="أدخل اسم الوكالة" required>
+                                                
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <label for="registerEmail"><i class="input-icon uil uil-at"></i> البريد الإلكتروني</label>
+                                                <input type="email" id="registerEmail" name="email" class="form-style" placeholder="أدخل البريد الإلكتروني" required>
+                                                
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <label for="registerPassword"><i class="input-icon uil uil-lock-alt"></i> كلمة المرور</label>
+                                                <input type="password" id="registerPassword" name="password" class="form-style" placeholder="أدخل كلمة المرور">
+                                              
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <label for="registerWilaya"><i class="input-icon uil uil-map"></i> الولاية</label>
+                                                <select id="registerWilaya" name="wilaya" class="form-style" required>
+                                                    <option value="">اختر الولاية</option>
+                                                </select>
+                                                
+                                            </div>
+                                            <div class="form-group mt-2">
+        <label><i class="input-icon uil uil-plane"></i> المطارات</label>
+        <button type="button" id="toggleAirportsBtn" class="btn">اختر المطارات</button>
+        <div id="airportsCheckboxes" class="airports-checkboxes"></div>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <label for="registerLicense"><i class="input-icon uil uil-file-alt"></i> رقم الرخصة</label>
+                                                <input type="text" id="registerLicense" name="license_number" class="form-style" placeholder="أدخل رقم الرخصة" required>
+                                               
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <label for="registerPhone"><i class="input-icon uil uil-phone"></i> رقم الهاتف</label>
+                                                <input type="text" id="registerPhone" name="phone" class="form-style" placeholder="أدخل رقم الهاتف" required>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <label for="registerBankAccount"><i class="input-icon uil uil-credit-card"></i> رقم الحساب البنكي</label>
+                                                <input type="text" id="registerBankAccount" name="bank_account" class="form-style" placeholder="أدخل رقم الحساب البنكي" >
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <label for="registerLocationName"><i class="input-icon uil uil-location-point"></i> اسم الموقع (المدينة/الحي)</label>
+                                                <div style="position:relative;">
+                                                    <input type="text" id="registerLocationName" name="location_name" class="form-style" placeholder="ابحث عن عنوان أو حي..." required>
+                                                    <div id="addressSuggestionsList" style="position:absolute;top:100%;right:0;left:0;z-index:10;display:none;"></div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <label for="registerLatitude"><i class="input-icon uil uil-location-arrow"></i> خط العرض (latitude)</label>
+                                                <div style="display:flex;gap:8px;align-items:center;">
+                                                    <input type="number" id="registerLatitude" name="latitude" class="form-style" placeholder="أدخل خط العرض" step="any" required>
+                                                    <button type="button" id="getLocationBtn" class="btn">تحديد تلقائي</button>
+                                                    <button type="button" id="openMapBtn" class="btn" style="width:auto;">من الخريطة</button>
+                                                </div>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <label for="registerLongitude"><i class="input-icon uil uil-location-arrow"></i> خط الطول (longitude)</label>
+                                                <input type="number" id="registerLongitude" name="longitude" class="form-style" placeholder="أدخل خط الطول" step="any" required>
+
+                                                <!-- نافذة الخريطة -->
+                                                <div id="mapModal" style="display:none;position:fixed;top:0;right:0;bottom:0;left:0;z-index:9999;align-items:center;justify-content:center;">
+                                                    <div style="max-width:650px;width:95vw;margin:auto;border-radius:12px;padding:18px;box-shadow:0 2px 16px #0005;">
+                                                        <h5 style="margin-bottom:12px;">اختر الموقع من الخريطة</h5>
+                                                        <div id="map" style="width:100%;height:450px;min-height:350px;border-radius:8px;"></div>
+                                                        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
+                                                            <button type="button" id="confirmMapBtn" class="btn">تأكيد الموقع</button>
+                                                            <button type="button" id="closeMapBtn" class="btn">إغلاق</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <label for="registerLogo"><i class="input-icon uil uil-image"></i> شعار الوكالة (اختياري)</label>
+                                                <input type="file" id="registerLogo" name="logo" accept="image/*" class="form-style">
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <label for="registerBackground"><i class="input-icon uil uil-image"></i> صورة خلفية (اختياري)</label>
+                                                <input type="file" id="registerBackground" name="background" accept="image/*" class="form-style">
+                                            </div>
+                                            <!-- سياسة الشروط والخصوصية -->
+                                            <div class="form-group mt-2" style="margin-bottom:0;">
+                                                <label style="font-weight:700;color:var(--primary-dark);font-size:16px;">سياسة الشروط والخصوصية الخاصة بتسجيل الوكالات السياحية على منصة "المناسك العربي"</label>
+                                                <button type="button" id="showPolicyBtn" class="btn" style="background:var(--gold);color:var(--primary-dark);margin-bottom:8px;">اطلاع على المحتوى *</button>
+                                                <div style="display:flex;align-items:center;gap:8px;">
+                                                    <input type="checkbox" id="acceptPolicy" style="width:22px;height:22px;">
+                                                    <label for="acceptPolicy" style="font-size:15px;color:var(--primary-dark);margin:0;">أوافق على سياسة الشروط والخصوصية</label>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn mt-4">إنشاء حساب</button>
+                                            <div>
+                                                <span style="font-size:19px;color:#666; margin-left: 0px;">
+                                                    لديك حساب بالفعل؟
+                                                    <button id="toggleToLoginBtn" type="button" style="background:none;border:none;color:var(--primary-dark);font-weight:700;cursor:pointer;padding:0;">تسجيل الدخول</button>
+                                                </span>
+                                            </div>
+                                            <div class="login-message" id="registerMessage" style="margin-top:1rem;"></div>
+                                            <!-- نافذة سياسة الخصوصية -->
+                                            <div id="policyModal" style="display:none;position:fixed;top:0;right:0;bottom:0;left:0;z-index:99999;background:rgba(0,0,0,0.18);align-items:center;justify-content:center;">
+                                                <div style="max-width:650px;width:95vw;margin:auto;border-radius:12px;padding:24px 18px 18px 18px;background:#fff;box-shadow:0 2px 24px #0005;overflow-y:auto;max-height:90vh;">
+                                                    <h4 style="margin-bottom:18px;color:var(--primary-dark);font-weight:900;">سياسة الشروط والخصوصية</h4>
+                                                    <div style="text-align:right;font-size:15px;color:#333;line-height:2;white-space:pre-line;">
+تهانينا ..\nلقد تم تسجيل الوكالة السياحة "ــــــ" ضمن قائمة الوكالات المعتمدة والمرخص لها بالولوج لمنصة المناسك العربي\nلتفعيل حسابكم يرجى منكم الاطلاع على محتوى سياسة الشروط والخصوصية والموافقة عليها\n\nتهدف هذه السياسة الى تنظيم العلاقة بين منصة "المناسك العربي" ووكالة "ــــــ" الراغبة في تقديم عروض العمرة عبر المنصة.\nتعتبر وكالة "ــــــ" شريكا موثوقا لنا، وتمنح له بموجب هاته الاتفاقية حسابا مجانيا مخصصا لعرض وتحديث عروض\nتتكفل المنصة بخدمة الترويج، التوجيه الرقمي، دعم الحجز، بينما تلتزم وكالة"ــــــ" بضمان جودة الخدمات المقدمة للمعتمرين.\nتقوم وكالة"ــــ" بعرض أسعار العمرة على المنصة بنفسها، كما تلتزم بشفافية عرض الأسعار كما هو مطروح في الوكالة.\nبإمكان الوكالة إرسال عروض العمرة لبريد المنصة من أجل نشرها على حساب الوكالة.\nيتفق الطرفان على عمولة الحجز للمنصة لاحقاً.\nترسل المنصة إشعارات فورية الى وكالتكم بطلب الحجز عبر البريد الإلكتروني والمنصة.\nتعتبر المنصة فضاءً ملائماً لتأكيد الحجوزات\nيتم الدفع مباشرة في مكتب الوكالة أو عبر حسابكم الخاص.\nتقدم عمولة للمنصة من طرف وكالتكم "ــــــ" نظير حجز المعتمر عن طريقنا.\nيتم تحصيل عمولة الحجز عن طريق صبها عبر حساب المنصة أو عن طريق التواصل مع أحد فروعنا.\nيمكن لأي طرف إنهاء علاقة العمل بإشعار مسبق عبر البريد قبل 30 يوماً، ما لم يخالف أحد الطرفين أحد البنود\nيتعهد الطرفان بحماية بيانات العملاء وعدم استخدامها خارج نطاق المنصة.\nتخضع هاته الاتفاقية للشروط المعمول بها ويسري العمل بها ابتداءً من الموافقة عليها.\n\nالتواصل الرسمية:\nأي استفسار أو تواصل رسمي يكون عبر القنوات التالية:\nالبريد الإلكتروني: Contact@Almanassik-alarabi.com\n+213 770993282 :الهاتف\nالمنصة: Almanassik-alarabi.com\nحساب الفايس بوك : منصة المناسك العربي
+                                                    </div>
+                                                    <button type="button" id="closePolicyBtn" class="btn" style="margin-top:18px;background:var(--primary);color:#fff;">إغلاق</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+</script>
+ <script>
+  
+    </script>
+    <script src="js/login.js"></script>
+    <script>
+    // تغيير مظهر زر التبديل بين تسجيل الدخول وإنشاء حساب
+    document.addEventListener('DOMContentLoaded', function() {
+        // ...existing code...
+        const cardWrap = document.querySelector('.card-3d-wrap');
+        const toggleToRegisterBtn = document.getElementById('toggleToRegisterBtn');
+        const toggleToLoginBtn = document.getElementById('toggleToLoginBtn');
+        function updateSwitchBtnStyle() {
+            if (cardWrap.classList.contains('signup-mode')) {
+                toggleToLoginBtn.classList.add('btn-switch-active');
+                toggleToRegisterBtn.classList.remove('btn-switch-active');
+            } else {
+                toggleToRegisterBtn.classList.add('btn-switch-active');
+                toggleToLoginBtn.classList.remove('btn-switch-active');
+            }
+        }
+        toggleToRegisterBtn.addEventListener('click', function() {
+            cardWrap.classList.add('signup-mode');
+            updateSwitchBtnStyle();
+        });
+        toggleToLoginBtn.addEventListener('click', function() {
+            cardWrap.classList.remove('signup-mode');
+            updateSwitchBtnStyle();
+        });
+        updateSwitchBtnStyle();
+
+        // كود نافذة سياسة الخصوصية
+        const showPolicyBtn = document.getElementById('showPolicyBtn');
+        const policyModal = document.getElementById('policyModal');
+        const closePolicyBtn = document.getElementById('closePolicyBtn');
+        if (showPolicyBtn && policyModal) {
+            showPolicyBtn.addEventListener('click', function() {
+                policyModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+        }
+        if (closePolicyBtn && policyModal) {
+            closePolicyBtn.addEventListener('click', function() {
+                policyModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+        }
+    });
+    </script>
+      <script>
+    // إخفاء حقول الصور عند فتح نافذة الخريطة
+    const mapModal = document.getElementById('mapModal');
+    const registerLogo = document.getElementById('registerLogo');
+    const registerBackground = document.getElementById('registerBackground');
+    const openMapBtn = document.getElementById('openMapBtn');
+    const closeMapBtn = document.getElementById('closeMapBtn');
+
+    if (openMapBtn && mapModal && registerLogo && registerBackground && closeMapBtn) {
+        openMapBtn.addEventListener('click', function() {
+            // إخفاء حقول الصور
+            registerLogo.parentElement.style.display = 'none';
+            registerBackground.parentElement.style.display = 'none';
+        });
+        closeMapBtn.addEventListener('click', function() {
+            // إظهار حقول الصور
+            registerLogo.parentElement.style.display = '';
+            registerBackground.parentElement.style.display = '';
+        });
+    }
+    </script>
+</body>
+</html>
+  

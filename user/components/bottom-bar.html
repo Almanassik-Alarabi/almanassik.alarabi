@@ -1,130 +1,707 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-          --primary: #176a3d;
-          --primary-dark: #0f3f26;
-          --primary-light: #eaf7ec;
-          --secondary: #f3f6f9;
-          --gold: #d9a441;
-          --gold-light: #fff5d0;
-          --success: #2ca87f;
-          --success-light: #e6f7f2;
-          --danger: #c0392b;
-          --warning: #f7ca18;
-          --sidebar-bg: linear-gradient(120deg, #176a3d 80%, #bfa669 100%);
-          --sidebar-text: #e7f6f9;
-          --sidebar-active: #d9a441;
-          --text-secondary: #7d8c7c;
-          --border-radius: 16px;
-          --shadow: 0 2px 16px #bfa66922;
-          --white: #fff;
-          --main-bg: linear-gradient(135deg, #f6f9f6 0%, #e6f3e6 100%);
-        }
-        /* Add your CSS styles here */
-        /* تأكد أن الشريط السفلي فوق كل شيء */
-        .bottom-bar {
-            z-index: 99999 !important;
-            display: flex;
-            justify-content: space-around;
-            background: var(--sidebar-bg);
-            padding: 10px 0;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            width: 100%;
-            box-shadow: var(--shadow);
-            margin: 0;
-            border: none;
-            z-index: 9999;
-        }
+  <!-- FontAwesome CDN لأيقونات الأزرار العائمة -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>قائمة تنقل متحركة</title>
+  <style>
+    /* الأزرار العائمة تظهر دائماً افتراضياً */
+    .floating-side-buttons { opacity: 1; pointer-events: auto; }
+    /* في الصفحة الرئيسية فقط: إخفاء الأزرار العائمة حتى يسمح الجافاسكريبت بإظهارها */
+    body.home1 .floating-side-buttons { opacity: 0; pointer-events: none; }
+    @keyframes floating-shake {
+      0% { transform: translateY(0) rotate(-6deg); }
+      5% { transform: translateY(-8px) rotate(7deg); }
+      10% { transform: translateY(8px) rotate(-7deg); }
+      15% { transform: translateY(-8px) rotate(7deg); }
+      20% { transform: translateY(8px) rotate(-7deg); }
+      25% { transform: translateY(-5px) rotate(4deg); }
+      30% { transform: translateY(5px) rotate(-4deg); }
+      35% { transform: translateY(-5px) rotate(4deg); }
+      40% { transform: translateY(5px) rotate(-4deg); }
+      45% { transform: translateY(-5px) rotate(4deg); }
+      50% { transform: translateY(0) rotate(-6deg); }
+      100% { transform: translateY(0) rotate(-6deg); }
+    }
+    .floating-side-buttons .floating-btn {
+      animation: none;
+    }
+    .floating-side-buttons .floating-btn.active {
+      box-shadow: 0 0 0 5px #d4af37, 0 4px 16px 0 rgba(212,175,55,0.18);
+      border-color: #fffbe6;
+      filter: brightness(1.18);
+      transform: scale(1.08);
+      z-index: 2100;
+    }
+    
+    .floating-side-buttons .floating-btn.floating-animate {
+      animation: floating-shake 0.4s linear 0s 1;
+    }
+    /* أزرار عائمة جانبية فوق الشريط السفلي */
+    .floating-side-buttons {
+      position: fixed;
+      bottom: 100px; /* أقرب للشريط السفلي */
+      right: 24px;
+      left: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px; /* تقارب الأزرار أكثر */
+      z-index: 2002 !important;
+      pointer-events: auto;
+    }
+    [dir="ltr"] .floating-side-buttons {
+      left: 24px;
+      right: auto;
+    }
+    .floating-side-buttons .floating-btn {
+      width: 56px;
+      height: 56px;
+      max-width: 64px;
+      max-height: 64px;
+      border-radius: 50%; /* دائري بالكامل */
+      background: linear-gradient(135deg, #004d40, #00695c);
+      border: 3px solid #d4af37;
+      color: #fffbe6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.45em;
+      box-shadow: 0 4px 16px 0 rgba(0,0,0,0.13);
+      transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+      cursor: pointer;
+      z-index: 2003 !important;
+      pointer-events: auto;
+    }
+    .floating-side-buttons .floating-btn i {
+      font-size: 1.1em;
+      line-height: 1;
+      /* يجعل الأيقونة أصغر وأكثر تمركزًا */
+    }
+    .floating-side-buttons .floating-btn:hover {
+      box-shadow: 0 12px 32px 0 rgba(0,0,0,0.22);
+      filter: brightness(1.12);
+      transform: scale(1.08) translateY(-2px);
+      background: linear-gradient(135deg, #00695c 60%, #004d40 100%);
+    }
+    .floating-side-buttons .gold-btn {
+      background: linear-gradient(135deg, #d4af37 60%, #fffbe6 100%);
+      color: #004d40;
+      border: 3px solid #fffbe6;
+      box-shadow: 0 4px 16px 0 rgba(212,175,55,0.18);
+      
+    }
+    .floating-side-buttons .gold-btn:hover {
+      background: linear-gradient(135deg, #fffbe6 60%, #d4af37 100%);
+      color: #d4af37;
+    }
+    .floating-side-buttons .trip-btn {
+      background: linear-gradient(135deg, #004d40 60%, #00695c 100%);
+      color: #fffbe6;
+      border: 3px solid #d4af37;
+      box-shadow: 0 4px 16px 0 rgba(0,77,64,0.13);
+    }
+    .floating-side-buttons .trip-btn.active i {
+      color: #d4af37 !important;
+      text-shadow: none;
+    }
+    
+    .floating-side-buttons .whatsapp-btn {
+      background: linear-gradient(135deg, #25d366 60%, #128c7e 100%);
+      color: #fff;
+      border: 3px solid #fffbe6;
+      box-shadow: 0 4px 16px 0 rgba(37,211,102,0.18);
+    }
+    .floating-side-buttons .whatsapp-btn:hover {
+      background: linear-gradient(135deg, #128c7e 60%, #25d366 100%);
+      color: #fffbe6;
+    }
+    @media (max-width: 768px) {
+   
+    .floating-side-buttons .floating-btn {
+      animation: none;
+    }
+    .floating-side-buttons .floating-btn.active {
+      box-shadow: 0 0 0 5px #d4af37, 0 4px 16px 0 rgba(212,175,55,0.18);
+      border-color: #fffbe6;
+      filter: brightness(1.18);
+      transform: scale(1.08);
+      z-index: 2100;
+    }
+    
+    .floating-side-buttons .floating-btn.floating-animate {
+      animation: floating-shake 0.4s linear 0s 1;
+    }
+    /* أزرار عائمة جانبية فوق الشريط السفلي */
+    .floating-side-buttons {
+      position: fixed;
+      bottom: 100px; /* أقرب للشريط السفلي */
+      right: 24px;
+      left: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px; /* تقارب الأزرار أكثر */
+      z-index: 2002 !important;
+      pointer-events: auto;
+    }
+    [dir="ltr"] .floating-side-buttons {
+      left: 24px;
+      right: auto;
+    }
+    .floating-side-buttons .floating-btn {
+      width: 56px;
+      height: 56px;
+      max-width: 64px;
+      max-height: 64px;
+      border-radius: 50%; /* دائري بالكامل */
+      background: linear-gradient(135deg, #004d40, #00695c);
+      border: 3px solid #d4af37;
+      color: #fffbe6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.45em;
+      box-shadow: 0 4px 16px 0 rgba(0,0,0,0.13);
+      transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+      cursor: pointer;
+      z-index: 2003 !important;
+      pointer-events: auto;
+    }
+    .floating-side-buttons .floating-btn i {
+      font-size: 1.1em;
+      line-height: 1;
+      /* يجعل الأيقونة أصغر وأكثر تمركزًا */
+    }
+    .floating-side-buttons .floating-btn:hover {
+      box-shadow: 0 12px 32px 0 rgba(0,0,0,0.22);
+      filter: brightness(1.12);
+      transform: scale(1.08) translateY(-2px);
+      background: linear-gradient(135deg, #00695c 60%, #004d40 100%);
+    }
+    .floating-side-buttons .gold-btn {
+      background: linear-gradient(135deg, #d4af37 60%, #fffbe6 100%);
+      color: #004d40;
+      border: 3px solid #fffbe6;
+      box-shadow: 0 4px 16px 0 rgba(212,175,55,0.18);
+      
+    }
+    .floating-side-buttons .gold-btn:hover {
+      background: linear-gradient(135deg, #fffbe6 60%, #d4af37 100%);
+      color: #d4af37;
+    }
+    .floating-side-buttons .trip-btn {
+      background: linear-gradient(135deg, #004d40 60%, #00695c 100%);
+      color: #fffbe6;
+      border: 3px solid #d4af37;
+      box-shadow: 0 4px 16px 0 rgba(0,77,64,0.13);
+    }
+    .floating-side-buttons .trip-btn.active i {
+      color: #d4af37 !important;
+      text-shadow: none;
+    }
+    
+    .floating-side-buttons .whatsapp-btn {
+      background: linear-gradient(135deg, #25d366 60%, #128c7e 100%);
+      color: #fff;
+      border: 3px solid #fffbe6;
+      box-shadow: 0 4px 16px 0 rgba(37,211,102,0.18);
+    }
+    .floating-side-buttons .whatsapp-btn:hover {
+      background: linear-gradient(135deg, #128c7e 60%, #25d366 100%);
+      color: #fffbe6;
+    }
+    }
+    @media (max-width: 480px) {
+      .floating-side-buttons {
+        right: 12px;
+        left: auto;
+        bottom: 90px;
+        gap: 8px;
+      }
+      [dir="ltr"] .floating-side-buttons {
+        left: 12px;
+        right: auto;
+      }
+      .floating-side-buttons .floating-btn {
+        width: 48px;
+        height: 48px;
+        font-size: 1em;
+      }
+      .floating-side-buttons .floating-btn i {
+        font-size: 1.3em;
+      }
+    }
+    @import url("https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900");
 
-        .nav-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            text-align: center;
-            position: relative;
-        }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+    :root {
+      --clr: #222327;
+    }
+    /* إزالة أي تأثير على body من الشريط السفلي */
+    .umrah-navigation {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100vw;
+      height: 70px;
+      background: linear-gradient(135deg, #004d40, #00695c);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
+      z-index: 1000;
+      box-shadow: 0 -2px 12px 0 rgba(0,0,0,0.10);
+      border-top: 2px solid #d4af37;
+    }
+    .umrah-navigation ul {
+      display: flex;
+      width: 100%;
+      padding: 0;
+      margin: 0 auto;
+      gap: 0;
+    }
+    .umrah-navigation ul li {
+      position: relative;
+      list-style: none;
+      flex: 1 1 0%;
+      height: 70px;
+      z-index: 1;
+      min-width: 0;
+      max-width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .umrah-navigation ul li .indicator {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -100%); /* تم رفع الدائرة للأعلى أكثر */
+      width: 68px;
+      height: 68px;
+background: radial-gradient(circle at 60% 40%, #fff5cc 0%, #ffcc66 30%, #c49b2d 90%);
+      border-radius: 50%;
+      border: 5px solid #fffbe6;
+      box-shadow:
+        0 2px 12px 0 rgba(212,175,55,0.18),
+        0 0 16px 4px rgba(212,175,55,0.18),
+        0 0 0 6px rgba(212,175,55,0.10);
+      transition: background 0.4s, box-shadow 0.4s, width 0.3s, height 0.3s;
+      pointer-events: none;
+      z-index: 1;
+      display: none;
+    }
+    .umrah-navigation ul li.active .indicator {
+      display: block;
+      animation: indicator-pop 0.55s cubic-bezier(.4,2,.6,1);
+    }
+    @keyframes indicator-pop {
+      0%   { transform: translate(-50%, -100%) scale(0.7) rotate(-8deg); opacity: 0.5; }
+      40%  { transform: translate(-50%, -100%) scale(1.15) rotate(7deg); opacity: 1; }
+      60%  { transform: translate(-50%, -100%) scale(0.95) rotate(-5deg); }
+      80%  { transform: translate(-50%, -100%) scale(1.05) rotate(3deg); }
+      100% { transform: translate(-50%, -100%) scale(1) rotate(0deg); opacity: 1; }
+    }
+    @media (max-width: 1024px) {
+      .umrah-navigation ul li .indicator { width: 60px; height: 60px; }
+    }
+    @media (max-width: 768px) {
+      .umrah-navigation {
+        height: 60px;
+      }
+      .umrah-navigation ul li {
+        height: 60px;
+      }
+      .umrah-navigation ul li a .icon {
+        font-size: 1.3em;
+      }
+      .umrah-navigation .indicator {
+        width: 60px;
+        height: 60px;
+      }
+    }
+    @media (max-width: 480px) {
+      .umrah-navigation {
+        height: 50px;
+      }
+      .umrah-navigation ul li {
+        height: 50px;
+      }
+      .umrah-navigation ul li a .icon {
+        font-size: 1.2em;
+        line-height: 50px;
+      }
+      .umrah-navigation ul li a .text {
+        font-size: 0.7em;
+      }
+      .umrah-navigation .indicator {
+        width: 50px;
+        height: 50px;
+      }
+    }
+    @media (max-width: 360px) {
+      .umrah-navigation ul li {
+        height: 45px;
+      }
+      .umrah-navigation ul li a .icon {
+        font-size: 1.1em;
+        line-height: 45px;
+      }
+      .umrah-navigation .indicator {
+        width: 45px;
+        height: 45px;
+      }
+    }
+    .umrah-navigation ul li a {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      width: 100%;
+      text-align: center;
+      font-weight: 500;
+      text-decoration: none;
+    }
+    .umrah-navigation ul li a .icon {
+      position: relative;
+      display: block;
+      line-height: 75px;
+      font-size: 1.5em;
+      text-align: center;
+      transition: 0.5s;
+      color: #d4af37;
+    }
+    .umrah-navigation ul li.active a .icon {
+      transform: translateY(-32px);
+      color: #fff;
+      z-index: 3;
+      position: relative;
+    }
+    .umrah-navigation ul li a .text {
+      position: absolute;
+      color: #fffbe6;
+      font-weight: 400;
+      font-size: 0.75em;
+      letter-spacing: 0.05em;
+      transition: 0.5s;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .umrah-navigation ul li.active a .text {
+      opacity: 1;
+      transform: translateY(10px);
+      color: #d4af37;
+    }
+    @media (max-width: 1024px) {
+      .umrah-navigation .indicator {
+        width: 60px;
+        height: 60px;
+        top: -60%;
+      }
+    }
+    @media (max-width: 768px) {
+      .umrah-navigation .indicator {
+        width: 52px;
+        height: 52px;
+        top: -54%;
+      }
+    }
+    @media (max-width: 480px) {
+      .umrah-navigation .indicator {
+        width: 42px;
+        height: 42px;
+        top: -46%;
+      }
+    }
+    @media (max-width: 360px) {
+      .umrah-navigation .indicator {
+        width: 36px;
+        height: 36px;
+        top: -40%;
+      }
+    }
 
-        .nav-btn i {
-            font-size: 24px;
-            display: block;
-            margin-bottom: 5px;
-            color: var(--sidebar-text);
-            transition: color 0.2s;
-        }
+    .umrah-navigation[dir="rtl"] ul {
+      flex-direction: row-reverse;
+    }
+    .umrah-navigation[dir="ltr"] ul {
+      flex-direction: row;
+    }
 
-        .nav-btn span {
-            font-size: 12px;
-            color: var(--sidebar-text);
-            font-family: 'Tajawal', sans-serif;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            text-shadow: 0 1px 6px #0001;
-        }
-
-        .nav-btn i {
-            color: #fff;
-        }
-
-        .nav-badge {
-            position: absolute;
-            top: -5px;
-            right: -10px;
-            background-color: var(--danger);
-            color: white;
-            border-radius: 50%;
-            padding: 2px 6px;
-            font-size: 10px;
-        }
-
-        .active i {
-            color: var(--gold);
-        }
-
-        .active span {
-            color: var(--gold);
-        }
-    </style>
+    .language-switcher {
+      background: #fffbe6;
+      padding: 10px 20px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-weight: 500;
+      color: #d4af37;
+      border: 1px solid #d4af37;
+      font-family: 'Tajawal', Arial, sans-serif;
+      font-size: 1em;
+      margin: 8px auto 0 auto;
+      display: block;
+      box-shadow: 0 1px 4px 0 rgba(212,175,55,0.07);
+      transition: background 0.2s;
+    }
+    .language-switcher:hover {
+      background: #fff2b2;
+    }
+  </style>
 </head>
 <body>
-    <div class="bottom-bar">
-        <button class="nav-btn" data-page="home" onclick="navigateToPage('home')">
-            <i class="fas fa-home"></i>
-            <span>الرئيسية</span>
-        </button>
+  <script src="components/lang.js"></script>
+  <script>
+    // منطق ظهور الأزرار العائمة:
+    // - في كل الصفحات تظهر الأزرار العائمة بشكل عادي (مع إخفاء الزر الخاص بالصفحة)
+    // - في الصفحة الرئيسية (home1.html): تظهر الأزرار العائمة فقط بعد اختفاء أزرار hero-buttons عند التمرير
+    // أضف كلاس home1 على body إذا كنا في الصفحة الرئيسية
+    (function() {
+      var page = window.location.pathname.split('/').pop();
+      if (page === 'home1.html') {
+        document.body.classList.add('home1');
+      }
+    })();
 
-        <button class="nav-btn" data-page="agencies" onclick="navigateToPage('agencies')">
-       <i class="fas fa-building"></i>
-            <span>الوكالات</span>
-        </button>
+    function handleFloatingButtonsVisibility() {
+      var page = window.location.pathname.split('/').pop();
+      var goldBtn = document.querySelector('.floating-btn.gold-btn');
+      var tripBtn = document.querySelector('.floating-btn.trip-btn');
+      // منطق الإخفاء حسب الصفحة
+      // تم إزالة إخفاء زر العرض الذهبي في صفحة العروض
+      if (goldBtn) goldBtn.style.display = '';
+      // لا تخفي زر العروض في صفحة الوكالات
+      //if (page === 'agencies.html' && tripBtn) tripBtn.style.display = 'none';
+      if (tripBtn) tripBtn.style.display = '';
 
-        <button class="nav-btn offers" data-page="offers" onclick="navigateToPage('offers')">
-            <i class="fas fa-bag-shopping"></i>
-            <span>العروض</span>
-           
-        </button>
+      // منطق الصفحة الرئيسية فقط
+      if (page === 'home1.html') {
+        var heroBtns = document.querySelector('.hero-buttons');
+        if (heroBtns) {
+          var heroRect = heroBtns.getBoundingClientRect();
+          // إذا كانت أزرار hero-buttons لا تظهر في الشاشة (تم تمريرها للأعلى)
+          if (heroRect.bottom < 0 || heroRect.top < 0) {
+            document.body.classList.remove('home1');
+          } else {
+            document.body.classList.add('home1');
+          }
+        }
+      } else {
+        document.body.classList.remove('home1');
+      }
+    }
+    window.addEventListener('DOMContentLoaded', handleFloatingButtonsVisibility);
+    window.addEventListener('popstate', handleFloatingButtonsVisibility);
+    window.addEventListener('scroll', handleFloatingButtonsVisibility);
+    // اجعل الأزرار العائمة تهتز كل ثانيتين فقط
+    function triggerFloatingShake() {
+      var btns = document.querySelectorAll('.floating-side-buttons .floating-btn');
+      btns.forEach(function(btn) {
+        btn.classList.add('floating-animate');
+        setTimeout(function() {
+          btn.classList.remove('floating-animate');
+        }, 400);
+      });
+    }
+    setInterval(triggerFloatingShake, 2000);
+    window.addEventListener('DOMContentLoaded', triggerFloatingShake);
+  </script>
+  <!-- أزرار عائمة جانبية فوق الشريط السفلي -->
+  <div class="floating-side-buttons">
+    <a href="golden.html" class="floating-btn gold-btn" title="العروض الذهبية">
+      <i class="fas fa-crown"></i>
+    </a>
+    <a href="offers.html" class="floating-btn trip-btn" title="تصفح الرحلات">
+      <i class="fas fa-kaaba"></i>
+    </a>
+    <a href="https://wa.me/966500000000" class="floating-btn whatsapp-btn" title="واتساب admin" target="_blank">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+    <script>
+      // تفعيل الزر الجانبي المناسب حسب الصفحة
+      (function() {
+        var page = window.location.pathname.split('/').pop();
+        var goldBtn = document.querySelector('.floating-btn.gold-btn');
+        var tripBtn = document.querySelector('.floating-btn.trip-btn');
+        var whatsappBtn = document.querySelector('.floating-btn.whatsapp-btn');
+        if (page === 'golden.html' && goldBtn) {
+          goldBtn.classList.add('active');
+        } else if (goldBtn) {
+          goldBtn.classList.remove('active');
+        }
+        if (page === 'offers.html' && tripBtn) {
+          tripBtn.classList.add('active');
+        } else if (tripBtn) {
+          tripBtn.classList.remove('active');
+        }
+        // واتساب ليس له صفحة خاصة، فلا داعي لتفعيله
+      })();
+    </script>
+  </div>
+  <div class="umrah-navigation" dir="rtl">
+    <!-- قائمة عربية (معكوسة)-->
+    <ul id="nav-ar" style="display:none">
+      <li class="list">
+        <span class="indicator"></span>
+        <a href="call.html">
+          <span class="icon"><ion-icon name="call-outline"></ion-icon></span>
+          <span class="text" data-en="Contact Us" data-ar="اتصل بنا">اتصل بنا</span>
+        </a>
+      </li>
+      <li class="list">
+        <span class="indicator"></span>
+        <a href="learn_omra.html">
+          <span class="icon"><ion-icon name="book-outline"></ion-icon></span>
+          <span class="text" data-en="Learn My Life" data-ar="تعلم  عمرتك">تعلم  عمرتك</span>
+        </a>
+      </li>
+      <li class="list">
+        <span class="indicator"></span>
+        <a href="agencies.html">
+          <span class="icon"><ion-icon name="business-outline"></ion-icon></span>
+          <span class="text" data-en="Agency" data-ar="الوكالة">الوكالة</span>
+        </a>
+      </li>
+      <li class="list">
+        <span class="indicator"></span>
+        <a href="home1.html">
+          <span class="icon"><ion-icon name="home-outline"></ion-icon></span>
+          <span class="text" data-en="Home" data-ar="الرئيسية">الرئيسية</span>
+        </a>
+      </li>
+      <script>
+        // تفعيل زر الرئيسية عند صفحة العروض
+        (function() {
+          var page = window.location.pathname.split('/').pop();
+          var navAr = document.getElementById('nav-ar');
+          if (navAr) {
+            var lists = navAr.querySelectorAll('.list');
+            lists.forEach(function(item) { item.classList.remove('active'); });
+            if (page === 'offers.html') {
+              // زر الرئيسية هو الأخير
+              lists[3].classList.add('active');
+            } else if (page === 'home1.html') {
+              lists[3].classList.add('active');
+            } else if (page === 'agencies.html') {
+              lists[2].classList.add('active');
+            } else if (page === 'learn_omra.html') {
+              lists[1].classList.add('active');
+            } else if (page === 'call.html') {
+              lists[0].classList.add('active');
+            }
+          }
+        })();
+      </script>
+    </ul>
+    <!-- قائمة فرنسية (عادي)-->
+    <ul id="nav-fr" style="display:none">
+      <li class="list active">
+        <span class="indicator"></span>
+        <a href="home1.html">
+          <span class="icon"><ion-icon name="home-outline"></ion-icon></span>
+          <span class="text" data-en="Home" data-ar="الرئيسية">Home</span>
+        </a>
+      </li>
+      <li class="list">
+        <span class="indicator"></span>
+        <a href="agencies.html">
+          <span class="icon"><ion-icon name="business-outline"></ion-icon></span>
+          <span class="text" data-en="Agency" data-ar="الوكالة">Agency</span>
+        </a>
+      </li>
+      <li class="list">
+        <span class="indicator"></span>
+        <a href="learn_omra.html">
+          <span class="icon"><ion-icon name="book-outline"></ion-icon></span>
+          <span class="text" data-en="Learn My Life" data-ar="تعلم  عمرتك">Learn My Life</span>
+        </a>
+      </li>
+      <li class="list">
+        <span class="indicator"></span>
+         <a href="call.html">
+          <span class="icon"><ion-icon name="call-outline"></ion-icon></span>
+          <span class="text" data-en="Contact Us" data-ar="اتصل بنا">Contact Us</span>
+        </a>
+      </li>
+    </ul>
+  </div>
 
-       
-        <button class="nav-btn" data-page="golden" onclick="navigateToPage('golden')">
-        <i class="fas fa-crown"></i>
-            <span>الذهبية</span>
-        </button>
 
-         <button class="nav-btn" data-page="learn" onclick="navigateToPage('learn')">
-            <i class="fas fa-book-open"></i>
-            <span>تعلم العمرة</span>
-        </button>
 
-    </div>
+  <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  
+  <script>
 
-    <!-- تم حذف كود الجافاسكريبت الإضافي، الدالة موجودة في include-bars.js -->
+    // استخدم اللغة من localStorage أو الافتراضية
+    let currentLanguage = localStorage.getItem('lang') || 'ar';
+    const navigation = document.querySelector('.umrah-navigation');
+
+    function setActiveByUrl(navUl) {
+      const page = window.location.pathname.split('/').pop();
+      const lists = navUl.querySelectorAll('.list');
+      lists.forEach((item) => {
+        const link = item.querySelector('a');
+        if (!link) return;
+        const href = link.getAttribute('href');
+        if (href && page && href.split('#')[0] === page) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+    }
+
+
+    function setupNavEvents(navUl) {
+      // إزالة أي تفعيل يدوي عند الضغط، والاكتفاء بتفعيل الزر حسب عنوان الصفحة
+      // حتى لا يبقى الزر السابق مفعلاً عند الرجوع/التقدم
+      // عند الضغط على زر، يتم الانتقال للصفحة، وسيتم تفعيل الزر الصحيح عند تحميل الصفحة أو popstate
+    }
+
+    function applyLanguage(lang) {
+      const htmlElement = document.documentElement;
+      const navAr = document.getElementById('nav-ar');
+      const navFr = document.getElementById('nav-fr');
+      if (lang === 'ar') {
+        htmlElement.lang = 'ar';
+        htmlElement.dir = 'rtl';
+        navigation.dir = 'rtl';
+        navAr.style.display = '';
+        navFr.style.display = 'none';
+        setActiveByUrl(navAr);
+        setupNavEvents(navAr);
+      } else {
+        htmlElement.lang = 'en';
+        htmlElement.dir = 'ltr';
+        navigation.dir = 'ltr';
+        navAr.style.display = 'none';
+        navFr.style.display = '';
+        setActiveByUrl(navFr);
+        setupNavEvents(navFr);
+      }
+    }
+
+    // عند تغيير اللغة من أي مكان في الموقع
+    window.setLanguage = function(lang) {
+      localStorage.setItem('lang', lang);
+      currentLanguage = lang;
+      applyLanguage(lang);
+    };
+
+    // عند تحميل الصفحة طبق اللغة المختارة
+    applyLanguage(currentLanguage);
+
+    // عند الرجوع أو التقدم في المتصفح، فعّل الزر الصحيح دائماً
+    window.addEventListener('popstate', function() {
+      applyLanguage(currentLanguage);
+    });
+  </script>
 </body>
 </html>

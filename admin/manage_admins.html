@@ -4,11 +4,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>إدارة المدراء | منصة العمرة</title>
+    <title>إدارة المدراء | منصة المناسك العربي</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/manage_admin.css" />
     <link rel="stylesheet" href="css/dashboard.css" />
+        <script src="js/adminTokenRefresher.js"></script>
+
   </head>
   <body>
     <div class="dashboard-container">
@@ -52,22 +54,23 @@
           </div>
         </div>
         <div id="admin-actions" class="mb-3 d-flex justify-content-between align-items-center">
-          <button id="addAdminBtn" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addAdminModal" style="display:none;">
+          <button id="addAdminBtn" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addAdminModal" style="display:none;"
+            data-ar="إضافة مدير فرعي جديد" data-en="Add Sub Admin" data-fr="Ajouter un sous-admin">
             <i class="fas fa-user-plus"></i> إضافة مدير فرعي جديد
           </button>
         </div>
         <section class="orders-list-section" style="margin-top:2.5rem;">
-          <h2 style="margin-bottom: 1rem; font-size:1.3rem; color:var(--primary); font-weight:900;">قائمة المدراء</h2>
+          <h2 style="margin-bottom: 1rem; font-size:1.3rem; color:var(--primary); font-weight:900;" data-ar="قائمة المدراء" data-en="Admins List" data-fr="Liste des admins">قائمة المدراء</h2>
           <table class="orders-table" id="adminsTable">
             <thead>
               <tr>
-                <th>#</th>
-                <th>الاسم الكامل</th>
-                <th>البريد الإلكتروني</th>
-                <th>الدور</th>
-                <th>الصلاحيات</th>
-                <th>تاريخ الإنشاء</th>
-                <th>إجراءات</th>
+                <th data-ar="#" data-en="#" data-fr="#">#</th>
+                <th data-ar="الاسم الكامل" data-en="Full Name" data-fr="Nom complet">الاسم الكامل</th>
+                <th data-ar="البريد الإلكتروني" data-en="Email" data-fr="E-mail">البريد الإلكتروني</th>
+                <th data-ar="الدور" data-en="Role" data-fr="Rôle">الدور</th>
+                <th data-ar="الصلاحيات" data-en="Permissions" data-fr="Autorisations">الصلاحيات</th>
+                <th data-ar="تاريخ الإنشاء" data-en="Created At" data-fr="Date de création">تاريخ الإنشاء</th>
+                <th data-ar="إجراءات" data-en="Actions" data-fr="Actions">إجراءات</th>
               </tr>
             </thead>
             <tbody id="adminsTbody">
@@ -83,7 +86,8 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title modal-title" id="addAdminModalLabel" style="font-size:1.35em;font-weight:900;color:var(--primary);display:flex;align-items:center;gap:8px;">
+            <h5 class="modal-title modal-title" id="addAdminModalLabel" style="font-size:1.35em;font-weight:900;color:var(--primary);display:flex;align-items:center;gap:8px;"
+              data-ar="إضافة مدير فرعي جديد" data-en="Add Sub Admin" data-fr="Ajouter un sous-admin">
               <i class="fas fa-user-plus" style="color:var(--primary);"></i>
               إضافة مدير فرعي جديد
             </h5>
@@ -94,46 +98,52 @@
           <form id="addAdminForm" autocomplete="off">
             <div class="modal-body" style="padding-top:10px;">
               <div class="form-group">
-                <label for="fullName">الاسم الكامل</label>
-                <input type="text" id="fullName" class="form-control" required autocomplete="name" style="font-size:1.13em;padding:13px 12px;margin-bottom:7px;" placeholder="أدخل الاسم الكامل" />
+                <label for="fullName" data-ar="الاسم الكامل" data-en="Full Name" data-fr="Nom complet">الاسم الكامل</label>
+                <input type="text" id="fullName" class="form-control" required autocomplete="name" style="font-size:1.13em;padding:13px 12px;margin-bottom:7px;"
+                  placeholder="أدخل الاسم الكامل"
+                  data-ar-placeholder="أدخل الاسم الكامل" data-en-placeholder="Enter full name" data-fr-placeholder="Entrer le nom complet" />
               </div>
               <div class="form-group">
-                <label for="email">البريد الإلكتروني</label>
-                <input type="email" id="email" class="form-control" required autocomplete="email" style="font-size:1.13em;padding:13px 12px;margin-bottom:7px;direction:ltr;" placeholder="example@email.com" />
+                <label for="email" data-ar="البريد الإلكتروني" data-en="Email" data-fr="E-mail">البريد الإلكتروني</label>
+                <input type="email" id="email" class="form-control" required autocomplete="email" style="font-size:1.13em;padding:13px 12px;margin-bottom:7px;direction:ltr;"
+                  placeholder="example@email.com"
+                  data-ar-placeholder="البريد الإلكتروني" data-en-placeholder="Email" data-fr-placeholder="E-mail" />
               </div>
               <div class="form-group">
-                <label for="password">كلمة المرور</label>
-                <input type="password" id="password" class="form-control" required autocomplete="new-password" style="font-size:1.13em;padding:13px 12px;margin-bottom:7px;direction:ltr;" placeholder="********" />
+                <label for="password" data-ar="كلمة المرور" data-en="Password" data-fr="Mot de passe">كلمة المرور</label>
+                <input type="password" id="password" class="form-control" required autocomplete="new-password" style="font-size:1.13em;padding:13px 12px;margin-bottom:7px;direction:ltr;"
+                  placeholder="********"
+                  data-ar-placeholder="كلمة المرور" data-en-placeholder="Password" data-fr-placeholder="Mot de passe" />
               </div>
               <div class="form-group">
-                <label style="margin-bottom:7px;">الصلاحيات</label>
+                <label style="margin-bottom:7px;" data-ar="الصلاحيات" data-en="Permissions" data-fr="Autorisations">الصلاحيات</label>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px 18px;">
                   <div class="form-check" style="margin-bottom:0;">
                     <input class="form-check-input" type="checkbox" value="can_approve_agencies" id="canApproveAgencies" />
-                    <label class="form-check-label" for="canApproveAgencies">الموافقة على الوكالات</label>
+                    <label class="form-check-label" for="canApproveAgencies" data-ar="الموافقة على الوكالات" data-en="Approve Agencies" data-fr="Approuver les agences">الموافقة على الوكالات</label>
                   </div>
                   <div class="form-check" style="margin-bottom:0;">
                     <input class="form-check-input" type="checkbox" value="manage_agencies" id="manageAgencies" />
-                    <label class="form-check-label" for="manageAgencies">إدارة الوكالات</label>
+                    <label class="form-check-label" for="manageAgencies" data-ar="إدارة الوكالات" data-en="Manage Agencies" data-fr="Gérer les agences">إدارة الوكالات</label>
                   </div>
                   <div class="form-check" style="margin-bottom:0;">
                     <input class="form-check-input" type="checkbox" value="manage_offers" id="manageOffers" />
-                    <label class="form-check-label" for="manageOffers">إدارة العروض</label>
+                    <label class="form-check-label" for="manageOffers" data-ar="إدارة العروض" data-en="Manage Offers" data-fr="Gérer les offres">إدارة العروض</label>
                   </div>
                   <div class="form-check" style="margin-bottom:0;">
                     <input class="form-check-input" type="checkbox" value="manage_bookings" id="manageBookings" />
-                    <label class="form-check-label" for="manageBookings">إدارة الحجوزات</label>
+                    <label class="form-check-label" for="manageBookings" data-ar="إدارة الحجوزات" data-en="Manage Bookings" data-fr="Gérer les réservations">إدارة الحجوزات</label>
                   </div>
                   <div class="form-check" style="margin-bottom:0;">
                     <input class="form-check-input" type="checkbox" value="manage_admins" id="manageAdmins" />
-                    <label class="form-check-label" for="manageAdmins">إدارة المدراء</label>
+                    <label class="form-check-label" for="manageAdmins" data-ar="إدارة المدراء" data-en="Manage Admins" data-fr="Gérer les admins">إدارة المدراء</label>
                   </div>
                 </div>
               </div>
             </div>
             <div class="modal-footer" style="padding-top:0;">
               <div style="display:flex;gap:10px;flex-direction:row-reverse;width:100%;justify-content:center;">
-                <button type="submit" class="btn btn-success"><i class="fas fa-plus me-1"></i>إضافة</button>
+                <button type="submit" class="btn btn-success" data-ar="إضافة" data-en="Add" data-fr="Ajouter"><i class="fas fa-plus me-1"></i>إضافة</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
               </div>
             </div>
@@ -208,9 +218,10 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/languageSwitcher.js"></script>
     <script src="js/manage_admins.js"></script>
     <script>
-      // تحميل الشريط الجانبي ديناميكياً مع تفعيل العنصر الحالي
+      // تحميل الشريط الجانبي ديناميكياً مع تفعيل العنصر الحالي وتفعيل منطق اللغة
       fetch('sidebar.html')
         .then(res => res.text())
         .then(html => {
@@ -225,6 +236,21 @@
               }
             });
           }, 100);
+          // تفعيل نظام تغيير اللغة بعد تحميل الشريط الجانبي
+          if (window.applyLanguage) {
+            const lang = localStorage.getItem('umrah_admin_lang') || 'ar';
+            window.applyLanguage(lang);
+          }
+          // ربط أزرار اللغة من جديد بعد تحميل الشريط الجانبي
+          document.querySelectorAll('.lang-btn').forEach(function(btn) {
+            btn.onclick = function() {
+              const lang = btn.getAttribute('data-lang');
+              if (lang) {
+                localStorage.setItem('umrah_admin_lang', lang);
+                if (window.applyLanguage) window.applyLanguage(lang);
+              }
+            };
+          });
         });
     </script>
   </body>

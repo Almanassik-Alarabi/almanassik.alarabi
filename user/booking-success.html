@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تم طلب الحجز بنجاح - RIHLA</title>
+    <link rel="stylesheet" href="css/booking-success.css">
+</head>
+<body>
+       <div class="main-offer-image" id="mainOfferImageContainer" style="">
+            <img id="mainOfferImage" src="img/boking-hadia.png" alt="صورة العرض" style="width:100%; max-width:800px; height:100%;object-fit:cover;border-radius:18px 18px 8px 8px;box-shadow:0 4px 18px #c0cde4;display:block;margin:0 auto;">
+        </div>
+    <div class="success-container">
+        
+        <div class="success-icon">
+            <span class="checkmark">✓</span>
+        </div>
+        <h1 class="success-title">تم طلب طلب الحجز بنجاح!</h1>
+        <div class="celebration-emoji">🎉</div>
+        <p class="success-message">
+            مبروك! تم تأكيد حجزك بنجاح.<br>
+            سيتم التواصل معك قريباً عبر الهاتف لتأكيد التفاصيل وترتيب موعد الرحلة.
+        </p>
+        <div class="booking-details">
+            <h3>📋 تفاصيل طلب الحجز</h3>
+            <p><strong>رقم طلب الحجز:</strong> <span id="bookingNumber"></span></p>
+            <p><strong>اسم العرض:</strong> <span id="offerName"></span></p>
+            <p><strong>تاريخ طلب الحجز:</strong> <span id="bookingDate"></span></p>
+            <p><strong>الاسم الكامل:</strong> <span id="fullName"></span></p>
+            <p><strong>رقم الهاتف:</strong> <span id="phone"></span></p>
+            <p><strong>نوع الغرفة:</strong> <span id="roomType"></span></p>
+            <p><strong>السعر السابق:</strong> <span id="oldPrice" style="text-decoration:line-through;color:#d32f2f;"></span></p>
+            <p><strong>السعر بعد الهدية:</strong> <span id="totalPrice" style="color:#237937;"></span></p>
+            <p><strong>قيمة الهدية:</strong> <span id="giftValue" style="color:#d4af37;"></span></p>
+            <p><strong>حالة طلب الحجز:</strong> <span id="bookingStatusValue"></span></p>
+            <p><strong>معرف طلب الحجز:</strong> <span id="bookingIdValue"></span></p>
+            <p><strong>رقم العرض:</strong> <span id="offerIdValue"></span></p>
+            <img id="passportImage" style="max-width:180px;display:block;margin:15px auto;border-radius:12px;box-shadow:0 2px 8px #ccc;" alt="صورة جواز السفر">
+        </div>
+     
+        <div id="discountBanner" class="discount-banner" style="display: none;">
+            <h4>🎁 مبروك تحصلت على هدية المناسك بقيمة مليون سنتيم على طلب حجزك برفقة المنصة</h4>
+            <p>تم تطبيق تخفيض <span id="discountAmount">10000 د.ج</span> على حجزك!</p>
+        </div>
+        <div class="icons-section">
+            <div class="icon-item">
+                <div class="icon">🕋</div>
+                <span class="icon-label">زيارة الكعبة</span>
+            </div>
+            <div class="icon-item">
+                <div class="icon">🎁</div>
+                <span class="icon-label">هدايا مميزة</span>
+            </div>
+        </div>
+        <div class="contact-info">
+            <h4>📞 سنتواصل معك قريباً</h4>
+            <p>سيقوم فريقنا بالاتصال بك خلال 24 ساعة لتأكيد التفاصيل وترتيب موعد الرحلة.</p>
+        </div>
+        <button class="home-button" onclick="goHome()">العودة للصفحة الرئيسية</button>
+    </div>
+  <script src="js/booking-success.js"></script>
+</body>
+</html>

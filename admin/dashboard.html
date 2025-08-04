@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
-    <title>لوحة تحكم منصة العمرة</title>
+    <title>لوحة تحكم منصة المناسك العربي</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -14,6 +14,7 @@
     />
     <link rel="stylesheet" href="css/manage_admin.css" />
     <link rel="stylesheet" href="css/dashboard.css" />
+    <script src="js/adminTokenRefresher.js"></script>
     <!-- Supabase JS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.min.js"></script>
   </head>
@@ -25,13 +26,7 @@
         <!-- Header -->
         <div class="header">
           <div class="header-left">
-            <h1
-              data-ar="لوحة التحكم"
-              data-en="Dashboard"
-              data-fr="Tableau de bord"
-            >
-              لوحة التحكم
-            </h1>
+            <h1 data-ar="لوحة التحكم" data-en="Dashboard" data-fr="Tableau de bord">لوحة التحكم</h1>
            
           </div>
           <div class="header-right">
@@ -45,10 +40,8 @@
                 <i class="fas fa-user"></i>
               </div>
               <div>
-                <div style="font-weight: 600">المدير العام</div>
-                <div style="font-size: 0.9rem; color: var(--text-secondary)">
-                  admin@umrah.com
-                </div>
+                <div style="font-weight: 600" data-ar="المدير العام" data-en="Super Admin" data-fr="Administrateur">المدير العام</div>
+                <div style="font-size: 0.9rem; color: var(--text-secondary)">admin@umrah.com</div>
               </div>
             </div>
           </div>
@@ -60,27 +53,27 @@
         <!-- المخططات -->
         <div class="charts-section">
           <div class="chart-card">
-            <div class="chart-title">إحصائيات الحجوزات الشهرية</div>
+            <div class="chart-title" data-ar="إحصائيات الحجوزات الشهرية" data-en="Monthly Bookings Statistics" data-fr="Statistiques des réservations mensuelles">إحصائيات الحجوزات الشهرية</div>
             <canvas id="monthlyBookingsChart" height="180"></canvas>
           </div>
           <div class="chart-card">
-            <div class="chart-title">توزيع الوكالات حسب الولاية</div>
+            <div class="chart-title" data-ar="توزيع الوكالات حسب الولاية" data-en="Agency Distribution by Wilaya" data-fr="Répartition des agences par Wilaya">توزيع الوكالات حسب الولاية</div>
             <canvas id="agencyDistributionChart" height="180"></canvas>
           </div>
           <div class="chart-card">
-            <div class="chart-title">أكثر الوكالات التي لديها عروض</div>
+            <div class="chart-title" data-ar="أكثر الوكالات التي لديها عروض" data-en="Top Agencies by Offers" data-fr="Agences avec le plus d'offres">أكثر الوكالات التي لديها عروض</div>
             <canvas id="topAgenciesByOffersChart" height="180"></canvas>
           </div>
           <div class="chart-card">
-            <div class="chart-title">العروض الأكثر طلبا</div>
+            <div class="chart-title" data-ar="العروض الأكثر طلبا" data-en="Most Requested Offers" data-fr="Offres les plus demandées">العروض الأكثر طلبا</div>
             <canvas id="topRequestedOffersChart" height="180"></canvas>
           </div>
           <div class="chart-card">
-            <div class="chart-title">زيارات الموقع الشهري (آخر 12 شهر)</div>
+            <div class="chart-title" data-ar="زيارات الموقع الشهري (آخر 12 شهر)" data-en="Monthly Site Visits (Last 12 Months)" data-fr="Visites mensuelles du site (12 derniers mois)">زيارات الموقع الشهري (آخر 12 شهر)</div>
             <canvas id="siteVisitsMonthlyChart" height="180"></canvas>
           </div>
           <div class="chart-card">
-            <div class="chart-title">أكثر وكالة أضافت عروضًا في كل سنة (آخر 10 سنوات)</div>
+            <div class="chart-title" data-ar="أكثر وكالة أضافت عروضًا في كل سنة (آخر 10 سنوات)" data-en="Top Agency by Offers per Year (Last 10 Years)" data-fr="Agence avec le plus d'offres par an (10 dernières années)">أكثر وكالة أضافت عروضًا في كل سنة (آخر 10 سنوات)</div>
             <canvas id="topAgencyByOffersPerYearChart" height="180"></canvas>
           </div>
         </div>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <title>إدارة طلبات العمرة | منصة المناسك العربي</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/demande_umrah.css" />
+    <script src="js/languageSwitcher.js"></script>
+    <script src="js/agencyTokenRefresher.js"></script>
+    <script src="js/authGuard.js"></script>
+
+    <!-- Supabase JS CDN -->
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <div id="sidebar1"></div>
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          
+          fetch("sidebar.html")
+            .then((res) => res.text())
+            .then((html) => {
+              document.getElementById("sidebar1").innerHTML = html;
+              setTimeout(function () {
+                if (window.languageSwitcher) {
+                  window.languageSwitcher.setLang(
+                    window.languageSwitcher.getLang()
+                  );
+                }
+                // إعادة تفعيل active في الشريط الجانبي بعد إدراجه
+                if (window.highlightSidebarActive) {
+                  window.highlightSidebarActive();
+                }
+              }, 200);
+            });
+            
+
+        });
+      </script>
+      <div class="main-content">
+        <!-- Header -->
+
+        <div class="header">
+          <div class="header-left">
+            <h1
+              data-ar="ادارة المعتمرين"
+              data-en="Manage Pilgrims"
+              data-fr="Gérer les Pèlerins"
+            >
+              ادارة المعتمرين
+            </h1>
+            <p
+              data-ar="عرض وإدارة جميع المعتمرين المسجلين في النظام"
+              data-en="View and manage all registered pilgrims in the system"
+              data-fr="Voir et gérer tous les pèlerins enregistrés dans le système"
+            >
+              عرض وإدارة المعتمرين النظام
+            </p>
+          </div>
+          <div class="header-right">
+ <div class="language-switcher">
+              <button class="lang-btn active" data-lang="ar">العربية</button>
+              <button class="lang-btn" data-lang="en">English</button>
+              <button class="lang-btn" data-lang="fr">Français</button>
+            </div>
+            <div class="user-info">
+              <div class="user-avatar">
+                <i class="fas fa-user"></i>
+              </div>
+              <div>
+                <div style="font-weight: 600">المدير العام</div>
+                <div style="font-size: 0.9rem; color: var(--text-secondary)">
+<span id="agencyEmailValue">—</span>              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Filters Section -->
+        <div
+          class="actions-section"
+          style="
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.2rem;
+          "
+        >
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input
+              type="text"
+              id="searchRequests"
+              placeholder="بحث عن اسم أو رقم..."
+              data-ar-placeholder="بحث عن اسم أو رقم..."
+              data-en-placeholder="Search by name or phone..."
+              data-fr-placeholder="Rechercher par nom ou téléphone..."
+            />
+          </div>
+          <div
+            class="action-buttons"
+            style="display: flex; align-items: center; gap: 1.5rem"
+          >
+            <select id="statusFilter" class="btn btn-secondary">
+              <option value="">كل الحالات</option>
+              <option value="مقبول">مقبول</option>
+              <option value="بانتظار موافقة الوكالة">
+                بانتظار موافقة الوكالة
+              </option>
+            </select>
+            <!-- زر إضافة معتمر محذوف -->
+          </div>
+        </div>
+
+        <!-- Display Orders -->
+        <section class="orders-list-section">
+          <h2 style="margin-bottom: 1rem">قائمة طلبات العمرة</h2>
+          <table class="orders-table" id="ordersTable">
+            <thead>
+              <tr>
+                <th data-ar="اسم المعتمر" data-en="Pilgrim Name" data-fr="Nom du pèlerin">اسم المعتمر</th>
+                <th data-ar="رقم الهاتف" data-en="Phone Number" data-fr="Téléphone">رقم الهاتف</th>
+                <th data-ar="العرض" data-en="Offer" data-fr="Offre">العرض</th>
+                <th data-ar="تاريخ الطلب" data-en="Request Date" data-fr="Date de la demande">تاريخ الطلب</th>
+                <th data-ar="الإجراءات" data-en="Actions" data-fr="Actions">الإجراءات</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Rows are filled by JS -->
+            </tbody>
+          </table>
+        </section>
+
+        <!-- نموذج إضافة معتمر محذوف -->
+      </div>
+    </div>
+    <div style="height: 32px"></div>
+    <!-- مودال تفاصيل الطلب -->
+    <div
+      class="modal fade"
+      id="bookingDetailsModal"
+      tabindex="-1"
+      aria-labelledby="bookingDetailsLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="bookingDetailsLabel" data-ar="تفاصيل طلب العمرة" data-en="Umrah Request Details" data-fr="Détails de la demande d'Omra">تفاصيل طلب العمرة</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="إغلاق"
+            ></button>
+          </div>
+          <div class="modal-body" id="bookingDetailsContent">
+            <!-- سيتم تعبئة التفاصيل ديناميكياً -->
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              <span data-ar="إغلاق" data-en="Close" data-fr="Fermer">إغلاق</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/demande_umrah.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', function() {
+     
+        var emailSpan = document.getElementById('agencyEmailValue');
+        var agency = null;
+        try {
+          agency = JSON.parse(localStorage.getItem('agency_data'));
+        } catch(e) {}
+        if (agency && agency.name) {
+          if (emailSpan) emailSpan.textContent = agency.name;
+        } else {
+          if (emailSpan) emailSpan.textContent = 'لا يوجد اسم وكالة';
+        }
+
+      });</script>
+  </body>
+</html>

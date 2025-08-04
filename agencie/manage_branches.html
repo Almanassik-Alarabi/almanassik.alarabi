@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>إدارة الفروع | Manage Branches</title>
+    <link rel="stylesheet" href="css/manage_branches.css" />
+    <script src="js/languageSwitcher.js"></script>
+    <script src="js/authGuard.js"></script>
+    <script src="js/agencyTokenRefresher.js"></script>
+
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style></style>
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <div id="sidebar1"></div>
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          fetch("sidebar.html")
+            .then((res) => res.text())
+            .then((html) => {
+              document.getElementById("sidebar1").innerHTML = html;
+              setTimeout(function () {
+                if (window.languageSwitcher) {
+                  window.languageSwitcher.setLang(
+                    window.languageSwitcher.getLang()
+                  );
+                }
+                // إعادة تفعيل active في الشريط الجانبي بعد إدراجه
+                if (window.highlightSidebarActive) {
+                  window.highlightSidebarActive();
+                }
+              }, 200);
+            });
+        });
+      </script>
+      <div class="main-content" id="mainContent">
+       <!-- Header -->
+        <div class="header">
+          <div class="header-left">
+            <h1
+              data-ar="لوح الفروع"
+              data-en="Branches Board"
+              data-fr="Tableau des branches"
+            >
+              لوح الفروع
+            </h1>
+
+          </div>
+          <div class="header-right">
+            <div class="language-switcher">
+              <button class="lang-btn active" data-lang="ar">العربية</button>
+              <button class="lang-btn" data-lang="en">English</button>
+              <button class="lang-btn" data-lang="fr">Français</button>
+            </div>
+          </div>
+          <div class="header-right">
+            
+            <div class="user-info">
+              <div class="user-avatar">
+                <i class="fas fa-user"></i>
+              </div>
+              <div>
+                <div style="font-weight: 600" id="agencyName">اسم الوكالة</div>
+                <div style="font-size: 0.9rem; color: var(--text-secondary)" id="agencyEmail">
+<span id="agencyEmailValue">—</span>             </div>
+              </div>
+            </div>
+          </div>
+         </div>
+        
+        <div class="actions-section" style="margin-bottom: 18px">
+          <button class="btn btn-primary" id="openAddBranchModalBtn">
+            <i class="fas fa-plus"></i> <span data-ar="إضافة فرع" data-en="Add Branch" data-fr="Ajouter une agence">إضافة فرع</span>
+          </button>
+        </div>
+        <div id="branchesTableContainer"></div>
+      </div>
+    </div>
+
+    <!-- Modal: إضافة/تعديل فرع -->
+    <div id="branchModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="modal-title" id="branchModalTitle" data-ar="إضافة فرع جديد" data-en="Add New Branch" data-fr="Ajouter une nouvelle agence">إضافة فرع جديد</span>
+          <span class="close" id="closeBranchModalBtn">&times;</span>
+        </div>
+        <form id="branchForm" autocomplete="off">
+          <div class="form-row">
+            <div class="form-group">
+              <label data-ar="اسم الفرع" data-en="Branch Name" data-fr="Nom de l'agence">اسم الفرع</label>
+              <input type="text" name="name" required 
+                data-ar-placeholder="اسم الفرع" data-en-placeholder="Branch Name" data-fr-placeholder="Nom de l'agence"
+                placeholder="اسم الفرع" />
+            </div>
+            <div class="form-group">
+              <label data-ar="المدينة" data-en="City" data-fr="Ville">المدينة</label>
+              <input type="text" name="city" required 
+                data-ar-placeholder="المدينة" data-en-placeholder="City" data-fr-placeholder="Ville"
+                placeholder="المدينة" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group" style="position: relative">
+              <label data-ar="العنوان" data-en="Address" data-fr="Adresse">العنوان</label>
+              <input
+                type="text"
+                name="address"
+                id="addressInput"
+                autocomplete="off"
+                data-ar-placeholder="العنوان" data-en-placeholder="Address" data-fr-placeholder="Adresse"
+                placeholder="العنوان"
+              />
+              <div
+                id="addressSuggestions"
+                style="
+                  position: absolute;
+                  right: 0;
+                  left: 0;
+                  z-index: 10;
+                  background: #fff;
+                  border: 1px solid #ccc;
+                  max-height: 180px;
+                  overflow-y: auto;
+                  display: none;
+                "
+              ></div>
+            </div>
+            <div class="form-group">
+              <label data-ar="البريد الإلكتروني للفرع" data-en="Branch Email" data-fr="Email de l'agence">البريد الإلكتروني للفرع</label>
+              <input type="email" name="email" required 
+                data-ar-placeholder="البريد الإلكتروني" data-en-placeholder="Branch Email" data-fr-placeholder="Email de l'agence"
+                placeholder="البريد الإلكتروني" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label data-ar="كلمة المرور للفرع" data-en="Branch Password" data-fr="Mot de passe de l'agence">كلمة المرور للفرع</label>
+              <input type="password" name="password" required 
+                data-ar-placeholder="كلمة المرور" data-en-placeholder="Password" data-fr-placeholder="Mot de passe"
+                placeholder="كلمة المرور" />
+            </div>
+            <div class="form-group">
+              <label data-ar="هاتف المدير" data-en="Manager Phone" data-fr="Téléphone du responsable">هاتف المدير</label>
+              <input type="text" name="manager_phone" required 
+                data-ar-placeholder="هاتف المدير" data-en-placeholder="Manager Phone" data-fr-placeholder="Téléphone du responsable"
+                placeholder="هاتف المدير" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div
+              class="form-group"
+              style="
+                display: flex;
+                align-items: flex-end;
+                gap: 18px;
+                width: 100%;
+              "
+            >
+              <div style="flex: 1">
+                <label data-ar="خط العرض (latitude)" data-en="Latitude" data-fr="Latitude">خط العرض (latitude)</label>
+                <input
+                  type="number"
+                  name="latitude"
+                  step="any"
+                  required
+                  class="input-short"
+                  data-ar-placeholder="خط العرض" data-en-placeholder="Latitude" data-fr-placeholder="Latitude"
+                  placeholder="خط العرض"
+                />
+              </div>
+              <div
+                style="flex: 1; display: flex; align-items: flex-end; gap: 6px"
+              >
+                <div style="flex: 1">
+                  <label data-ar="خط الطول (longitude)" data-en="Longitude" data-fr="Longitude">خط الطول (longitude)</label>
+                  <input
+                    type="number"
+                    name="longitude"
+                    step="any"
+                    required
+                    class="input-short"
+                    data-ar-placeholder="خط الطول" data-en-placeholder="Longitude" data-fr-placeholder="Longitude"
+                    placeholder="خط الطول"
+                  />
+                </div>
+                <button
+                  type="button"
+                  id="detectLocationBtn"
+                  class="btn btn-info"
+                  style="margin-bottom: 0; white-space: nowrap"
+                  data-ar="تحديد الموقع تلقائياً" data-en="Detect Location" data-fr="Détecter la position"
+                >
+                  تحديد الموقع تلقائياً
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label data-ar="المطارات المرتبطة بالفرع" data-en="Branch Airports" data-fr="Aéroports associés">المطارات المرتبطة بالفرع</label>
+            <div id="airportCheckboxes"></div>
+            <small style="color: #888" data-ar="اختر مطار أو أكثر" data-en="Select one or more airports" data-fr="Sélectionnez un ou plusieurs aéroports">اختر مطار أو أكثر</small>
+          </div>
+          <div style="text-align: left; margin-top: 10px">
+            <button type="submit" class="btn btn-primary"><span data-ar="حفظ" data-en="Save" data-fr="Enregistrer">حفظ</span></button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              id="cancelBranchBtn"
+            >
+              <span data-ar="إلغاء" data-en="Cancel" data-fr="Annuler">إلغاء</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="js/manage_branches.js"></script>
+    <script>
+          var emailSpan = document.getElementById('agencyEmailValue');
+          var agency = null;
+          try {
+            agency = JSON.parse(localStorage.getItem('agency_data'));
+          } catch(e) {}
+          if (agency && agency.name) {
+            if (emailSpan) emailSpan.textContent = agency.name;
+          } else {
+            if (emailSpan) emailSpan.textContent = 'لا يوجد اسم وكالة';
+          }
+      // الجزائر: اقتراح عناوين عبر Nominatim OpenStreetMap أو واجهة جزائرية
+      const addressInput = document.getElementById("addressInput");
+      const suggestionsBox = document.getElementById("addressSuggestions");
+      let debounceTimeout;
+      // خريطة ولايات الجزائر بالعربية -> فرنسية
+      const dzWilayas = {
+        أدرار: "Adrar",
+        الشلف: "Chlef",
+        الأغواط: "Laghouat",
+        "أم البواقي": "Oum El Bouaghi",
+        باتنة: "Batna",
+        بجاية: "Bejaia",
+        بسكرة: "Biskra",
+        بشار: "Bechar",
+        البليدة: "Blida",
+        البويرة: "Bouira",
+        تمنراست: "Tamanrasset",
+        تبسة: "Tebessa",
+        تلمسان: "Tlemcen",
+        تيارت: "Tiaret",
+        "تيزي وزو": "Tizi Ouzou",
+        الجزائر: "Alger",
+        الجلفة: "Djelfa",
+        جيجل: "Jijel",
+        سطيف: "Setif",
+        سعيدة: "Saida",
+        سكيكدة: "Skikda",
+        "سيدي بلعباس": "Sidi Bel Abbes",
+        عنابة: "Annaba",
+        قالمة: "Guelma",
+        قسنطينة: "Constantine",
+        المدية: "Medea",
+        مستغانم: "Mostaganem",
+        المسيلة: "M'Sila",
+        معسكر: "Mascara",
+        ورقلة: "Ouargla",
+        وهران: "Oran",
+        البيض: "El Bayadh",
+        إليزي: "Illizi",
+        "برج بوعريريج": "Bordj Bou Arreridj",
+        بومرداس: "Boumerdes",
+        الطارف: "El Tarf",
+        تندوف: "Tindouf",
+        تيسمسيلت: "Tissemsilt",
+        الوادي: "El Oued",
+        خنشلة: "Khenchela",
+        "سوق أهراس": "Souk Ahras",
+        تيبازة: "Tipaza",
+        ميلة: "Mila",
+        "عين الدفلى": "Ain Defla",
+        النعامة: "Naama",
+        "عين تموشنت": "Ain Temouchent",
+        غرداية: "Ghardaia",
+        غليزان: "Relizane",
+      };
+
+      addressInput.addEventListener("input", function () {
+        clearTimeout(debounceTimeout);
+        const query = this.value.trim();
+        // اقتراح ولايات الجزائر مباشرة عند إدخال أول حرفين أو أكثر بالعربية
+        if (/^[\u0600-\u06FF]{2,}$/.test(query)) {
+          const wilayaMatches = Object.keys(dzWilayas).filter((w) =>
+            w.startsWith(query)
+          );
+          if (wilayaMatches.length) {
+            suggestionsBox.innerHTML = wilayaMatches
+              .map(
+                (w) =>
+                  `<div class='suggestion-item' style='padding:7px;cursor:pointer;border-bottom:1px solid #eee;' data-wilaya='${w}'>${w}</div>`
+              )
+              .join("");
+            suggestionsBox.style.display = "block";
+            return;
+          }
+        }
+        if (query.length < 3) {
+          suggestionsBox.style.display = "none";
+          return;
+        }
+        debounceTimeout = setTimeout(async () => {
+          let data = [];
+          try {
+            let url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+              query + ", Algeria"
+            )}&format=json&addressdetails=1&limit=7`;
+            let res = await fetch(url);
+            data = await res.json();
+            if (!data.length && dzWilayas[query]) {
+              url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+                dzWilayas[query] + ", Algeria"
+              )}&format=json&addressdetails=1&limit=7`;
+              res = await fetch(url);
+              data = await res.json();
+            }
+            if (data.length) {
+              suggestionsBox.innerHTML = data
+                .map(
+                  (item) =>
+                    `<div class='suggestion-item' style='padding:7px;cursor:pointer;border-bottom:1px solid #eee;' data-json='${encodeURIComponent(
+                      JSON.stringify(item)
+                    )}'>${item.display_name}</div>`
+                )
+                .join("");
+              suggestionsBox.style.display = "block";
+            } else {
+              suggestionsBox.innerHTML =
+                '<div style="padding:7px;color:#888">لا توجد نتائج أو تحقق من اتصالك بالإنترنت</div>';
+              suggestionsBox.style.display = "block";
+            }
+          } catch (err) {
+            suggestionsBox.innerHTML =
+              '<div style="padding:7px;color:#c0392b">حدث خطأ في الاتصال بخدمة العناوين</div>';
+            suggestionsBox.style.display = "block";
+          }
+        }, 350);
+      });
+
+      suggestionsBox.addEventListener("mousedown", function (e) {
+        if (e.target.classList.contains("suggestion-item")) {
+          // إذا كان الاختيار ولاية جزائرية فقط
+          if (e.target.hasAttribute("data-wilaya")) {
+            const wilaya = e.target.getAttribute("data-wilaya");
+            addressInput.value = wilaya + "، الجزائر";
+            document.querySelector('input[name="city"]').value = wilaya;
+            suggestionsBox.style.display = "none";
+            return;
+          }
+          // إذا كان الاختيار من نتائج Nominatim
+          const item = JSON.parse(
+            decodeURIComponent(e.target.getAttribute("data-json"))
+          );
+          addressInput.value = item.display_name;
+          suggestionsBox.style.display = "none";
+          // تعبئة المدينة (الأولوية: city ثم town ثم village ثم state)
+          if (item.address) {
+            let cityVal =
+              item.address.city ||
+              item.address.town ||
+              item.address.village ||
+              item.address.state ||
+              "";
+            document.querySelector('input[name="city"]').value = cityVal;
+          }
+          if (item.lat && item.lon) {
+            document.querySelector('input[name="latitude"]').value = item.lat;
+            document.querySelector('input[name="longitude"]').value = item.lon;
+          }
+        }
+      });
+
+      // إخفاء الاقتراحات عند فقدان التركيز
+      addressInput.addEventListener("blur", function () {
+        setTimeout(() => {
+          suggestionsBox.style.display = "none";
+        }, 200);
+      });
+    </script>
+  </body>
+</html>

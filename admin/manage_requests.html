@@ -12,6 +12,8 @@
       href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+        <script src="js/adminTokenRefresher.js"></script>
+
     <link rel="stylesheet" href="css/manage_requests.css" />
   </head>
   <body>
@@ -50,7 +52,7 @@
 
         <!-- New: Agency Registration Requests Section -->
         <div class="orders-list-section" style="margin-top:2rem;">
-          <h2 style="margin-bottom: 1rem;">طلبات تسجيل حسابات الوكالات</h2>
+          <h2 style="margin-bottom: 1rem;" data-ar="طلبات تسجيل حسابات الوكالات" data-en="Agency Registration Requests" data-fr="Demandes d'inscription d'agences">طلبات تسجيل حسابات الوكالات</h2>
                  <!-- Filters Section -->
         <div class="actions-section">
           <div class="search-box">
@@ -69,13 +71,13 @@
           <table class="orders-table" id="agencyRequestsTable">
             <thead>
               <tr>
-                <th>اسم الوكالة</th>
-                <th>اسم المسؤول</th>
-                <th>الهاتف</th>
-                <th>البريد الإلكتروني</th>
-                <th>الولاية</th>
-                <th>الحالة</th>
-                <th>إجراءات</th>
+                <th data-ar="اسم الوكالة" data-en="Agency Name" data-fr="Nom de l'agence">اسم الوكالة</th>
+                <th data-ar="اسم المسؤول" data-en="Manager Name" data-fr="Nom du responsable">اسم المسؤول</th>
+                <th data-ar="الهاتف" data-en="Phone" data-fr="Téléphone">الهاتف</th>
+                <th data-ar="البريد الإلكتروني" data-en="Email" data-fr="E-mail">البريد الإلكتروني</th>
+                <th data-ar="الولاية" data-en="Wilaya" data-fr="Wilaya">الولاية</th>
+                <th data-ar="الحالة" data-en="Status" data-fr="Statut">الحالة</th>
+                <th data-ar="إجراءات" data-en="Actions" data-fr="Actions">إجراءات</th>
               </tr>
             </thead>
             <tbody>
@@ -101,6 +103,7 @@
     </div>
 
 
+    <script src="js/languageSwitcher.js"></script>
     <script src="js/manage_requests.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function() {

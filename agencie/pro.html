@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-ar="النسخة المدفوعة - Pro" data-en="Pro Version" data-fr="Version Pro">النسخة المدفوعة - Pro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* تثبيت اتجاه الشريط الجانبي ومحتواه ليبقى دائماً من اليمين (أو اليسار) */
+    #sidebar, #sidebar * {
+      direction: rtl !important;
+      text-align: left !important;
+    }
+    /* إذا أردت إبقاءه يميناً دائماً استبدل left بـ right و ltr بـ rtl */
+    body {
+      background: linear-gradient(135deg, #f6f9f6 0%, #e6f3e6 100%);
+      font-family: 'Tajawal', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #176a3d;
+    }
+    .pro-container {
+      max-width: 600px;
+      margin: 60px auto 0 auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 4px 32px #bfa66922;
+      padding: 36px 32px 32px 32px;
+      text-align: center;
+      border: 2px solid #d9a44133;
+    }
+    .pro-title {
+      font-size: 2.2rem;
+      color: #d9a441;
+      margin-bottom: 18px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .pro-icon {
+      font-size: 3.5rem;
+      color: #d9a441;
+      margin-bottom: 18px;
+      filter: drop-shadow(0 2px 8px #bfa66955);
+    }
+    .pro-features {
+      text-align: right;
+      margin: 0 0 28px 0;
+      padding: 0;
+      list-style: none;
+    }
+    .pro-features li {
+      font-size: 1.13rem;
+      margin-bottom: 13px;
+      padding-right: 0.5em;
+      position: relative;
+      color: #176a3d;
+    }
+    .pro-features li:before {
+      content: '\f058';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      color: #2ca87f;
+      margin-left: 8px;
+      font-size: 1.1em;
+      position: relative;
+      top: 1px;
+    }
+    .pro-cta {
+      margin-top: 30px;
+    }
+    .pro-btn {
+      background: linear-gradient(90deg, #d9a441 60%, #ffe7a9 100%);
+      color: #176a3d;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 38px;
+      font-size: 1.15rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 12px #bfa66922;
+      transition: background 0.2s, color 0.2s;
+    }
+    .pro-btn:hover {
+      background: linear-gradient(90deg, #ffe7a9 60%, #d9a441 100%);
+      color: #0f3f26;
+    }
+    .pro-note {
+      margin-top: 18px;
+      color: #7d8c7c;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+   <!-- Sidebar -->
+      <div id="sidebar-container"></div>
+      <script src="js/languageSwitcher.js"></script>
+      <script src="js/sidebar.js"></script>
+      <script src="js/agencyTokenRefresher.js"></script>
+      <script>
+        // تحميل الشريط الجانبي المشترك ديناميكيًا
+        document.addEventListener('DOMContentLoaded', function() {
+          var sidebarContainer = document.getElementById('sidebar-container');
+          if (!sidebarContainer) return;
+          fetch('sidebar.html')
+            .then(res => res.text())
+            .then(html => {
+              sidebarContainer.innerHTML = html;
+              if (typeof initSidebar === 'function') initSidebar();
+              // تحديث اللغة بعد تحميل الشريط الجانبي
+              if (window.languageSwitcher && typeof window.languageSwitcher.refreshLanguage === 'function') {
+                window.languageSwitcher.refreshLanguage();
+              }
+            });
+        });
+      </script>
+     
+  <div class="pro-container">
+    <div class="pro-icon"><i class="fas fa-crown"></i></div>
+    <div class="pro-title" data-ar="النسخة المدفوعة" data-en="Pro Version" data-fr="Version Pro">النسخة المدفوعة <span style="color:#176a3d;">Pro</span></div>
+    <ul class="pro-features">
+      <li data-ar="مزايا متقدمة لإدارة العروض والحجوزات" data-en="Advanced features for managing offers and bookings" data-fr="Fonctionnalités avancées pour la gestion des offres et réservations">مزايا متقدمة لإدارة العروض والحجوزات</li>
+      <li data-ar="تقارير وإحصائيات مفصلة" data-en="Detailed reports and statistics" data-fr="Rapports et statistiques détaillés">تقارير وإحصائيات مفصلة</li>
+      <li data-ar="دعم فني سريع وأولوية" data-en="Priority and fast technical support" data-fr="Support technique prioritaire et rapide">دعم فني سريع وأولوية</li>
+      <li data-ar="إمكانية تخصيص النظام حسب احتياجاتك" data-en="System customization according to your needs" data-fr="Personnalisation du système selon vos besoins">إمكانية تخصيص النظام حسب احتياجاتك</li>
+      <li data-ar="تصدير البيانات بشكل احترافي (Excel, PDF)" data-en="Professional data export (Excel, PDF)" data-fr="Exportation professionnelle des données (Excel, PDF)">تصدير البيانات بشكل احترافي (Excel, PDF)</li>
+      <li data-ar="إشعارات وتنبيهات فورية" data-en="Instant notifications and alerts" data-fr="Notifications et alertes instantanées">إشعارات وتنبيهات فورية</li>
+      <li data-ar="دعم متعدد اللغات" data-en="Multi-language support" data-fr="Support multilingue">دعم متعدد اللغات</li>
+      <li data-ar="والمزيد من المزايا الحصرية..." data-en="And more exclusive features..." data-fr="Et plus de fonctionnalités exclusives...">والمزيد من المزايا الحصرية...</li>
+    </ul>
+    <div class="pro-cta">
+      <button type="button" class="pro-btn" id="pro-request-btn" data-ar="اطلب النسخة المدفوعة الآن" data-en="Request Pro Version Now" data-fr="Demander la version Pro maintenant">اطلب النسخة المدفوعة الآن</button>
+    </div>
+    <!-- Modal -->
+    <div id="pro-modal" style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.35);align-items:center;justify-content:center;">
+      <div style="background:#fff;padding:32px 24px;border-radius:14px;max-width:350px;width:90vw;box-shadow:0 2px 16px #bfa66955;text-align:center;position:relative;">
+        <span style="font-size:2.2rem;color:#d9a441;"><i class="fas fa-tools"></i></span>
+        <div style="margin:18px 0 10px 0;font-size:1.18rem;color:#176a3d;font-weight:bold;">هذه الميزة قيد التطوير</div>
+        <div style="color:#7d8c7c;font-size:1rem;margin-bottom:18px;">ستكون جاهزة في أقرب وقت ممكن. شكرًا لاهتمامك!</div>
+        <button id="close-pro-modal" style="background:#d9a441;color:#fff;border:none;border-radius:7px;padding:8px 22px;font-size:1rem;cursor:pointer;">حسناً</button>
+      </div>
+    </div>
+    <div class="pro-note" data-ar="لمزيد من المعلومات أو تجربة النسخة المدفوعة، يرجى التواصل معنا عبر البريد الإلكتروني." data-en="For more information or to try the Pro version, please contact us by email." data-fr="Pour plus d'informations ou pour essayer la version Pro, veuillez nous contacter par e-mail.">لمزيد من المعلومات أو تجربة النسخة المدفوعة، يرجى التواصل معنا عبر البريد الإلكتروني.</div>
+  </div>
+</body>
+<script>
+  // Modal logic for Pro request
+  document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('pro-request-btn');
+    var modal = document.getElementById('pro-modal');
+    var closeBtn = document.getElementById('close-pro-modal');
+    if (btn && modal && closeBtn) {
+      btn.addEventListener('click', function() {
+        modal.style.display = 'flex';
+      });
+      closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+      });
+      // Optional: close modal when clicking outside the modal content
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) modal.style.display = 'none';
+      });
+    }
+  });
+</script>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تفاصيل الوكالة</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/agency-details.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+ 
+  </style>
+</head>
+<body>
+  <div id="top-bar-placeholder"></div>
+  <div class="agency-details-header">
+    <img class="agency-bg-img" id="agency-bg-img" src="img/diwane.jpeg" alt="background">
+    <img class="agency-logo-main" id="agency-logo-main" src="img/diwane.jpeg" alt="logo">
+  </div>
+  <div class="agency-info-card" id="agency-info-card">
+    <h2 id="agency-name">اسم الوكالة</h2>
+    <ul class="agency-info-list">
+      <li><b>رقم الترخيص:</b> <span id="agency-license">-</span></li>
+      <li><b>الولاية:</b> <span id="agency-wilaya">-</span></li>
+      <li><b>العنوان:</b> <span id="agency-location">-</span></li>
+      <li><b>البريد الإلكتروني:</b> <span id="agency-email">-</span></li>
+    </ul>
+    <a id="agency-map-link" href="#" target="_blank" style="color:#1de9b6;display:none;"><i class="fa fa-map-marker-alt"></i> عرض على الخريطة</a>
+  </div>
+  <div class="agency-offers-section">
+    <div class="offers-title">عروض الوكالة</div>
+    <div class="offers-grid" id="offers-grid">
+      <div style="text-align:center;width:100%;color:#888;">جاري تحميل العروض...</div>
+    </div>
+  </div>
+  <div id="bottom-bar-placeholder"></div>
+  <script src="components/lang.js"></script>
+  <script src="components/include-bars.js"></script>
+  <script src="js/agency-details.js"></script>
+  <script>
+    // ترجمة نصوص الصفحة حسب اللغة
+    function setAgencyDetailsLang() {
+      const lang = window.getCurrentLang ? window.getCurrentLang() : 'ar';
+      const texts = {
+        ar: {
+          title: 'تفاصيل الوكالة',
+          license: 'رقم الترخيص:',
+          wilaya: 'الولاية:',
+          location: 'العنوان:',
+          phone: 'الهاتف:',
+          email: 'البريد الإلكتروني:',
+          map: 'عرض على الخريطة',
+          offers: 'عروض الوكالة',
+          loading: 'جاري تحميل العروض...',
+          noOffers: 'لا توجد عروض متاحة حالياً.',
+          agencyName: 'اسم الوكالة'
+        },
+        fr: {
+          title: 'Détails de l\'agence',
+          license: 'N° d\'agrément :',
+          wilaya: 'Wilaya :',
+          location: 'Adresse :',
+          phone: 'Téléphone :',
+          email: 'E-mail :',
+          map: 'Voir sur la carte',
+          offers: 'Offres de l\'agence',
+          loading: 'Chargement des offres...',
+          noOffers: 'Aucune offre disponible.',
+          agencyName: 'Nom de l\'agence'
+        }
+      };
+      const t = texts[lang] || texts.ar;
+      document.title = t.title;
+      document.querySelector('.offers-title').textContent = t.offers;
+      document.getElementById('agency-name').textContent = t.agencyName;
+      const lis = document.querySelectorAll('.agency-info-list li');
+      if (lis.length >= 5) {
+        lis[0].querySelector('b').textContent = t.license;
+        lis[1].querySelector('b').textContent = t.wilaya;
+        lis[2].querySelector('b').textContent = t.location;
+        lis[3].querySelector('b').textContent = t.phone;
+        lis[4].querySelector('b').textContent = t.email;
+      }
+      document.getElementById('agency-map-link').innerHTML = `<i class='fa fa-map-marker-alt'></i> ${t.map}`;
+      // تغيير نص التحميل/عدم وجود عروض
+      const offersGrid = document.getElementById('offers-grid');
+      if (offersGrid && offersGrid.children.length === 1) {
+        if (offersGrid.children[0].textContent.includes('تحميل') || offersGrid.children[0].textContent.includes('Chargement')) {
+          offersGrid.children[0].textContent = t.loading;
+        }
+        if (offersGrid.children[0].textContent.includes('لا توجد') || offersGrid.children[0].textContent.includes('Aucune')) {
+          offersGrid.children[0].textContent = t.noOffers;
+        }
+      }
+    }
+    // زر تغيير اللغة (يمكنك وضعه في الهيدر أو هنا)
+    document.addEventListener('DOMContentLoaded', function() {
+      setAgencyDetailsLang();
+      // دعم التغيير الفوري إذا تم تبديل اللغة
+      window.addEventListener('storage', function(e) {
+        if (e.key === 'lang') setAgencyDetailsLang();
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+/* booking-success.css */
+/* تصميم صفحة نجاح الحجز، RTL، ألوان عصرية */
+body, * {
+    font-family: 'Tajawal', Arial, sans-serif ;
+    font-weight: 900 !important; /* أقصى سماكة */
+}
+body {
+    font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f6f8ff 0%, #e3f9e3 100%);
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+}
+
+.success-container {
+    background: #fff;
+    max-width: 480px;
+    margin: 5px auto 20px auto;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px #c0cde4;
+    padding: 32px 26px 26px 26px;
+    text-align: center;
+    position: relative;
+    animation: fadeInDown 0.7s;
+}
+
+@keyframes fadeInDown {
+    0% { opacity: 0; transform: translateY(-30px);}
+    100% { opacity: 1; transform: translateY(0);}
+}
+
+.success-icon {
+    width: 78px;
+    height: 78px;
+    background: linear-gradient(135deg, #45a049 70%, #d4af37 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 18px auto;
+    box-shadow: 0 2px 8px #c0cde4;
+}
+
+.checkmark {
+    font-size: 46px;
+    color: #fff;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.success-title {
+    color: #45a049;
+    font-size: 2.1em;
+    margin: 12px 0 4px 0;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.celebration-emoji {
+    font-size: 2.2em;
+    margin-bottom: 6px;
+}
+
+.success-message {
+    color: #515151;
+    font-size: 1.12em;
+    margin-bottom: 16px;
+    line-height: 1.8;
+}
+
+.booking-details {
+    background: #f3f8f3;
+    border-radius: 14px;
+    box-shadow: 0 1px 3px #e8e8e8;
+    margin: 18px 0 16px 0;
+    padding: 18px 12px 12px 12px;
+    text-align: right;
+    font-size: 1em;
+}
+
+.booking-details h3 {
+    color: #237937;
+    margin-bottom: 7px;
+    font-size: 1.06em;
+    font-weight: 700;
+    text-align: right;
+}
+
+.booking-details p {
+    color: #2d2d2d;
+    margin: 5px 0;
+    font-size: 1em;
+    word-break: break-word;
+}
+
+.booking-details strong {
+    color: #764ba2;
+    min-width: 98px;
+    display: inline-block;
+    font-weight: bold;
+}
+
+#passportImage {
+    margin: 16px auto 0 auto;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #ccc;
+    display: block;
+    max-width: 180px;
+}
+
+.discount-banner {
+    background: linear-gradient(90deg, #d4af37 30%, #45a049 100%);
+    color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px #e8e8e8;
+    padding: 12px 18px 10px 18px;
+    margin: 17px 0 8px 0;
+    text-align: center;
+    font-size: 1.08em;
+    font-weight: 500;
+    animation: pulse 1.7s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 10px #d4af37; }
+    50% { box-shadow: 0 0 22px #45a049; }
+    100% { box-shadow: 0 0 10px #d4af37; }
+}
+
+.icons-section {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 15px 0 8px 0;
+}
+
+.icon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.18em;
+}
+
+.icon {
+    font-size: 2em;
+    margin-bottom: 2px;
+}
+
+.icon-label {
+    font-size: 0.98em;
+    color: #237937;
+    font-weight: 600;
+}
+
+.contact-info {
+    background: #e3f9e3;
+    border-radius: 11px;
+    padding: 13px 10px 10px 10px;
+    margin: 18px 0 7px 0;
+    color: #237937;
+    font-size: 1.02em;
+    box-shadow: 0 2px 8px #e8e8e8;
+}
+
+.contact-info h4 {
+    margin: 0 0 6px 0;
+    font-size: 1.09em;
+    color: #45a049;
+}
+
+.home-button {
+    background: linear-gradient(135deg, #45a049 70%, #d4af37 100%);
+    color: #fff;
+    border: none;
+    border-radius: 9px;
+    padding: 12px 0;
+    width: 80%;
+    max-width: 300px;
+    font-size: 1.05em;
+    font-weight: bold;
+    margin: 14px auto 0 auto;
+    cursor: pointer;
+    box-shadow: 0 2px 8px #c0cde4;
+    transition: background 0.3s, transform 0.2s;
+    display: block;
+}
+
+.home-button:hover {
+    background: linear-gradient(135deg, #3a8b3a 60%, #bfa135 100%);
+    transform: scale(1.04);
+}
+
+@media (max-width: 600px) {
+    .success-container {
+        max-width: 98vw;
+        padding: 17px 6vw;
+    }
+    .booking-details, .contact-info {
+        font-size: 0.98em;
+        padding: 10px 5px;
+    }
+    .home-button {
+        font-size: 0.98em;
+        padding: 10px 0;
+    }
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    background: #f3f8f3;
+}
+::-webkit-scrollbar-thumb {
+    background: #d4af37;
+    border-radius: 8px;
+}

@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<!-- NOTE: Make sure this file is saved as UTF-8 (without BOM). لا تضع أي رموز أو مسافات قبل <!DOCTYPE html> -->
+<html lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>إدارة العروض | Manage Offers</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/manage_offers.css" />
+    <script src="js/languageSwitcher.js"></script>
+    <script src="js/authGuard.js"></script>
+    <script src="js/agencyTokenRefresher.js"></script>
+
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <!-- Sidebar -->
+      <div id="sidebar-container"></div>
+      <!-- Main Content -->
+      <div class="main-content" id="mainContent">
+        <!-- Header -->
+        <div class="header">
+          <div class="header-left">
+            <h1
+              data-ar="إدارة العروض"
+              data-en="Manage Offers"
+              data-fr="Gérer les Offres"
+            >
+              إدارة العروض
+            </h1>
+            <p
+              data-ar="عرض وإدارة جميع عروض الوكالات السياحية"
+              data-en="View and manage all travel agency offers"
+              data-fr="Voir et gérer toutes les offres des agences de voyage"
+            >
+              عرض وإدارة جميع عروض الوكالات السياحية
+            </p>
+          </div>
+          <div class="header-right">
+            <div class="language-switcher">
+              <button class="lang-btn active" data-lang="ar">العربية</button>
+              <button class="lang-btn" data-lang="en">English</button>
+              <button class="lang-btn" data-lang="fr">Français</button>
+            </div>
+            <div class="user-info">
+              <div class="user-avatar">
+                <i class="fas fa-user"></i>
+              </div>
+              <div>
+                <div style="font-weight: 600">المدير العام</div>
+                <div style="font-size: 0.9rem; color: var(--text-secondary)">
+<span id="agencyEmailValue">—</span>               </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Actions Section -->
+        <div class="actions-section">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input
+              type="text"
+              id="searchOffers"
+              placeholder="البحث عن العروض..."
+              data-ar-placeholder="البحث عن العروض..."
+              data-en-placeholder="Search offers..."
+              data-fr-placeholder="Rechercher des offres..."
+            />
+          </div>
+          <div class="action-buttons">
+            <button class="btn btn-primary" id="openAddOfferModalBtn">
+              <i class="fas fa-plus"></i>
+              <span
+                data-ar="إضافة عرض"
+                data-en="Add Offer"
+                data-fr="Ajouter une offre"
+              >
+                إضافة عرض
+              </span>
+            </button>
+            <button class="btn btn-success" id="exportOffersBtn">
+              <i class="fas fa-download"></i>
+              <span
+                data-ar="تصدير البيانات"
+                data-en="Export Data"
+                data-fr="Exporter les données"
+              >
+                تصدير البيانات
+              </span>
+            </button>
+          </div>
+        </div>
+        <!-- Offers Grid -->
+        <!-- Action Button Language Templates (hidden, for JS rendering) -->
+        <template id="offer-action-labels">
+          <span id="details-label" data-ar="تفاصيل" data-en="Details" data-fr="Détails">تفاصيل</span>
+          <span id="edit-label" data-ar="تعديل" data-en="Edit" data-fr="Modifier">تعديل</span>
+          <span id="delete-label" data-ar="حذف" data-en="Delete" data-fr="Supprimer">حذف</span>
+        </template>
+        <div class="offersGrid" id="offersGrid">
+          <!-- البيانات تُحقن عبر جافاسكريبت -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: إضافة عرض جديد أو تعديل عرض -->
+    <div id="addOfferModal" class="modal" style="display: none">
+      <div class="modal-content custom-modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">
+            <i class="fas fa-gift"></i>
+            <span 
+              data-ar="إضافة عرض جديد" 
+              data-en="Add New Offer" 
+              data-fr="Ajouter une nouvelle offre"
+            >
+              إضافة عرض جديد
+            </span>
+          </h2>
+          <span class="close" id="closeAddOfferModalBtn">&times;</span>
+        </div>
+        <form
+          id="addOfferForm"
+          autocomplete="off"
+          enctype="multipart/form-data"
+        >
+          <div class="form-group">
+            <label
+              data-ar="اسم العرض"
+              data-en="Offer Name"
+              data-fr="Nom de l'offre"
+            >اسم العرض</label>
+            <input type="text" name="title" required
+              data-ar-placeholder="اسم العرض"
+              data-en-placeholder="Offer Name"
+              data-fr-placeholder="Nom de l'offre"
+              placeholder="اسم العرض"
+            />
+          </div>
+          <div class="form-group">
+            <label
+              data-ar="ينسب العرض إلى"
+              data-en="Offer Belongs To"
+              data-fr="Offre attribuée à"
+            >ينسب العرض إلى</label>
+            <div
+              id="branchesListBox"
+              style="
+          background: #fff8e1;
+          padding: 12px 10px 8px 10px;
+          border-radius: 9px;
+          margin-bottom: 7px;
+          min-height: 32px;
+          font-size: 1.04em;
+          color: #176a3d;
+          font-weight: 600;
+              "
+            ></div>
+          </div>
+          <div class="form-group">
+            <label
+              data-ar="شركة الطيران"
+              data-en="Airline"
+              data-fr="Compagnie aérienne"
+            >شركة الطيران</label>
+            <select name="airline_id" id="airlineSelect">
+              <option value="" data-ar="بدون" data-en="None" data-fr="Aucun">بدون</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label
+              data-ar="نوع الرحلة"
+              data-en="Flight Type"
+              data-fr="Type de vol"
+            >نوع الرحلة</label>
+            <select name="flight_type" required>
+              <option value="مباشرة" data-ar="مباشرة" data-en="Direct" data-fr="Direct">مباشرة</option>
+              <option value="غير مباشرة" data-ar="غير مباشرة" data-en="Indirect" data-fr="Indirect">غير مباشرة</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label
+              data-ar="تاريخ الذهاب"
+              data-en="Departure Date"
+              data-fr="Date de départ"
+            >تاريخ الذهاب</label>
+            <input type="date" name="departure_date" required
+              data-ar-placeholder="تاريخ الذهاب"
+              data-en-placeholder="Departure Date"
+              data-fr-placeholder="Date de départ"
+              placeholder="تاريخ الذهاب"
+            />
+          </div>
+          <div class="form-group">
+            <label
+              data-ar="تاريخ العودة"
+              data-en="Return Date"
+              data-fr="Date de retour"
+            >تاريخ العودة</label>
+            <input type="date" name="return_date" required
+              data-ar-placeholder="تاريخ العودة"
+              data-en-placeholder="Return Date"
+              data-fr-placeholder="Date de retour"
+              placeholder="تاريخ العودة"
+            />
+          </div>
+          <div class="form-group">
+            <label
+              data-ar="مدة الرحلة (أيام)"
+              data-en="Trip Duration (days)"
+              data-fr="Durée du voyage (jours)"
+            >مدة الرحلة (أيام)</label>
+            <input type="number" name="duration_days" min="1" required
+              data-ar-placeholder="مدة الرحلة"
+              data-en-placeholder="Trip Duration"
+              data-fr-placeholder="Durée du voyage"
+              placeholder="مدة الرحلة"
+            />
+          </div>
+          <div class="form-group">
+            <label
+              data-ar="اسم الفندق"
+              data-en="Hotel Name"
+              data-fr="Nom de l'hôtel"
+            >اسم الفندق</label>
+            <input type="text" name="hotel_name"
+              data-ar-placeholder="اسم الفندق"
+              data-en-placeholder="Hotel Name"
+              data-fr-placeholder="Nom de l'hôtel"
+              placeholder="اسم الفندق"
+            />
+          </div>
+          <div class="form-group">
+            <label
+              data-ar="المسافة إلى الحرم (متر)"
+              data-en="Distance to Haram (m)"
+              data-fr="Distance au Haram (m)"
+            >المسافة إلى الحرم (متر)</label>
+            <input type="number" name="hotel_distance" min="0"
+              data-ar-placeholder="المسافة إلى الحرم"
+              data-en-placeholder="Distance to Haram"
+              data-fr-placeholder="Distance au Haram"
+              placeholder="المسافة إلى الحرم"
+            />
+          </div>
+          <div class="form-group">
+            <label
+              data-ar="صور الفندق"
+              data-en="Hotel Images"
+              data-fr="Images de l'hôtel"
+            >صور الفندق</label>
+            <input
+              type="file"
+              name="hotel_images_file"
+              accept="image/*"
+              multiple
+            />
+          </div>
+          <div class="form-group">
+            <label
+              data-ar="الخدمات"
+              data-en="Services"
+              data-fr="Services"
+            >الخدمات</label>
+            <div id="servicesIconsContainer" style="margin-bottom: 8px"></div>
+            <input type="hidden" name="services" id="servicesInput" />
+          </div>
+          <div class="form-group">
+            <label
+              data-ar="الوصف"
+              data-en="Description"
+              data-fr="Description"
+            >الوصف</label>
+            <textarea name="description" rows="3"
+              data-ar-placeholder="الوصف"
+              data-en-placeholder="Description"
+              data-fr-placeholder="Description"
+              placeholder="الوصف"
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label
+              data-ar="الدخول/الخروج"
+              data-en="Entry/Exit"
+              data-fr="Entrée/Sortie"
+            >الدخول/الخروج</label>
+            <div
+              style="
+          display: flex;
+          gap: 10px;
+          flex-wrap: wrap;
+          align-items: center;
+              "
+            >
+              <span
+          data-ar="الدخول:"
+          data-en="Entry:"
+          data-fr="Entrée:"
+              >الدخول:</span>
+              <select name="entry" required style="min-width: 90px">
+          <option value="مكة" data-ar="مكة" data-en="Makkah" data-fr="La Mecque">مكة</option>
+          <option value="المدينة" data-ar="المدينة" data-en="Madinah" data-fr="Médine">المدينة</option>
+              </select>
+              <span
+          data-ar="الخروج:"
+          data-en="Exit:"
+          data-fr="Sortie:"
+              >الخروج:</span>
+              <select name="exit" required style="min-width: 90px">
+          <option value="مكة" data-ar="مكة" data-en="Makkah" data-fr="La Mecque">مكة</option>
+          <option value="المدينة" data-ar="المدينة" data-en="Madinah" data-fr="Médine">المدينة</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label
+              data-ar="السعر (غرفة مزدوجة)"
+              data-en="Price (Double Room)"
+              data-fr="Prix (Chambre double)"
+            >السعر (غرفة مزدوجة)</label>
+            <input type="number" name="price_double" min="0"
+              data-ar-placeholder="السعر (غرفة مزدوجة)"
+              data-en-placeholder="Price (Double Room)"
+              data-fr-placeholder="Prix (Chambre double)"
+              placeholder="السعر (غرفة مزدوجة)"
+            />
+          </div>
+          <div class="form-group">
+            <label
+              data-ar="السعر (غرفة ثلاثية)"
+              data-en="Price (Triple Room)"
+              data-fr="Prix (Chambre triple)"
+            >السعر (غرفة ثلاثية)</label>
+            <input type="number" name="price_triple" min="0"
+              data-ar-placeholder="السعر (غرفة ثلاثية)"
+              data-en-placeholder="Price (Triple Room)"
+              data-fr-placeholder="Prix (Chambre triple)"
+              placeholder="السعر (غرفة ثلاثية)"
+            />
+          </div>
+          <div class="form-group">
+            <label
+              data-ar="السعر (غرفة رباعية)"
+              data-en="Price (Quad Room)"
+              data-fr="Prix (Chambre quadruple)"
+            >السعر (غرفة رباعية)</label>
+            <input type="number" name="price_quad" min="0"
+              data-ar-placeholder="السعر (غرفة رباعية)"
+              data-en-placeholder="Price (Quad Room)"
+              data-fr-placeholder="Prix (Chambre quadruple)"
+              placeholder="السعر (غرفة رباعية)"
+            />
+          </div>
+          <div class="form-group">
+            <label
+              data-ar="السعر (غرفة خماسية)"
+              data-en="Price (Quint Room)"
+              data-fr="Prix (Chambre quintuple)"
+            >السعر (غرفة خماسية)</label>
+            <input type="number" name="price_quint" min="0"
+              data-ar-placeholder="السعر (غرفة خماسية)"
+              data-en-placeholder="Price (Quint Room)"
+              data-fr-placeholder="Prix (Chambre quintuple)"
+              placeholder="السعر (غرفة خماسية)"
+            />
+          </div>
+          <div class="form-group">
+            <label
+              data-ar="الصورة الرئيسية"
+              data-en="Main Image"
+              data-fr="Image principale"
+            >الصورة الرئيسية</label>
+            <input type="file" name="main_image_file" accept="image/*" />
+          </div>
+          <div style="text-align: left; margin-top: 10px">
+            <button type="submit" class="btn btn-primary"
+              data-ar="حفظ"
+              data-en="Save"
+              data-fr="Enregistrer"
+            >حفظ</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              id="cancelAddOfferBtn"
+              data-ar="إلغاء"
+              data-en="Cancel"
+              data-fr="Annuler"
+            >
+              إلغاء
+            </button>
+          </div>
+        </form>
+        
+      </div>
+    </div>
+    <style>
+      :root {
+        direction: rtl;
+        writing-mode: horizontal-tb;
+        text-orientation: mixed;
+      }
+      /* Modal Overlay */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow: auto;
+        background: rgba(23, 106, 61, 0.09); /* أخضر باهت شفاف */
+        justify-content: center;
+        align-items: center;
+      }
+      .modal.show {
+        display: flex !important;
+      }
+
+      /* Modal Content */
+      .custom-modal-content {
+        background: linear-gradient(
+          125deg,
+          #fff 70%,
+          var(--primary-light) 100%
+        );
+        border-radius: var(--border-radius);
+        margin: 30px auto;
+        padding: 32px 24px 24px 24px;
+        max-width: 600px;
+        width: 95vw;
+        box-shadow: var(--shadow);
+        border: 2.5px solid var(--gold-light);
+        max-height: 90vh;
+        overflow-y: auto;
+        direction: rtl;
+        position: relative;
+        animation: modal-in 0.3s;
+      }
+
+      /* Modal Header & Title */
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 18px;
+      }
+      .modal-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-shadow: 0 2px 7px var(--gold-light);
+        letter-spacing: 0.3px;
+        border-right: 5px solid var(--gold);
+        padding-right: 12px;
+        background: linear-gradient(
+          90deg,
+          var(--gold-light) 0 25%,
+          transparent 80%
+        );
+        border-radius: 7px 0 0 7px;
+      }
+
+      .modal .close {
+        font-size: 2rem;
+        color: var(--gold);
+        cursor: pointer;
+        transition: color 0.2s, background 0.2s;
+        background: none;
+        border: none;
+        outline: none;
+        border-radius: 50%;
+        padding: 2px 10px 1px 10px;
+      }
+      .modal .close:hover {
+        color: #fff;
+        background: var(--primary);
+      }
+
+      /* Form Style */
+      #addOfferForm {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 13px;
+        position: relative;
+      }
+      .form-group label {
+        font-weight: 600;
+        color: var(--primary-dark);
+        font-size: 1.07rem;
+        letter-spacing: 0.2px;
+      }
+      .form-group input[type="text"],
+      .form-group input[type="number"],
+      .form-group input[type="date"],
+      .form-group input[type="file"],
+      .form-group select,
+      .form-group textarea {
+        padding: 9px 12px;
+        border: 1.5px solid var(--primary-light);
+        border-radius: 6px;
+        font-size: 1rem;
+        background: #fafbfc;
+        transition: border 0.2s;
+      }
+      .form-group input[type="file"] {
+        padding: 6px 0;
+        background: none;
+      }
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        border-color: var(--gold);
+        outline: none;
+        background: var(--gold-light);
+      }
+      .form-group textarea {
+        resize: vertical;
+        min-height: 60px;
+      }
+
+      /* Buttons */
+      .btn {
+        padding: 9px 22px;
+        border: none;
+        border-radius: 7px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+        box-shadow: 0 2px 10px #f7ca1855;
+        margin-top: 2px;
+      }
+      .btn-primary {
+        background: linear-gradient(
+          120deg,
+          var(--primary) 60%,
+          var(--gold) 100%
+        );
+        color: #fff;
+        border: 1.5px solid var(--gold);
+      }
+      .btn-primary:hover {
+        background: linear-gradient(
+          120deg,
+          var(--gold) 60%,
+          var(--primary) 100%
+        );
+        color: #fff;
+      }
+      .btn-secondary {
+        background: var(--gold-light);
+        color: var(--primary-dark);
+        border: 1.2px solid var(--gold);
+        margin-right: 8px;
+      }
+      .btn-secondary:hover {
+        background: var(--primary-light);
+        color: var(--gold);
+      }
+
+      /* Responsive */
+      @media (max-width: 600px) {
+        .custom-modal-content {
+          padding: 18px 6vw;
+          max-width: 98vw;
+        }
+        .modal-title {
+          font-size: 1.1rem;
+          padding-right: 7px;
+        }
+      }
+    </style>
+    <!-- Modal تفاصيل العرض -->
+    <!-- تأكد من وجود عناصر تفاصيل العرض في الصفحة -->
+    <div id="offerDetailsModal" class="modal" style="display: none">
+      <div id="offerDetailsContent" style="padding: 20px"></div>
+    </div>
+
+    <script src="js/manage_offers.js"></script>
+    <script>
+      // دالة لعرض رسالة قصيرة عائمة بدلاً من alert
+      function showShortMessage(message, type = "info", duration = 2500) {
+        // إزالة أي رسالة سابقة
+        const oldMsg = document.getElementById("shortMsgToast");
+        if (oldMsg) oldMsg.remove();
+        // إنشاء العنصر
+        const msgDiv = document.createElement("div");
+        msgDiv.id = "shortMsgToast";
+        msgDiv.textContent = message;
+        msgDiv.style.position = "fixed";
+        msgDiv.style.bottom = "40px";
+        msgDiv.style.left = "50%";
+        msgDiv.style.transform = "translateX(-50%)";
+        msgDiv.style.background =
+          type === "success"
+            ? "linear-gradient(90deg,#1e824c,#f7ca18)"
+            : type === "error"
+            ? "#c0392b"
+            : "#34495e";
+        msgDiv.style.color = "#fff";
+        msgDiv.style.padding = "13px 32px";
+        msgDiv.style.borderRadius = "12px";
+        msgDiv.style.fontSize = "1.1em";
+        msgDiv.style.fontWeight = "bold";
+        msgDiv.style.boxShadow = "0 2px 16px #0002";
+        msgDiv.style.zIndex = 9999;
+        msgDiv.style.opacity = "0.97";
+        msgDiv.style.letterSpacing = "0.5px";
+        msgDiv.style.textAlign = "center";
+        document.body.appendChild(msgDiv);
+        setTimeout(() => {
+          msgDiv.style.transition = "opacity 0.5s";
+          msgDiv.style.opacity = "0";
+          setTimeout(() => msgDiv.remove(), 600);
+        }, duration);
+      }
+    </script>
+    <style>
+      /* تصغير حجم بطاقات الخدمات */
+      /* ملاحظة: -moz-osx-font-smoothing خاص بفايرفوكس ويمكن تجاهله إذا ظهر تحذير */
+      #servicesIconsContainer {
+        gap: 10px !important;
+      }
+      .service-icon-select {
+        font-size: 1.2em !important;
+        min-width: 60px !important;
+        padding: 10px 10px 6px 10px !important;
+        border-radius: 9px !important;
+      }
+      .service-icon-select .icon {
+        font-size: 1.5em !important;
+        margin-bottom: 4px !important;
+      }
+      .service-icon-select .label {
+        font-size: 0.85em !important;
+      }
+    </style>
+   
+    <script src="js/sidebar.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var emailSpan = document.getElementById('agencyEmailValue');
+      var agency = null;
+      try {
+        agency = JSON.parse(localStorage.getItem('agency_data'));
+      } catch(e) {}
+      if (agency && agency.name) {
+        if (emailSpan) emailSpan.textContent = agency.name;
+      } else {
+        if (emailSpan) emailSpan.textContent = 'لا يوجد اسم وكالة';
+      }
+    });
+    </script>
+    <script>
+    // إدراج الشريط الجانبي من ملف sidebar.html بعد تحميل الصفحة بالكامل
+    function loadSidebarAndInit() {
+      const sidebarContainer = document.getElementById('sidebar-container');
+      if (!sidebarContainer) {
+        console.error('لم يتم العثور على العنصر sidebar-container في الصفحة!');
+        return;
+      }
+      fetch('sidebar.html', { cache: 'reload' })
+        .then(res => {
+          if (!res.ok) throw new Error('فشل تحميل sidebar.html: ' + res.status);
+          return res.text();
+        })
+        .then(html => {
+          sidebarContainer.innerHTML = html;
+          if (typeof initSidebar === 'function') initSidebar();
+          // إعادة تفعيل اللغة بعد تحميل الشريط الجانبي
+          if (window.languageSwitcher && typeof window.languageSwitcher.refreshLanguage === 'function') {
+            window.languageSwitcher.refreshLanguage();
+          }
+        })
+        .catch(err => {
+          sidebarContainer.innerHTML = '<div style="color:red;text-align:center">فشل تحميل الشريط الجانبي<br>' + err.message + '</div>';
+          console.error('Sidebar load error:', err);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      loadSidebarAndInit();
+
+      // دعم تغيير placeholder لحقل البحث حسب اللغة
+      function updateSearchPlaceholder(lang) {
+        var input = document.getElementById('searchOffers');
+        if (!input) return;
+        var ph = input.getAttribute('data-' + lang + '-placeholder');
+        if (ph) input.placeholder = ph;
+      }
+
+      // تحديث زر اللغة النشط
+      function updateActiveLangBtn(lang) {
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+        });
+      }
+
+      // مراقبة تغيير اللغة
+      if (window.languageSwitcher) {
+        const lang = window.languageSwitcher.getLang();
+        updateSearchPlaceholder(lang);
+        updateActiveLangBtn(lang);
+        // عند تغيير اللغة من أي مكان
+        window.addEventListener('storage', function(e) {
+          if (e.key === 'lang') {
+            updateSearchPlaceholder(e.newValue || 'ar');
+            updateActiveLangBtn(e.newValue || 'ar');
+          }
+        });
+        // عند الضغط على زر اللغة
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const lang = btn.getAttribute('data-lang');
+            setTimeout(() => {
+              updateSearchPlaceholder(lang);
+              updateActiveLangBtn(lang);
+            }, 50);
+          });
+        });
+      }
+    });
+    </script>
+  </body>
+</html>

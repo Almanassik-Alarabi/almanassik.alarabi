@@ -4,13 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تعلم العمرة</title>
+    <title id="page-title">تعلم العمرة</title>
+    <!-- سكريبتات اللغة يجب أن تسبق إدراج الشريط العلوي -->
+    <script src="components/lang.js"></script>
     <link rel="stylesheet" href="css/learn_omra.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
- <!-- الشريط العلوي -->
+    <!-- الشريط العلوي -->
     <div id="top-bar-placeholder"></div>
+    <script>
+      // إدراج الشريط العلوي ديناميكياً بعد تحميل ملفات اللغة
+      fetch('components/top-bar.html')
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById('top-bar-placeholder').innerHTML = html;
+        });
+    </script>
 
     
     <!-- محتوى الصفحة -->
@@ -19,43 +29,70 @@
         <div class="section">
             <h2 class="section-title">الكتب والمطويات</h2>
             <div class="pdf-container">
-                <!-- جميع الروابط التالية من Google Drive فقط -->
-                <!-- كتاب 1 -->
-                <div class="pdf-item">
-                    <a href="https://drive.google.com/file/d/1-6h9e-yEs_sqtB1osYn33vm0gNZwKcYq/view?usp=sharing" target="_blank" rel="noopener">
-                        <div class="pdf-icon">
-                            <img src="img/liver1.png" alt="غلاف دليل المعتمر المبتدئ" style="width:64px;height:90px;display:block;margin:auto;border-radius:6px;box-shadow:0 2px 8px #ccc;">
-                        </div>
-                        <div class="pdf-title">دليل المعتمر المبتدئ</div>
-                    </a>
-                </div>
-                <!-- كتاب 2 -->
-                <div class="pdf-item">
-                    <a href="https://drive.google.com/file/d/1Ww9Ww9Ww9Ww9Ww9Ww9Ww9Ww9Ww9Ww9Ww/view?usp=sharing" target="_blank" rel="noopener">
-                        <div class="pdf-icon">
-                            <img src="img/cover2.jpg" alt="غلاف مناسك العمرة" style="width:64px;height:90px;display:block;margin:auto;border-radius:6px;box-shadow:0 2px 8px #ccc;">
-                        </div>
-                        <div class="pdf-title">مناسك العمرة</div>
-                    </a>
-                </div>
-                <!-- كتاب 3 -->
-                <div class="pdf-item">
-                    <a href="https://drive.google.com/file/d/1Ee7Ee7Ee7Ee7Ee7Ee7Ee7Ee7Ee7Ee7Ee/view?usp=sharing" target="_blank" rel="noopener">
-                        <div class="pdf-icon">
-                            <img src="img/liver1.png" alt="غلاف أخطاء شائعة في العمرة" style="width:64px;height:90px;display:block;margin:auto;border-radius:6px;box-shadow:0 2px 8px #ccc;">
-                        </div>
-                        <div class="pdf-title">أخطاء شائعة في العمرة</div>
-                    </a>
-                </div>
-                <!-- كتاب 4 -->
-                <div class="pdf-item">
-                    <a href="https://drive.google.com/file/d/1Rr6Rr6Rr6Rr6Rr6Rr6Rr6Rr6Rr6Rr6Rr/view?usp=sharing" target="_blank" rel="noopener">
-                        <div class="pdf-icon">
-                            <img src="img/cover4.jpg" alt="غلاف أذكار وأدعية العمرة" style="width:64px;height:90px;display:block;margin:auto;border-radius:6px;box-shadow:0 2px 8px #ccc;">
-                        </div>
-                        <div class="pdf-title">أذكار وأدعية العمرة</div>
-                    </a>
-                </div>
+                <script>
+                // بيانات الكتب باللغتين
+                window.learnOmraBooks = [
+                  {
+                    link: "https://drive.google.com/file/d/1uujR0YRZnNgtVNGU5pwOxQed8epOeL6f/view?usp=sharing",
+                    img: "img/pho1.png",
+                    ar: "دليل العمرة التوعوي",
+                    fr: "Guide éducatif de la Omra"
+                  },
+                  {
+                    link: "https://drive.google.com/file/d/1hYtFuoKm48W8c2_IgCZ52Tw9yA7N4JxV/view?usp=sharing",
+                    img: "img/pho2.png",
+                    ar: "ادعية العمرة",
+                    fr: "Invocations de la Omra"
+                  },
+                  {
+                    link: "https://drive.google.com/file/d/1ePIjJ1cCHKviTw0cnY87E0SUrPUn6Mct/view?usp=sharing",
+                    img: "img/pho3.png",
+                    ar: "مناسك رحلة الحج",
+                    fr: "Rites du voyage du Hajj"
+                  },
+                  {
+                    link: "https://drive.google.com/file/d/1kYBqvIWr6O7BxenKS5-cv-8nTQXpghWd/view?usp=sharing",
+                    img: "img/pho4.png",
+                    ar: "دليل معالم مكة التوعوي",
+                    fr: "Guide éducatif des sites de La Mecque"
+                  },
+                  {
+                    link: "https://drive.google.com/file/d/1IqX3_No8urTJ5m4LaefiQPsCcyVEfiRh/view?usp=sharing",
+                    img: "img/pho5.png",
+                    ar: "دليل المعتمر",
+                    fr: "Guide du pèlerin de la Omra"
+                  },
+                  {
+                    link: "https://drive.google.com/file/d/1dIdmOVvLZGoAHf9Vo9iB7ikp0cIY3JB6/view?usp=sharing",
+                    img: "img/pho6.png",
+                    ar: "دليل المسجد الحرام التوعوي",
+                    fr: "Guide éducatif de la Mosquée Sacrée"
+                  },
+                  {
+                    link: "https://drive.google.com/file/d/1spErMrrlJCTgZdQ8Y_oYJYcLOJJ817V7/view?usp=sharing",
+                    img: "img/pho7.png",
+                    ar: "اعمال العمرة",
+                    fr: "Les actes de la Omra"
+                  },
+                  {
+                    link: "https://drive.google.com/file/d/1NPDwGYUpC85gcTVSIoN3M4PV9NKhJZUX/view?usp=sharing",
+                    img: "img/pho8.png",
+                    ar: "اخلاق الناسك",
+                    fr: "Les vertus du pèlerin"
+                  }
+                ];
+                function renderBooks(lang) {
+                  var container = document.querySelector('.pdf-container');
+                  if (!container) return;
+                  container.innerHTML = '';
+                  window.learnOmraBooks.forEach(function(book) {
+                    var item = document.createElement('div');
+                    item.className = 'pdf-item';
+                    item.innerHTML = `<a href='${book.link}' target='_blank' rel='noopener'><div class='pdf-icon'><img src='${book.img}' alt='${book[lang]}'></div><div class='pdf-title'>${book[lang]}</div></a>`;
+                    container.appendChild(item);
+                  });
+                }
+                </script>
             </div>
         </div>
         
@@ -63,23 +100,42 @@
         <div class="section">
             <h2 class="section-title">فيديوهات تعليمية</h2>
             <div class="videos-container">
-                <!-- فيديوهات تعليمية رسمية متاحة دائماً -->
-                <div class="video-item">
-                    <iframe width="100%" height="200" src="https://www.youtube.com/embed/SXyUW8ufXe8" title="كيفية أداء العمرة خطوة بخطوة" frameborder="0" allowfullscreen></iframe>
-                    <div class="video-title"> تلاوة رائعة للقارئ الشيخ خالد الجليل</div>
-                </div>
-                       <div class="video-item">
-                    <iframe width="100%" height="200" src="https://www.youtube.com/embed/fUwA-JvDILQ" title="العمرة خطوة بخطوة - فيديو مرئي" frameborder="0" allowfullscreen></iframe>
-                    <div class="video-title">تلاوة عراقية أخاذة لسورة القمر </div>
-                </div>
-                <div class="video-item">
-                    <iframe width="100%" height="200" src="https://www.youtube.com/embed/NoIVRuiBRdQ" title="العمرة خطوة بخطوة" frameborder="0" allowfullscreen></iframe>
-                    <div class="video-title">من أجمل التلاوات الخاشعة للشيخ نايف الفيصل - سورة إبراهيم </div>
-                </div>
-                <div class="video-item">
-                    <iframe width="100%" height="200" src="https://www.youtube.com/embed/Yvx_GdcrSYM" title="شرح مبسط للعمرة" frameborder="0" allowfullscreen></iframe>
-                    <div class="video-title"> تلاوة هادئة سورة غافر خالد جليل</div>
-                </div>
+                <script>
+                // بيانات الفيديوهات باللغتين
+                window.learnOmraVideos = [
+                  {
+                    src: "https://www.youtube.com/embed/IUjFKJGa9Jw",
+                    ar: "صفة العمرة من النية الى تمامها",
+                    fr: "Description de la Omra de l'intention à la fin"
+                  },
+                  {
+                    src: "https://www.youtube.com/embed/Kwq2NGMD_TQ",
+                    ar: "رحلة المشاعر",
+                    fr: "Voyage des émotions"
+                  },
+                  {
+                    src: "https://www.youtube.com/embed/Xx9NdCb8R-o",
+                    ar: "زمزم الماء المبارك",
+                    fr: "Zamzam, l'eau bénite"
+                  },
+                  {
+                    src: "https://www.youtube.com/embed/QsxcmCEHkrE",
+                    ar: "فلم الروضة الشريفة مشاهد فريدة لأول مرة",
+                    fr: "Film sur la Rawda, scènes inédites"
+                  }
+                ];
+                function renderVideos(lang) {
+                  var container = document.querySelector('.videos-container');
+                  if (!container) return;
+                  container.innerHTML = '';
+                  window.learnOmraVideos.forEach(function(video) {
+                    var item = document.createElement('div');
+                    item.className = 'video-item';
+                    item.innerHTML = `<iframe width='100%' height='220' src='${video.src}' title='${video[lang]}' frameborder='0' allowfullscreen style='border-radius:10px;'></iframe><div class='video-title'>${video[lang]}</div>`;
+                    container.appendChild(item);
+                  });
+                }
+                </script>
             </div>
         </div>
         
@@ -87,29 +143,7 @@
         <div class="section">
             <h2 class="section-title">أسئلة شائعة</h2>
             <div class="faq-container">
-                <!-- سؤال 1 -->
-                <div class="faq-item">
-                    <div class="faq-question">ما هي شروط العمرة؟</div>
-                    <div class="faq-answer">شروط العمرة تشبه شروط الحج وهي: الإسلام، العقل، البلوغ، الاستطاعة المالية والبدنية، المحرم للمرأة.</div>
-                </div>
-                
-                <!-- سؤال 2 -->
-                <div class="faq-item">
-                    <div class="faq-question">كم مرة يمكن أداء العمرة في السنة؟</div>
-                    <div class="faq-answer">يمكن أداء العمرة أكثر من مرة في السنة، ولا يوجد حد معين شرعاً لعدد العمر في السنة.</div>
-                </div>
-                
-                <!-- سؤال 3 -->
-                <div class="faq-item">
-                    <div class="faq-question">ما هو أفضل وقت لأداء العمرة؟</div>
-                    <div class="faq-answer">أفضل وقت لأداء العمرة هو شهر رمضان، ولكن يمكن أداؤها في أي وقت من السنة.</div>
-                </div>
-                
-                <!-- سؤال 4 -->
-                <div class="faq-item">
-                    <div class="faq-question">هل يجوز للمرأة أداء العمرة بدون محرم؟</div>
-                    <div class="faq-answer">جمهور العلماء يشترطون وجود محرم للمرأة في السفر لأداء العمرة أو الحج.</div>
-                </div>
+                <div id="faq-dynamic"></div>
             </div>
         </div>
     </div>
@@ -119,5 +153,133 @@
 
     <script src="components/include-bars.js"></script>
     <script src="js/learn_omra.js"></script>
+    <script>
+    // نصوص الأسئلة الشائعة باللغتين
+    window.learnOmraFaqs = {
+      ar: [
+        {q: "ما هي العمرة؟", a: "العمرة هي عبادة تتضمن الإحرام، الطواف، السعي، والحلق أو التقصير. وتُعد زيارةً روحانية إلى المسجد الحرام، لكنها ليست بديلاً عن الحج."},
+        {q: "ما الفرق بين الحج والعمرة؟", a: "الحج له وقت محدد وأركان أكثر، وهو فرض مرة واحدة في العمر، أما العمرة فتجوز في أي وقت."},
+        {q: "هل يمكن أداء أكثر من عمرة في نفس الرحلة؟", a: "نعم، بشرط الخروج إلى الحِل (مثل التنعيم) ثم الإحرام مجددًا."},
+        {q: "هل يجوز الاعتمار عن شخص ميت أو مريض؟", a: "نعم، بشرط أن يكون المُعتمر قد اعتمر عن نفسه أولاً."},
+        {q: "هل يصح تقديم السعي على الطواف؟", a: "لا، يجب أن يكون السعي بعد الطواف مباشرة."},
+        {q: "ماذا لو نسي الحلق أو التقصير؟", a: "يجب فعله متى تذكّر، ولا تتم العمرة بدونه."},
+        {q: "ما السنن المستحبة في العمرة؟", a: "الغُسل قبل الإحرام، لبس الأبيض، التلبية، تقبيل الحجر إن أمكن، الدعاء."},
+        {q: "من أين يُحرم القادم من الجزائر؟", a: "من ميقات \"رابغ\" أو \"يلملم\"، أو بالإحرام من الطائرة قبل دخول الميقات."},
+        {q: "ما هي محظورات الإحرام؟", a: "قص الشعر، تقليم الأظافر، الجماع، لبس المخيط (للرجال)، تغطية الرأس، قتل الصيد، الطيب."},
+        {q: "هل يمكن الإحرام من الطائرة؟", a: "نعم، ويُستحب الاستعداد قبل بلوغ الميقات بمدة."},
+        {q: "هل يشترط التلفظ بالنية؟", a: "النية بالقلب تكفي، والتلفظ مستحب (لبيك اللهم عمرة)."},
+        {q: "هل يجوز لبس النظارات والكمامة؟", a: "نعم، لا حرج في ذلك، لأنها لا تُعد من المخيط."},
+        {q: "كم عدد أشواط الطواف؟", a: "سبعة أشواط تبدأ من الحجر الأسود وتنتهي به."},
+        {q: "هل يشترط الوضوء في الطواف؟", a: "نعم، الطهارة شرط لصحة الطواف."},
+        {q: "ما حكم من نسي شوطًا؟", a: "يُكمل الشوط الناقص ما دام في المسجد، أو يُعيد الطواف إن غادر."},
+        {q: "هل يُشترط الدعاء بأدعية معينة؟", a: "لا، يمكن الدعاء بأي دعاء أو قراءة القرآن."},
+        {q: "كم شوط في السعي؟", a: "سبعة أشواط، تبدأ من الصفا وتنتهي بالمروة."},
+        {q: "ما حكم استخدام تطبيقات الحجز للعمرة؟", a: "جائز إذا كانت معتمدة من الجهات الرسمية."},
+        {q: "هل العمرة الافتراضية (التجريبية) تكفي؟", a: "لا، العمرة عبادة بدنية مكانية لا تغني عنها التقنية."},
+        {q: "ما حكم الطواف بالكراسي المتحركة؟", a: "جائز تمامًا ولا ينقص الأجر."},
+        {q: "ما حكم تمويل العمرة عبر قروض ربوية؟", a: "حرام شرعًا، ويفسد مقصد الطاعة بالحرام."},
+        {q: "ماذا أفعل عند ضياع التصريح؟", a: "التوجه مباشرة للجهة المنظمة أو التطبيق الرسمي لحل المشكلة."},
+        {q: "هل أحتاج تصريح خاص لدخول الحرم؟", a: "نعم، ويُحصل عليه عبر تطبيق “نسك” أو ما يُحدده النظام السعودي."},
+        {q: "هل يجوز أداء العمرة للمرأة دون محرم؟", a: "وفقًا للنظام السعودي الجديد، يُسمح بذلك مع رفقة آمنة، لكن بعض الفقهاء يشترطون المحرم."},
+        {q: "هل العمرة مناسبة للأطفال؟", a: "نعم، وتُعد تربية عملية، لكن بشروط الرفق والرعاية."},
+        {q: "هل هناك فرق في المناسك بين الرجال والنساء؟", a: "نعم، النساء لا يُطلب منهن الجهر بالتلبية، ولا الحلق بل التقصير فقط."}
+      ],
+      fr: [
+        {q: "Qu'est-ce que la Omra ?", a: "La Omra est un acte d'adoration comprenant l'ihram, la circumambulation, la marche entre Safa et Marwa, et la coupe ou la raccourcissement des cheveux. Ce n'est pas un substitut au Hajj."},
+        {q: "Quelle est la différence entre le Hajj et la Omra ?", a: "Le Hajj a une période et des rites spécifiques, il est obligatoire une fois dans la vie, alors que la Omra peut être accomplie à tout moment."},
+        {q: "Peut-on accomplir plusieurs Omra lors du même voyage ?", a: "Oui, à condition de sortir du Haram (comme à Tan'im) puis de reprendre l'ihram."},
+        {q: "Peut-on accomplir la Omra pour une personne décédée ou malade ?", a: "Oui, à condition d'avoir accompli la Omra pour soi-même d'abord."},
+        {q: "Peut-on faire le Sa'i avant la circumambulation ?", a: "Non, le Sa'i doit suivre immédiatement la circumambulation."},
+        {q: "Que faire si on oublie de couper ou raccourcir les cheveux ?", a: "Il faut le faire dès qu'on s'en souvient, la Omra n'est pas complète sans cela."},
+        {q: "Quelles sont les Sunna recommandées pour la Omra ?", a: "Se laver avant l'ihram, porter du blanc, réciter la Talbiya, embrasser la Pierre Noire si possible, prier."},
+        {q: "D'où doit s'ihram le voyageur venant d'Algérie ?", a: "Du miqat 'Rabigh' ou 'Yalamlam', ou depuis l'avion avant d'atteindre le miqat."},
+        {q: "Quelles sont les interdictions de l'ihram ?", a: "Couper les cheveux, se couper les ongles, rapports sexuels, porter des vêtements cousus (pour les hommes), couvrir la tête, tuer le gibier, utiliser du parfum."},
+        {q: "Peut-on s'ihram depuis l'avion ?", a: "Oui, il est recommandé de se préparer avant d'atteindre le miqat."},
+        {q: "Faut-il prononcer l'intention ?", a: "L'intention dans le cœur suffit, la prononcer est recommandé (Labbaik Allahumma Omra)."},
+        {q: "Peut-on porter des lunettes et un masque ?", a: "Oui, cela ne pose pas de problème, ce ne sont pas des vêtements cousus."},
+        {q: "Combien de tours pour la circumambulation ?", a: "Sept tours, en commençant et en terminant à la Pierre Noire."},
+        {q: "Faut-il être en état d'ablution pour la circumambulation ?", a: "Oui, la pureté est requise pour la validité de la circumambulation."},
+        {q: "Que faire si on oublie un tour ?", a: "Complétez le tour manquant tant que vous êtes dans la mosquée, sinon recommencez la circumambulation."},
+        {q: "Faut-il des invocations spécifiques ?", a: "Non, toute invocation ou lecture du Coran est permise."},
+        {q: "Combien d'allers-retours pour le Sa'i ?", a: "Sept allers-retours, du Safa à Marwa."},
+        {q: "Peut-on utiliser des applications de réservation pour la Omra ?", a: "Oui, si elles sont approuvées par les autorités officielles."},
+        {q: "La Omra virtuelle (expérimentale) est-elle suffisante ?", a: "Non, la Omra est un acte physique et spatial, la technologie ne la remplace pas."},
+        {q: "Peut-on faire la circumambulation en fauteuil roulant ?", a: "Oui, c'est tout à fait permis et la récompense n'est pas diminuée."},
+        {q: "Peut-on financer la Omra par des prêts usuraires ?", a: "C'est interdit religieusement et cela annule l'objectif de l'adoration."},
+        {q: "Que faire en cas de perte de l'autorisation ?", a: "Contactez immédiatement l'organisateur ou l'application officielle pour résoudre le problème."},
+        {q: "Faut-il une autorisation spéciale pour entrer dans le Haram ?", a: "Oui, elle s'obtient via l'application 'Nusuk' ou selon le système saoudien."},
+        {q: "Une femme peut-elle accomplir la Omra sans mahram ?", a: "Selon le nouveau système saoudien, c'est permis avec un groupe sûr, mais certains savants exigent un mahram."},
+        {q: "La Omra convient-elle aux enfants ?", a: "Oui, c'est une éducation pratique, mais avec douceur et encadrement."},
+        {q: "Y a-t-il une différence dans les rites entre hommes et femmes ?", a: "Oui, les femmes ne doivent pas réciter la Talbiya à haute voix, ni se raser la tête mais seulement raccourcir les cheveux."}
+      ]
+    };
+
+    function renderFaqs(lang) {
+      var faqs = window.learnOmraFaqs[lang] || window.learnOmraFaqs['ar'];
+      var faqDiv = document.getElementById('faq-dynamic');
+      if (!faqDiv) return;
+      faqDiv.innerHTML = '';
+      faqs.forEach(function(faq) {
+        var item = document.createElement('div');
+        item.className = 'faq-item';
+        item.innerHTML = `<div class='faq-question'>${faq.q} <i class=\"fas fa-chevron-down\"></i></div><div class='faq-answer' style='max-height:0;overflow:hidden;transition:max-height 0.35s, padding 0.2s; padding:0;'>${faq.a}</div>`;
+        faqDiv.appendChild(item);
+      });
+      // تفعيل إظهار/إخفاء الأجوبة بشكل ديناميكي مع حركة سلسة
+      document.querySelectorAll('.faq-item').forEach(item => {
+        const question = item.querySelector('.faq-question');
+        const answer = item.querySelector('.faq-answer');
+        item.classList.remove('active');
+        answer.style.maxHeight = '0';
+        answer.style.padding = '0';
+        question.onclick = function() {
+          const isActive = item.classList.contains('active');
+          document.querySelectorAll('.faq-item').forEach(i => {
+            i.classList.remove('active');
+            i.querySelector('.faq-answer').style.maxHeight = '0';
+            i.querySelector('.faq-answer').style.padding = '0';
+          });
+          if (!isActive) {
+            item.classList.add('active');
+            answer.style.maxHeight = answer.scrollHeight + 20 + 'px';
+            answer.style.padding = '12px 0 0 0';
+          }
+        };
+      });
+    }
+
+    function updateLearnOmraLang(lang) {
+      if (!window.langTexts) return;
+      // fallback للنصوص إذا لم تكن موجودة في lang.js
+      if (!window.langTexts[lang]) {
+        window.langTexts[lang] = {
+          pageTitle: lang === 'ar' ? "تعلم العمرة" : "Apprendre la Omra",
+          booksTitle: lang === 'ar' ? "الكتب والمطويات" : "Livres et brochures",
+          videosTitle: lang === 'ar' ? "فيديوهات تعليمية" : "Vidéos éducatives",
+          faqTitle: lang === 'ar' ? "أسئلة شائعة" : "Questions fréquentes"
+        };
+      }
+      document.title = window.langTexts[lang].pageTitle || (lang === 'ar' ? "تعلم العمرة" : "Apprendre la Omra");
+      document.getElementById("page-title") && (document.getElementById("page-title").textContent = window.langTexts[lang].pageTitle || (lang === 'ar' ? "تعلم العمرة" : "Apprendre la Omra"));
+      document.querySelectorAll(".section-title")[0].textContent = window.langTexts[lang].booksTitle || (lang === 'ar' ? "الكتب والمطويات" : "Livres et brochures");
+      document.querySelectorAll(".section-title")[1].textContent = window.langTexts[lang].videosTitle || (lang === 'ar' ? "فيديوهات تعليمية" : "Vidéos éducatives");
+      document.querySelectorAll(".section-title")[2].textContent = window.langTexts[lang].faqTitle || (lang === 'ar' ? "أسئلة شائعة" : "Questions fréquentes");
+      document.documentElement.lang = lang === 'ar' ? 'ar' : 'fr';
+      document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+      renderBooks(lang);
+      renderVideos(lang);
+      renderFaqs(lang);
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      var lang = window.getCurrentLang ? window.getCurrentLang() : 'ar';
+      updateLearnOmraLang(lang);
+    });
+    window.addEventListener('storage', function(e) {
+      if (e.key === 'lang') {
+        var lang = window.getCurrentLang ? window.getCurrentLang() : 'ar';
+        updateLearnOmraLang(lang);
+      }
+    });
+    </script>
 </body>
 </html>

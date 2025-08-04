@@ -1,525 +1,490 @@
+/* استثناء الأيقونات من خط Amiri حتى تظهر بشكل صحيح */
+i, .fa, .fas, .fab, .far, .icon-animate {
+  font-family: var(--fa-style-family, "Font Awesome 6 Free"), "Font Awesome 5 Free", "FontAwesome", Arial, sans-serif !important;
+  font-weight: var(--fa-style, 900) !important;
+}
+/* استخدم خط Amiri في كامل الصفحة بشكل موحد */
+body, * {
+    font-family: 'Tajawal', Arial, sans-serif ;
+    font-weight: 900 !important; /* أقصى سماكة */
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=Amiri:wght@700&display=swap');
+
 :root {
-  --main-green: #186049;
-  --second-green: #23a084;
-  --gold: #f4d078;
-  --gold-dark: #bfa338;
-  --white: #fff;
-  --light: #f8f9fa;
-  --shadow: 0 4px 20px 0 rgba(30, 41, 59, 0.09);
-  --radius: 16px;
-  --transition: all 0.3s cubic-bezier(.4,1,.7,1);
-  --main-font: 'Tajawal', 'Amiri', Arial, sans-serif;
+    --primary-color: #004d40;
+    --secondary-color: #fbc02d;
+    --accent-color: #e64a19;
+    --text-color: #333;
+    --light-text: #fff;
+    --bg-color: #f5f5f5;
+    --card-bg: #fff;
+    --border-radius: 12px;
+    --box-shadow: 0 4px 12px rgba(0, 77, 64, 0.15);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 html, body {
-  font-family: var(--main-font);
-  background: var(--light);
-  color: #222;
-  min-height: 100vh;
-  direction: rtl;
+    overflow-x: hidden !important;
+    width: 100vw;
+    max-width: 100vw;
 }
 
+
+/* Page Background */
 .page-bg {
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(130deg, #e0f2f1 0%, #f8f9fa 100%);
-  background-image: url('https://images.unsplash.com/photo-1512053364647-ec919a8d4b4d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80');
-  background-size: cover;
-  background-position: center;
-  z-index: -2;
-  filter: blur(10px) brightness(0.94);
-  opacity: 0.75;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+    z-index: -1;
 }
 
+/* Header Styles */
 .page-header {
-  background: linear-gradient(120deg, var(--main-green), var(--second-green));
-  color: var(--white);
-  text-align: center;
-  padding: 90px 20px 40px 20px;
-  position: relative;
-  margin-bottom: 32px;
-  box-shadow: var(--shadow);
-  margin-top: 70px;
-  border-radius: 0 0 var(--radius) var(--radius);
+    text-align: center;
+    padding: 20px 15px;
+    margin-bottom: 15px;
 }
-.page-header::after {
-  content: '';
-  display: block;
-  width: 65px;
-  height: 4px;
-  background: var(--gold);
-  margin: 18px auto 0;
-  border-radius: 2px;
-}
+
 .page-title {
-  font-family: 'Amiri', serif;
-  font-size: 2.4rem;
-  letter-spacing: -1px;
-  margin-bottom: 8px;
-  font-weight: 700;
+    font-family: 'Amiri', serif;
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 8px;
 }
+
 .page-subtitle {
-  font-size: 1.04rem;
-  opacity: 0.95;
+    font-size: 1rem;
+    color: #666;
 }
 
+/* Filters Section */
 .filters-section {
-  background: var(--white);
-  box-shadow: var(--shadow);
-  border-radius: var(--radius);
-  margin: 0 16px 28px 16px;
-  padding: 15px 18px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px 22px;
-  align-items: flex-end;
-  justify-content: space-between;
-  position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 80px;
+       margin-bottom: 15px;
 }
 
-.filter-group {
-  flex: 1 1 145px;
-  min-width: 130px;
+.filter-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0px;
+    transition: all 0.3s ease;
+    box-shadow: var(--box-shadow);
+ 
+}
+
+.filter-btn:hover {
+    background-color: #00695c;
+    transform: translateY(-2px);
+}
+
+.filter-btn i {
+    font-size: 1rem;
+}
+
+.filter-select {
+    padding: 10px 15px;
+    border-radius: var(--border-radius);
+    border: 1px solid #ddd;
+    background-color: white;
+    font-size: 0.9rem;
+    min-width: 120px;
+    cursor: pointer;
+}
+
+/* إطار العرض الجديد */
+
+.card_box {
+  width: 100%;
+  max-width: 340px;
+  min-width: 0;
+  min-height: 170px;
+      max-height: 10px;
+
+  border-radius: 20px;
+  background: linear-gradient(160deg, #ffffff 0%, #ffffff 80%, #ffffff 100%);
+  position: relative;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.55);
+  cursor: pointer;
+  transition: all .3s;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  align-items: stretch;
+  box-sizing: border-box;
+  overflow: hidden;
 }
-.filter-label {
-  font-weight: 500;
-  color: var(--main-green);
-  margin-bottom: 4px;
-  font-size: 15px;
+
+.card_box__header-row {
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 24px 18px 0 18px; /* زيادة المسافة العلوية */
+  border-bottom: 1px solid #e0e0e0;
+  background: transparent;
+  min-height: 70px; /* زيادة الارتفاع الأدنى */
+  position: relative;
+  z-index: 2;
 }
-.filter-select {
-  border: 1.5px solid #e0e0e0;
-  border-radius: 7px;
-  font-size: 15.5px;
-  padding: 9px 13px;
-  font-family: var(--main-font);
-  background: var(--light);
-  transition: border .2s;
+
+
+
+
+
+.card_box__body {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin: 0;
+  color: #333;
 }
-.filter-select:focus {
-  border-color: var(--main-green);
-  outline: none;
+
+/* تاريخ العرض في منتصف البطاقة */
+/* date-box في منتصف البطاقة فقط */
+.card_box .date-box {
+  position: absolute;
+  top: 15px;
+right: -50px;
+  transform: translate(-50%, -50%);
+  align-items: center;
+    display: flex;
+
 }
-.filter-btn {
-  background: var(--gold);
-  color: var(--main-green);
-  border: none;
-  border-radius: 8px;
-  padding: 13px 28px;
-  font-weight: bold;
-  font-size: 1rem;
-  cursor: pointer;
-  box-shadow: 0 2px 7px rgba(212, 175, 55, 0.08);
-  transition: var(--transition);
+
+/* المسافة بين الحرم والفندق أسفل البطاقة يسار */
+.card_box .distance {
+  position: absolute;
+  top: 60px;
+  right: 18px;
+  margin: 0;
+  text-align: left;
   display: flex;
   align-items: center;
-  gap: 9px;
-}
-.filter-btn:hover, .filter-btn:focus {
-  background: var(--gold-dark);
-  color: var(--white);
-  transform: translateY(-2px) scale(1.03);
-  outline: none;
+  justify-content: flex-start;
+  font-size: 1.1rem;
+  color: #fbc02d;
+  font-weight: bold;
+  z-index: 3;
 }
 
-/* Cards */
-.offers-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 32px 44px;
-  padding: 48px 24px 120px 24px;
-  align-items: stretch;
-  background: #f5f7fa;
-  border-radius: 22px;
-  box-shadow: 0 8px 36px 0 rgba(30, 41, 59, 0.10);
-}
-.offer-card {
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px 0 rgba(76,175,80,0.10), 0 16px 32px -8px #4caf5022;
-  overflow: hidden;
-  transition: box-shadow 0.3s, transform 0.25s, border-color 0.25s;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  max-height: 520px;
-  min-height: 340px;
-  position: relative;
-  border: 2px solid #e0e0e0;
-  margin-bottom: 25px;
-  margin: 0px 0px 30px 0px;
-  max-width: 400px;
-  min-width: 0;
-  width: 100%;
-}
-.offer-card:hover {
-  transform: translateY(-8px) scale(1.025);
-  box-shadow: 0 18px 48px 0 #43a04733, 0 24px 48px -8px #4caf5044;
-  border-color: #43a047;
-}
-.offer-badge {
+/* زر التفاصيل أسفل البطاقة في المنتصف */
+
+
+.card_box .details-btn-row {
   position: absolute;
-  top: 16px;
-  left: 16px;
-  background: var(--gold-color, #d4af37);
-  color: #fff;
-  padding: 6px 15px;
-  border-radius: 20px;
-  font-weight: 700;
-  font-size: 13px;
-  z-index: 2;
-  box-shadow: 0 2px 7px rgba(212, 175, 55, 0.11);
-  letter-spacing: 0.2px;
+  top: 60px;
+  left: 45px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  margin: 0;
+  z-index: 3;
 }
-.offer-badge.best-offer {
+
+
+
+
+
+.card_box:hover {
+  transform: scale(0.97);
+}
+
+.card_box .charite {
+  position: absolute;
+  overflow: hidden;
+  width: 150px;
+  height: 150px;
+  top: -10px;
+  left: -10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+/* إظهار سعر العرض داخل شريط Premium */
+.card_box .charite::before {
+  content: attr(data-price);
+  position: absolute;
+  width: 150%;
+  height: 40px;
+  background-image: linear-gradient(45deg, #ff6547 0%, #ffb144  51%, #ff7053  100%);
+  transform: rotate(-45deg) translateY(-20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.23);
+  font-size: 1.4em;
+}
+
+.card_box .charite::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  bottom: 0;
+  left: 0;
+  height: 10px;
+  z-index: -1;
+  box-shadow: 140px -140px #cc3f47;
+  background-image: linear-gradient(45deg, #FF512F 0%, #F09819  51%, #FF512F  100%);
+}
+
+.card_box .price-ribbon {
   position: absolute;
   top: 18px;
-  right: 18px;
-  left: auto;
-  background: linear-gradient(90deg, #ffd700 60%, #fffbe6 100%);
-  color: #388e3c;
-  padding: 7px 22px;
-  border-radius: 22px;
-  font-weight: 900;
-  font-size: 1.08rem;
+  right: -32px;
+  left: unset;
   z-index: 3;
-  box-shadow: 0 2px 12px #ffd70033;
-  letter-spacing: 0.3px;
-  border: 2px solid #388e3c;
-  text-shadow: 0 1px 0 #fffbe6;
+  background-color: #e64a19;
+  color: #fff;
+  padding: 5px 30px;
+  transform: rotate(-45deg);
+  font-weight: bold;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  width: 120px;
+  text-align: center;
+}
+
+.card_box .header-row {
   display: flex;
-  align-items: center;
-  gap: 7px;
-}
-.offer-badge.best-offer i {
-  color: #388e3c;
-  font-size: 1.2em;
-}
-.offer-image {
-  width: 100%;
-  height: 210px;
-  object-fit: cover;
-  border-bottom: 2px solid #e0e0e0;
-  background: #f9f9f9;
-  transition: filter 0.35s, box-shadow 0.3s;
-  filter: brightness(1.06) contrast(1.08);
-  box-shadow: 0 4px 18px 0 #4caf5011;
-}
-.offer-card:hover .offer-image {
-  filter: brightness(1.10) contrast(1.13);
-  box-shadow: 0 8px 32px 0 #43a04722;
-}
-.offer-content {
-  padding: 12px 10px 10px 10px;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
+  flex-direction: row;
   justify-content: space-between;
-  height: 100%;
-}
-.offer-content > * {
-  margin-bottom: 0.15em !important;
-}
-.offer-content > *:last-child {
-  margin-bottom: 0 !important;
-}
-.offer-agency {
-  display: flex;
   align-items: center;
-  font-size: 0.95rem;
-  color: #388e3c;
-  font-weight: 700;
-  margin-bottom: 4px;
-  gap: 5px;
-  letter-spacing: 0.2px;
-}
-.offer-agency-location-row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-.offer-location-group {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  align-items: flex-end;
-}
-.offer-location {
-  background: #e8f5e9;
-  color: #388e3c;
-  border-radius: 7px;
-  padding: 4px 10px 4px 8px;
-  font-size: 1.01rem;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 5px;
+  gap: 12px;
+  padding: 18px 18px 10px 18px;
+  border-bottom: 1px solid #e0e0e0;
   margin-bottom: 0;
 }
-.offer-location i {
-  color: #43a047;
-  font-size: 1.2em;
-  margin-left: 3px;
-}
-.offer-title {
-  font-size: 1.05rem;
-  color: #186049;
+
+
+
+
+
+.card_box .omra-label {
   font-weight: bold;
-  margin-bottom: 7px;
-  letter-spacing: -0.5px;
-  text-shadow: 0 1px 0 #d4af371a;
-  line-height: 1.2;
-  text-align: right;
-}
-.offer-details {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 10px;
-  margin-bottom: 7px;
-  align-items: flex-end;
-  justify-content: flex-start;
-}
-.offer-detail {
-  display: flex;
-  align-items: center;
-  font-size: 0.85rem;
-  color: #388e3c;
-  gap: 4px;
-  background: #e8f5e9;
-  border-radius: 7px;
-  padding: 2px 7px 2px 5px;
-  font-weight: 500;
-}
-.offer-price {
-  display: flex;
-  flex-direction: row-reverse;
-  gap: 18px;
-  align-items: center;
-  margin-bottom: 10px;
-  position: relative;
-  justify-content: space-between;
-}
-.price-amount {
-  font-size: 1.18rem;
-  color: #388e3c;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  direction: ltr;
-  order: 2;
-  margin-left: auto;
-  background: #e8f5e9;
-  border-radius: 8px;
-  padding: 7px 16px;
-  box-shadow: 0 2px 7px #4caf5011;
-  flex-direction: column;
-  align-items: flex-end;
-}
-.price-amount i.fa-people-group {
-  font-size: 1.3em;
-  color: #d4af37;
+  font-size: 1.2rem;
+  color: #fbc02d;
   margin-left: 4px;
 }
-.offer-btn {
-  background: linear-gradient(90deg, #4caf50 80%, #43a047);
-  color: #fff;
-  border: none;
-  padding: 8px 18px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 1rem;
-  transition: var(--transition);
+
+.card_box .date-value {
+  font-size: 0.95rem;
+  color: #000000;
+  font-weight: 500;
+}
+
+/* شعار الوكالة أعلى البطاقة يمين فوق الخط مع رفعه قليلاً */
+.card_box .agency-logo {
+  position: absolute;
+  top: 8px;
+  right: 18px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
   display: flex;
   align-items: center;
-  gap: 7px;
-  margin-top: 2px;
-  box-shadow: 0 2px 7px #4caf5011;
-  position: static;
-  order: 1;
-  margin-right: 0;
-  max-width: 140px;
-  min-width: 90px;
   justify-content: center;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  z-index: 4;
 }
-.offer-card .offer-content > * {
-  margin-bottom: 0.15em !important;
+
+.card_box .agency-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
-.offer-card .offer-content > *:last-child {
-  margin-bottom: 0 !important;
-}
-.service-icon-with-label {
+
+.card_box .map-row {
+  margin-bottom: 12px;
+  text-align: center;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  margin: 0 4px 0 0;
-  min-width: 28px;
-  max-width: 38px;
-}
-.service-icon-with-label i {
-  font-size: 0.95em;
-  max-width: 20px;
-  max-height: 20px;
-  margin-bottom: 1px;
-}
-.service-label {
-  font-size: 0.75em;
-  margin-top: 0px;
-  letter-spacing: 0.1px;
-}
-@media (max-width: 900px) {
-  .offers-container {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    padding: 12px 4px 100px 4px;
-  }
-  .offer-card {
-    max-width: 100%;
-    max-height: none;
-    min-height: 0;
-  }
-  .offer-image {
-    height: 160px;
-  }
-  .offer-content {
-    padding: 16px 10px 12px 10px;
-  }
-}
-@media (max-width: 570px) {
-  .offers-container {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 7px;
-    padding: 7px 3px 40px 3px;
-  }
-  .offer-card {
-    border-radius: 10px;
-    margin: 0 0 12px 0;
-    min-width: 0;
-    min-height: 0;
-    height: auto !important;
-    max-height: none !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    box-shadow: 0 2px 8px 0 #4caf5011;
-  }
-  .offer-image {
-    height: 60px;
-    border-radius: 8px 8px 0 0;
-  }
-  .offer-title {
-    font-size: 0.85rem;
-    margin-bottom: 4px;
-    font-weight: 700;
-  }
-  .offer-content {
-    padding: 6px 3px 6px 3px;
-  }
-  .offer-agency {
-    font-size: 0.75rem;
-    margin-bottom: 2px;
-    gap: 3px;
-  }
-  .offer-agency-location-row {
-    margin-bottom: 2px;
-  }
-  .offer-location-group {
-    gap: 2px;
-  }
-  .offer-location {
-    font-size: 0.7rem;
-    padding: 2px 5px 2px 4px;
-    border-radius: 5px;
-  }
-  .offer-location i {
-    font-size: 0.9em;
-    margin-left: 1px;
-  }
-  .offer-details {
-    gap: 4px 7px;
-    margin-bottom: 4px;
-  }
-  .offer-detail {
-    font-size: 0.7rem;
-    padding: 2px 5px 2px 4px;
-    border-radius: 5px;
-    gap: 3px;
-  }
-  .service-icon-with-label {
-    min-width: 30px;
-    max-width: 40px;
-  }
-  .service-icon-with-label i {
-    font-size: 1em;
-    max-width: 24px;
-    max-height: 24px;
-  }
-  .service-label {
-    font-size: 0.7em;
-    margin-top: 0px;
-  }
-  .offer-badge {
-    font-size: 0.7em;
-    padding: 3px 7px;
-    border-radius: 10px;
-    top: 7px;
-    left: 7px;
-  }
-  .offer-badge.best-offer {
-    font-size: 0.8em;
-    padding: 4px 10px;
-    border-radius: 12px;
-    top: 8px;
-    right: 8px;
-  }
-  .offer-price {
-    gap: 7px;
-    margin-bottom: 3px;
-  }
-  .price-amount {
-    font-size: 0.75rem;
-    padding: 2px 4px;
-    border-radius: 5px;
-  }
-  .offer-btn {
-    font-size: 0.85rem;
-    padding: 4px 7px;
-    border-radius: 5px;
-    margin-top: 0;
-    max-width: 100px;
-    min-width: 60px;
-  }
+  justify-content: center;
+  gap: 8px;
 }
 
-/* Bottom Nav */
+.card_box .details-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(247, 172, 11);
+  color: white;
+  border: none;
+  padding: 0px 10px 0px 10px ;
+  border-radius: 7px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,77,64,0.08);
+    top: 1px;
+      min-width: 70px;
+    min-height: 30px;
+}
+.card_box .details-btn:hover {
+  background-color: #00695c;
+  transform: translateY(-2px);
+}
 
 
+/* تاج ذهبي للعروض الذهبية - في منتصف أعلى البطاقة */
+.details-btn-crown {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7em;
+  color: #ffd700; /* لون ذهبي */
+  text-shadow: 0 2px 6px #bfa10088, 0 0px 1px #fffbe6;
+  background: rgba(255,255,255,0.0);
+  border-radius: 50%;
+  padding: 2px 0;
+  /* يمكن استخدام أيقونة FontAwesome أو SVG */
+}
 
-/* Scroll Top */
-.scroll-top {
-  position: fixed;
-  bottom: 90px; right: 21px;
-  width: 53px; height: 53px;
-  background: var(--gold-dark);
-  color: var(--white);
+/* مثال إذا كنت تستخدم FontAwesome */
+.details-btn-crown .fa-crown {
+  color: #ffd700;
+  font-size: 1.3em;
+  margin: 0;
+  filter: drop-shadow(0 1px 2px #bfa10055);
+}
+
+
+.offers-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 10px;
+    padding: 0 8px 30px 8px;
+}
+
+
+/* زر GPS أسفل البطاقة يمين */
+.card_box .gps-btn-row {
+  position: absolute;
+  top: 15px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  z-index: 4;
+  padding: 0;
+  transition: background 0.2s;
+  padding: 0px 0px 0px 0px;
+}
+
+.card_box .gps-btn-row .location-btn {
+  color: #ffc609;
   border: none;
   border-radius: 50%;
+  width: 0;
+  height: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
-  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.17);
+  font-size: 1.3rem;
   cursor: pointer;
-  transition: var(--transition);
-  z-index: 1100;
-  display: none;
+  box-shadow: 0 2px 8px #fbc02d44;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  margin: 0px 0px 0px 10px;
 }
-.scroll-top:hover {
-  background: var(--gold);
-  color: var(--main-green);
-  transform: translateY(-5px) scale(1.08);
+
+.card_box .gps-btn-row .location-btn:hover {
+  background: #d4af37;
+  color: #5f4f00;
+  transform: scale(1.08);
 }
+.location-name{
+  font-size: 0.9rem;
+  color: #000000;
+  font-weight: 500;
+  margin: 18px 6px 10px 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+    .offers-container {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        max-width: 100vw;
+           padding: 0 8px 600px 8px;
+
+    }
+}
+@media (max-width: 1900px) {
+    .offers-container {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        max-width: 100vw;
+           padding: 0 8px 60px 8px;
+
+    }
+}
+@media (max-width: 600px) {
+    .offers-container {
+        grid-template-columns: 1fr;
+           padding: 0 8px 600px 8px;
+
+    }
+    .card_box {
+        width: 100%;
+        max-width: 99vw;
+        min-width: 0;
+        box-sizing: border-box;
+            max-height: 10px;
+
+    }
+}
+@media (max-width: 480px) {
+    .card_box {
+        width: 100%;
+        max-width: 97vw;
+        min-width: 0;
+        box-sizing: border-box;
+            max-height: 10px;
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+

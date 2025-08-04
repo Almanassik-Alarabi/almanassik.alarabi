@@ -1,482 +1,276 @@
-:root {
-    --primary-color: #4caf50; /* أخضر رئيسي */
-    --secondary-color: #388e3c; /* أخضر غامق */
-    --accent-color: #43a047; /* أخضر فاتح */
-    --light-color: #f9f9f9;
-    --dark-color: #333;
-    --gold-color: #d4af37;
-    --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    --transition: all 0.3s ease;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Tajawal', sans-serif;
-        }
-
-        body {
-            background-color: #f5f7fa;
-            color: var(--dark-color);
-            line-height: 1.6;
-            padding-top: 70px; /* مساحة للشريط العلوي */
-            padding-bottom: 70px; /* مساحة للشريط السفلي */
-        }
-
-        /* أنماط الشريط العلوي */
-        .top-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: var(--primary-color);
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .top-nav {
-            display: flex;
-            gap: 20px;
-        }
-
-        .top-nav a {
-            color: white;
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .top-nav a:hover {
-            color: var(--gold-color);
-        }
-
-
-
-
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Header Styles */
-        .header {
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            color: white;
-            text-align: center;
-            padding: 60px 20px 40px;
-            position: relative;
-            margin-bottom: 30px;
-            box-shadow: var(--shadow);
-        }
-
-        .header::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: var(--gold-color);
-            border-radius: 2px;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        /* Search Section */
-        .search-section {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: var(--shadow);
-            margin-bottom: 30px;
-            position: relative;
-        }
-
-        .search-container {
-            position: relative;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 15px 50px 15px 20px;
-            border: 2px solid #eee;
-            border-radius: 50px;
-            font-size: 16px;
-            transition: var(--transition);
-        }
-
-        .search-input:focus {
-            border-color: var(--secondary-color);
-            outline: none;
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--primary-color);
-            font-size: 18px;
-        }
-
-        /* Agency Cards */
-
-        .agencies-grid {
-            display: grid;
-            direction: rtl;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* عمودان على الأقل ويزيد حسب المساحة */
-            gap: 8px;
-            padding-bottom: 40px;
-            justify-items: stretch;
-        }
-
-        /* إجبار وجود عمودين كحد أدنى مهما كان حجم الشاشة */
-        @media (max-width: 900px) {
-            .agencies-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        @media (max-width: 600px) {
-            .agencies-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-            }
-            .agency-card {
-                max-width: 100%;
-                min-width: 0;
-            }
-        }
-        @media (max-width: 400px) {
-            .agencies-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-            }
-        }
-
-        .agency-card {
-            margin: 0;
-          
-            min-width: 0;
-            max-height: 220px;
-            min-height: 120px;
-            width: 90%;
-            height: 90%;
-              max-width: 300px;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            position: relative;
-            padding: 5px 5px 5px 5px;
-            margin: 0 auto auto auto; /* تقليل المسافة بين البطاقات */
-        }
-        
-
-        .agency-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        /* شارة الاعتماد الجديدة */
-.card-badge.approved-badge {
-    display: none !important;
+body, * {
+    font-family: 'Cairo','Tajawal', Arial, sans-serif ;
+    font-weight: 900 !important; /* أقصى سماكة */
 }
-.card-badge.approved-badge {
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    background: #fff;
-    color: var(--primary-color);
-    padding: 2px 6px 2px 4px;
-    border-radius: 10px;
-    font-weight: bold;
-    font-size: 0.7rem;
-    box-shadow: 0 2px 8px rgba(76,175,80,0.10);
-    border: 2px solid var(--primary-color);
-    display: flex;
+body {
+      font-family: 'Cairo', Arial, sans-serif;
+      background: #0a3d3f;
+      margin: 0;
+      padding: 0;
+      color: #222;
+      overflow-x: hidden;
+    }
+    .container {
+      width: 100vw;
+      max-width: 100vw;
+      margin: 55px 0 0 0;
+      background: #c9f1f6;
+      border-radius: 20px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 20px 0 30px 0;
+      min-height: 90vh;
+      overflow-x: hidden;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+   .search-bar1 {
+        background-color: #1b5e20;
+      display: flex;
+      align-items: center;
+      background: #feffff;
+      border-radius: 20px;
+      padding: 6px 12px;
+      margin: 0;
+      width: 70%;
+      max-width: 400px;
+     
+    }
+    .search-bar1 input {
+      border: none;
+      background: transparent;
+      flex: 1;
+      font-size: 1.1em;
+      outline: none;
+      padding: 6px;
+      font-family: inherit;
+      direction: rtl;
+
+    }
+    .search-bar1 .icon {
+      margin-left: 8px;
+      color: #0a3d3f;
+      font-size: 1.2em;
+    }
+    .filters1 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+        gap: 10px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+        max-width: 900px;
+        box-sizing: border-box;
+        right: 10px;
+
+    }
+    @media (max-width: 700px) {
+  .filters1 {
+    flex-direction: column;
     align-items: center;
-    gap: 7px;
-    z-index: 2;
-}
-.card-badge.approved-badge i {
-    color: var(--primary-color);
-    font-size: 12px;
-    margin-left: 2px;
-}
+    justify-content: center;
+    gap: 8px;
+  }
 
-        .card-badge {
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            background: var(--gold-color);
-            color: var(--primary-color);
-            padding: 2px 6px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 0.6rem;
-            z-index: 2;
-        }
+  .search-bar1 {
+    width: 90%;
+    max-width: 90%;
+  }
 
-        .agency-image {
-            height: 50px;
-            width: 100%;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-
-        .agency-content {
-            padding: 6px 6px 6px 6px;
-        }
-
-        .agency-title {
-            font-size: 0.8rem;
-            margin-bottom: 2px;
-        }
-
-        .agency-rating {
-            background: var(--primary-color);
-            color: white;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-        }
-
-        .agency-rating i {
-            margin-right: 5px;
-            font-size: 12px;
-        }
-
-        .agency-meta {
-            display: flex;
-            align-items: center;
-            margin-bottom: 2px;
-            color: #666;
-            font-size: 0.7rem;
-        }
-
-        .agency-meta i {
-            margin-left: 5px;
-            color: var(--secondary-color);
-        }
-
-        .agency-description {
-            margin-bottom: 10px;
-            color: #555;
-            font-size: 14px;
-        }
-
-        .agency-features {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2px;
-            margin-bottom: 2px;
-        }
-
-        .feature-badge {
-            background: rgba(76, 175, 80, 0.08);
-            color: var(--primary-color);
-            padding: 2px 6px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-        }
-
-        .agency-footer {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            border-top: 1px solid #eee;
-            padding-top: 2px;
-            gap: 2px;
-        }
-
-        .agency-price {
-            font-weight: bold;
-            color: var(--primary-color);
-            font-size: 1.2rem;
-        }
-
-        .agency-price span {
-            font-size: 14px;
-            color: #777;
-            font-weight: normal;
-        }
-
-        .view-btn {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 4px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.7rem;
-        }
-
-        .view-btn:hover {
-            background: var(--secondary-color);
-            transform: translateY(-2px);
-        }
-
-        .map-btn {
-            background: #fff;
-            color: var(--primary-color);
-            border: 1.5px solid var(--primary-color);
-            padding: 4px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            font-size: 0.7rem;
-            text-decoration: none;
-            transition: background 0.2s, color 0.2s, border 0.2s;
-        }
-        .map-btn i {
-            color: var(--primary-color);
-            font-size: 17px;
-        }
-        .map-btn:hover {
-            background: var(--primary-color);
-            color: #fff;
-            border-color: var(--primary-color);
-        }
-        .map-btn:hover i {
-            color: #fff;
-        }
-
-        /* زر الأقرب إليك */
-.nearby-btn {
-    background: var(--primary-color);
-    color: #fff;
-    border: none;
-    padding: 12px 18px;
-    border-radius: 30px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 15px;
-    font-weight: 500;
-    box-shadow: 0 2px 8px rgba(76,175,80,0.10);
-    transition: background 0.2s, color 0.2s;
-}
-.nearby-btn:hover {
-    background: var(--secondary-color);
+  .filters {
+    justify-content: flex-start;
+  }
+    .login-agencie{
+        display: flex; justify-content: flex-start; align-items: center; width: 100%; height: 60px;
+    }
 }
 
-        /* Floating Button */
-        .floating-btn {
-            position: fixed;
-            bottom: 80px; /* تعديل الموقع ليتناسب مع الشريط السفلي */
-            left: 30px;
-            width: 60px;
-            height: 60px;
-            background: var(--primary-color);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            transition: var(--transition);
-            z-index: 100;
-        }
+    .filters {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .login-agencie{
+        display: flex; justify-content: flex-start; align-items: center; width: 100%; height: 10px;
+    }
+    .filter-btn {
+      background: linear-gradient(90deg, #f7e9b7 0%, #e6c97a 100%);
+      border: none;
+      border-radius: 18px;
+      padding: 7px 20px;
+      font-size: 1em;
+      font-family: inherit;
+      cursor: pointer;
+      font-weight: bold;
+      color: #333;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: background 0.2s;
+    }
+    .filter-btn.active {
+      background: linear-gradient(90deg, #0a3d3f 0%, #1de9b6 100%);
+      color: #fff;
+    }
+    .agency-card {
+      background: #f8f8f8;
+      border-radius: 16px;
+      margin: 0 16px 18px 16px;
+      padding: 14px 12px 10px 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      position: relative;
+      border: 1.5px solid #e0e0e0;
+      transition: box-shadow 0.2s, border 0.2s;
+      max-width: 450px;
+            min-width: 250px;
 
-        .floating-btn:hover {
-            background: var(--secondary-color);
-            transform: translateY(-3px) scale(1.1);
+    }
+    .agency-card:hover {
+      box-shadow: 0 6px 24px rgba(0,0,0,0.13);
+      border: 1.5px solid #1de9b6;
+    }
+    .agency-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 3px;
+    }
+    .agency-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      object-fit: contain;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+    }
+    .agency-title {
+      font-weight: bold;
+      font-size: 1.08em;
+      color: #0a3d3f;
+      flex: 1;
+    }
+    .agency-info {
+      font-size: 0.98em;
+      color: #444;
+      margin-bottom: 2px;
+    }
+    .agency-location {
+      display: flex;
+      align-items: center;
+      font-size: 0.97em;
+      color: #666;
+      gap: 4px;
+    }
+    .location-icon {
+      color: #e53935;
+      font-size: 1.1em;
+    }
+    .show-btn {
+      background: linear-gradient(90deg, #b7f7c7 0%, #7ae6a2 100%);
+      border: none;
+      border-radius: 10px;
+      padding: 5px 18px;
+      font-size: 1em;
+      font-family: inherit;
+      cursor: pointer;
+      font-weight: bold;
+      color: #1b5e20;
+      margin-top: -10px;
+      align-self: flex-end;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+      transition: background 0.2s;
         }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .agencies-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .header p {
-                font-size: 1rem;
-            }
-            
-            .top-nav {
-                display: none; /* إخفاء القائمة العلوية في الشاشات الصغيرة */
-            }
-        }
-
-        @media (max-width: 480px) {
-            .header {
-                padding: 40px 15px 30px;
-                margin-top: 10px;
-            }
-            
-            .agency-title {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-            
-            .agency-footer {
-                flex-direction: row;
-                gap: 8px;
-                align-items: center;
-                justify-content: flex-start;
-            }
-            
-            .view-btn {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .floating-btn {
-                bottom: 70px;
-                left: 20px;
-                width: 50px;
-                height: 50px;
-                font-size: 18px;
-            }
-        }
-
-        .agency-logo-wrapper {
-   
+    .show-btn:hover {
+      background: linear-gradient(90deg, #7ae6a2 0%, #b7f7c7 100%);
+    }
+    .register-agency-btn {
+  display: inline-block;
+  margin: 0 0 16px 0;
+  padding: 8px 28px;
+  background: linear-gradient(90deg, #1de9b6 0%, #0a3d3f 100%);
+  color: #fff;
+  border: none;
+  border-radius: 22px;
+  font-size: 1.08em;
+  font-family: inherit;
+  font-weight: bold;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  transition: background 0.2s, color 0.2s;
+  vertical-align: middle;
+  align-self: flex-start;
+  margin-right: auto;
+}
+.register-agency-btn:hover {
+  background: linear-gradient(90deg, #0a3d3f 0%, #1de9b6 100%);
+  color: #fff;
 }
 
-.agency-logo-img {
-    width: 22px;
-    height: 22px;
-    object-fit: cover;
-    border-radius: 50%;
+/* شبكة البطاقات */
+#agencies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px 16px;
+  padding: 0 18px 0 18px;
+  box-sizing: border-box;
 }
 
-.agency-card-clickable {
-    cursor: pointer;
+/* ضبط البطاقة لتملأ عرض العمود */
+.agency-card {
+  margin: 0;
+}
+
+/* شاشة صغيرة: عمود واحد */
+@media (max-width: 600px) {
+  #agencies-grid {
+    grid-template-columns: 1fr;
+    padding: 0 4px 0 4px;
+    gap: 12px 0;
+  }
+     .login-agencie{
+        display: flex; justify-content: flex-start; align-items: center; width: 100%; height: 60px;
+    }
+}
+
+/* شاشة متوسطة: عمودان */
+@media (min-width: 601px) and (max-width: 900px) {
+  #agencies-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+     .login-agencie{
+        display: flex; justify-content: flex-start; align-items: center; width: 100%; height: 60px;
+    }
+}
+/* شاشة متوسطة: عمودان */
+@media (min-width: 801px) and (max-width: 900px) {
+  #agencies-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+     .login-agencie{
+        display: flex; justify-content: flex-start; align-items: center; width: 100%; height: 60px;
+    }
+}
+/* شاشة كبيرة: 3 أعمدة أو أكثر */
+@media (min-width: 901px) {
+  #agencies-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+     .login-agencie{
+        display: flex; justify-content: flex-start; align-items: center; width: 100%; height: 60px;
+    }
+}
+
+/* شاشة كبيرة: 3 أعمدة أو أكثر */
+@media (min-width: 1111px) {
+  #agencies-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+    .login-agencie{
+        display: flex; justify-content: flex-start; align-items: center; width: 100%; height: 10px;
+    }  
 }

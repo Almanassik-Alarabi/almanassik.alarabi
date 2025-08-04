@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <title>لوحة تحكم منصة العمرة</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/dashboard.css" />
+    <script src="js/languageSwitcher.js"></script>
+    <script src="js/agencyTokenRefresher.js"></script>
+    <script src="js/authGuard.js"></script>
+
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <!-- Sidebar -->
+      <div id="sidebar-container"></div>
+      <script src="js/sidebar.js"></script>
+      <script>
+        // تحميل الشريط الجانبي المشترك ديناميكيًا
+        document.addEventListener('DOMContentLoaded', function() {
+          var sidebarContainer = document.getElementById('sidebar-container');
+          if (!sidebarContainer) return;
+          fetch('sidebar.html')
+            .then(res => res.text())
+            .then(html => {
+              sidebarContainer.innerHTML = html;
+              if (typeof initSidebar === 'function') initSidebar();
+            });
+        });
+      </script>
+      <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+          <div class="header-left">
+            <h1 
+              data-ar="لوحة التحكم"
+              data-en="Dashboard"
+              data-fr="Tableau de bord"
+              class="translatable"
+            >لوحة التحكم</h1>
+          </div>
+          <div class="header-right">
+            <div class="language-switcher">
+              <button class="lang-btn active" data-lang="ar">العربية</button>
+              <button class="lang-btn" data-lang="en">English</button>
+              <button class="lang-btn" data-lang="fr">Français</button>
+            </div>
+            <div class="user-info">
+              <div class="user-avatar">
+                <i class="fas fa-user"></i>
+              </div>
+              <div>
+                <div style="font-weight: 600" id="agencyName" class="translatable" 
+                  data-ar="اسم الوكالة" 
+                  data-en="Agency Name" 
+                  data-fr="Nom de l'agence"
+                >اسم الوكالة</div>
+                <div style="font-size: 0.9rem; color: var(--text-secondary)" id="agencyEmail" class="translatable"
+                 
+                  ><span id="agencyEmailValue">—</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- إحصائيات الوكالة -->
+        <div class="stats-grid" id="statsGrid">
+          <!-- سيتم تعبئتها عبر JS: إحصائيات خاصة بالوكالة فقط -->
+        </div>
+        <!-- المخططات -->
+        <div class="charts-section">
+          <div class="chart-card">
+            <div class="chart-title translatable"
+              data-ar="حجوزات وكالتك الشهرية"
+              data-en="Your Agency's Monthly Bookings"
+              data-fr="Réservations mensuelles de votre agence"
+            >حجوزات وكالتك الشهرية</div>
+            <canvas id="monthlyBookingsChart" height="180"></canvas>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title translatable"
+              data-ar="توزيع عروض وكالتك حسب الولاية"
+              data-en="Agency Offers Distribution by State"
+              data-fr="Répartition des offres de l'agence par wilaya"
+            >توزيع عروض وكالتك حسب الولاية</div>
+            <canvas id="agencyDistributionChart" height="180"></canvas>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title translatable"
+              data-ar="أكثر عروض وكالتك طلباً"
+              data-en="Top Requested Offers"
+              data-fr="Offres les plus demandées"
+            >أكثر عروض وكالتك طلباً</div>
+            <canvas id="topRequestedOffersChart" height="180"></canvas>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title translatable"
+              data-ar="زيارات صفحة وكالتك (آخر 12 شهر)"
+              data-en="Agency Page Visits (Last 12 Months)"
+              data-fr="Visites de la page agence (12 derniers mois)"
+            >زيارات صفحة وكالتك (آخر 12 شهر)</div>
+            <canvas id="siteVisitsMonthlyChart" height="180"></canvas>
+          </div>
+        </div>
+        <!-- تم حذف قسم الوكالات المعلقة من لوحة التحكم بناءً على طلبك -->
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/dashbord.js"></script>
+    <script>
+      // عند تحميل الصفحة، اجلب بيانات الوكالة من localStorage أو API وضعها في الهيدر
+      document.addEventListener('DOMContentLoaded', function() {
+        let agency = null;
+        try {
+          agency = JSON.parse(localStorage.getItem('agency_data'));
+        } catch(e) {}
+        if (agency && agency.name) {
+          document.getElementById('agencyName').textContent = agency.name;
+        }
+        var emailSpan = document.getElementById('agencyEmailValue');
+        if (agency && agency.name) {
+          if (emailSpan) emailSpan.textContent = agency.name;
+        } else {
+          if (emailSpan) emailSpan.textContent = 'لا يوجد بريد إلكتروني';
+        }
+
+        // دعم تفعيل زر اللغة النشط وتحديث النصوص عند تغيير اللغة
+        function updateActiveLangBtn(lang) {
+          document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+          });
+        }
+        if (window.languageSwitcher) {
+          const lang = window.languageSwitcher.getLang();
+          updateActiveLangBtn(lang);
+          window.addEventListener('storage', function(e) {
+            if (e.key === 'lang') {
+              updateActiveLangBtn(e.newValue || 'ar');
+            }
+          });
+          document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+              const lang = btn.getAttribute('data-lang');
+              setTimeout(() => updateActiveLangBtn(lang), 50);
+            });
+          });
+        }
+      });
+    </script>
+    
+  </body>
+</html>

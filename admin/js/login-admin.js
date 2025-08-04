@@ -14,7 +14,7 @@ loginForm.addEventListener('submit', async function (e) {
   const password = document.getElementById('password').value;
 
   try {
-    const response = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/admin/login-admin', {
+    const response = await fetch('https://almanassik-alarabi-server-v-01.onrender.com/api/admin/login-admin', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -23,9 +23,12 @@ loginForm.addEventListener('submit', async function (e) {
     });
     const data = await response.json();
     if (response.ok) {
-      // Save token for future authenticated requests
+      // Save tokens for future authenticated requests
       if (data.access_token) {
         localStorage.setItem('umrah_admin_token', data.access_token);
+      }
+      if (data.refresh_token) {
+        localStorage.setItem('admin_refresh_token', data.refresh_token);
       }
       successText.textContent = 'تم تسجيل الدخول بنجاح!';
       successMessage.style.display = 'block';

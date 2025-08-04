@@ -25,7 +25,7 @@ async function apiRequest(url, method = "GET", data = null) {
 // إضافة عرض جديد (يدعم رفع ملفات)
 async function addOffer(offerOrFormData) {
   return apiRequest(
-    "https://almanassik-alarabis-v0-4.onrender.com/api/offers/add",
+    "https://almanassik-alarabi-server-v-01.onrender.com/api/offers/add",
     "POST",
     offerOrFormData
   );
@@ -33,13 +33,13 @@ async function addOffer(offerOrFormData) {
 
 // جلب جميع العروض
 async function getAllOffers() {
-  return apiRequest("https://almanassik-alarabis-v0-4.onrender.com/api/offers/all");
+  return apiRequest("https://almanassik-alarabi-server-v-01.onrender.com/api/offers/all");
 }
 
 // تعديل عرض (يدعم رفع ملفات)
 async function updateOffer(id, updatedFieldsOrFormData) {
   return apiRequest(
-    `https://almanassik-alarabis-v0-4.onrender.com/api/offers/update/${id}`,
+    `https://almanassik-alarabi-server-v-01.onrender.com/api/offers/update/${id}`,
     "PUT",
     updatedFieldsOrFormData
   );
@@ -48,7 +48,7 @@ async function updateOffer(id, updatedFieldsOrFormData) {
 // حذف عرض مع إرسال التوكن
 async function deleteOffer(id) {
   const token = localStorage.getItem("umrah_admin_token");
-  const url = `https://almanassik-alarabis-v0-4.onrender.com/api/offers/delete/${id}`;
+  const url = `https://almanassik-alarabi-server-v-01.onrender.com/api/offers/delete/${id}`;
   const options = {
     method: "DELETE",
     headers: {
@@ -59,6 +59,7 @@ async function deleteOffer(id) {
   const response = await fetch(url, options);
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
+    alert(error.message || error.error || "فشل حذف العرض");
     throw new Error(error.message || "فشل حذف العرض");
   }
   return response.json();
@@ -231,7 +232,7 @@ async function loadAndRenderOffers() {
   try {
     const lang = localStorage.getItem("umrah_admin_lang") || "ar";
     const token = localStorage.getItem("umrah_admin_token");
-    let url = "https://almanassik-alarabis-v0-4.onrender.com/api/offers/all?lang=" + lang;
+    let url = "https://almanassik-alarabi-server-v-01.onrender.com/api/offers/all?lang=" + lang;
     const response = await fetch(url, {
       headers: {
         Authorization: token ? "Bearer " + token : "",
@@ -253,6 +254,7 @@ async function loadAndRenderOffers() {
     const offers = data.offers || [];
     allOffersCache = offers; // حفظ كل العروض في الكاش للبحث
     renderOffers(offers);
+    applyOffersLanguage(lang);
   } catch (err) {
     grid.innerHTML =
       '<div style="color:red;text-align:center;padding:40px;">' +
@@ -348,8 +350,15 @@ document.addEventListener("DOMContentLoaded", function () {
 function renderOffers(offers) {
   const grid = document.getElementById("offersGrid");
   if (!offers.length) {
+    // دعم تغيير اللغة في رسالة "لا توجد عروض حاليا"
+    const lang = localStorage.getItem("umrah_admin_lang") || "ar";
+    const noOffersMsg = {
+      ar: "لا توجد عروض حاليا",
+      en: "No offers available",
+      fr: "Aucune offre disponible"
+    };
     grid.innerHTML =
-      '<div style="text-align:center;color:#888;padding:40px;">لا توجد عروض حاليا</div>';
+      `<div style="text-align:center;color:#888;padding:40px;" data-ar="لا توجد عروض حاليا" data-en="No offers available" data-fr="Aucune offre disponible">${noOffersMsg[lang] || noOffersMsg.ar}</div>`;
     return;
   }
   grid.innerHTML = offers
@@ -370,9 +379,9 @@ function renderOffers(offers) {
             <div class="people-icons" style="display:flex;flex-direction:row;justify-content:center;align-items:center;width:100%;margin-bottom:2px;gap:0;">
               <span style='display:inline-flex;gap:2px;color:#176a3d;font-size:1.3em;'><i class="fa-solid fa-users"></i><i class="fa-solid fa-user-group"></i></span>
             </div>
-            <div class="price-val">${priceQuint} <span class="da">DA</span></div>
+            <div class="price-val">${priceQuint} <span class="da" data-ar="دج" data-en="DA" data-fr="DA">DA</span></div>
           </div>
-        ` : `<div class="price-circle no-price">لا يوجد</div>`;
+        ` : `<div class="price-circle no-price" data-ar="لا يوجد" data-en="No price" data-fr="Aucun prix">لا يوجد</div>`;
 
         // زر التبديل بين ذهبي وعادي
         let isGolden = offer.is_golden === true || offer.is_golden === 1;
@@ -383,14 +392,29 @@ function renderOffers(offers) {
         let goldenBtn = `<button class="btn ${goldenBtnClass} btn-sm" style="margin-left:7px;min-width:70px;" onclick="toggleGoldenOffer('${offer.id}', this)">${goldenBtnIcon} ${goldenBtnText}</button>`;
 
         return `
-      <div class="agency-card">
+            <div class="agency-card">
         <div class="agency-header" style="background-image:url('${mainImage}')"></div>
         <div class="agency-body">
-          <h3 class="agency-name">${offer.title || ""}</h3>
-          <div class="agency-extra">${offer.hotel_name ? `<b>الفندق:</b> ${offer.hotel_name}` : ""}</div>
-          <div class="agency-extra">${offer.description || ""}</div>
+          <h3 class="agency-name"
+            data-ar="${offer.title || ""}"
+            data-en="${offer.title_en || offer.title || ""}"
+            data-fr="${offer.title_fr || offer.title || ""}"
+          >${offer.title || ""}</h3>
           <div class="agency-extra">
-            <b>الخدمات:</b>
+            <b data-ar="الفندق" data-en="Hotel" data-fr="Hôtel">${offer.hotel_name ? "الفندق" : ""}</b>:
+            <span data-ar="${offer.hotel_name || ""}"
+                  data-en="${offer.hotel_name_en || offer.hotel_name || ""}"
+                  data-fr="${offer.hotel_name_fr || offer.hotel_name || ""}">
+              ${offer.hotel_name || ""}
+            </span>
+          </div>
+          <div class="agency-extra"
+            data-ar="${offer.description || ""}"
+            data-en="${offer.description_en || offer.description || ""}"
+            data-fr="${offer.description_fr || offer.description || ""}"
+          >${offer.description || ""}</div>
+          <div class="agency-extra">
+            <b data-ar="الخدمات" data-en="Services" data-fr="Services">الخدمات</b>:
             <span style="display:inline-flex;gap:8px;vertical-align:middle;font-size:1.7em;">
               ${getServiceIcons(offer.services)}
             </span>
@@ -399,13 +423,17 @@ function renderOffers(offers) {
             ${priceCircle}
           </div>
           <div class="agency-actions">
-            <button class="btn btn-info btn-sm" onclick="showOfferDetailsById('${offer.id}')"><i class="fas fa-eye"></i> تفاصيل</button>
+            <button class="btn btn-info btn-sm"
+              data-ar="تفاصيل" data-en="Details" data-fr="Détails"
+              onclick="showOfferDetailsById('${offer.id}')"><i class="fas fa-eye"></i> تفاصيل</button>
             ${goldenBtn}
-            <button class="btn btn-danger btn-sm" onclick="(function(){if(confirm('هل أنت متأكد أنك تريد حذف هذا العرض؟')){deleteOffer('${offer.id}').then(()=>{alert('تم حذف العرض بنجاح');loadAndRenderOffers();}).catch(()=>{alert('فشل حذف العرض');});}})();"><i class="fas fa-trash-alt"></i> حذف</button>
+            <button class="btn btn-danger btn-sm"
+              data-ar="حذف" data-en="Delete" data-fr="Supprimer"
+              onclick="(function(){if(confirm('هل أنت متأكد أنك تريد حذف هذا العرض؟')){deleteOffer('${offer.id}').then(()=>{alert('تم حذف العرض بنجاح');loadAndRenderOffers();}).catch(()=>{alert('فشل حذف العرض');});}})();"><i class="fas fa-trash-alt"></i> حذف</button>
           </div>
         </div>
-      </div>
-    `;
+            </div>
+          `;
       }
     )
     .join("");
@@ -421,7 +449,7 @@ async function toggleGoldenOffer(offerId, btn) {
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner" style="display:inline-block;width:16px;height:16px;border:2px solid #fff;border-top:2px solid #fbc02d;border-radius:50%;animation:spin 1s linear infinite;vertical-align:middle;margin-left:7px;"></span> ...';
   try {
-    const res = await fetch(`https://almanassik-alarabis-v0-4.onrender.com/api/offers/toggle-golden/${offerId}`, {
+    const res = await fetch(`https://almanassik-alarabi-server-v-01.onrender.com/api/offers/toggle-golden/${offerId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -525,7 +553,7 @@ async function showOfferDetailsById(offerId) {
     const token = localStorage.getItem("umrah_admin_token");
     // جلب العروض
     const offersRes = await fetch(
-      `https://almanassik-alarabis-v0-4.onrender.com/api/offers/all?lang=${lang}`,
+      `https://almanassik-alarabi-server-v-01.onrender.com/api/offers/all?lang=${lang}`,
       {
         headers: {
           Authorization: token ? "Bearer " + token : "",
@@ -541,7 +569,7 @@ async function showOfferDetailsById(offerId) {
     let agencyName = "";
     let agencyEmail = "";
     if (offer.agency_id) {
-      const agenciesRes = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/agencies/all', {
+      const agenciesRes = await fetch('https://almanassik-alarabi-server-v-01.onrender.com/api/admin/agencies/all', {
         headers: {
           Authorization: token ? "Bearer " + token : "",
           "Content-Type": "application/json",
@@ -781,7 +809,7 @@ async function populateAgenciesSelect() {
       select.innerHTML = '<option value="">يجب تسجيل الدخول أولاً</option>';
       return;
     }
-    const res = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/agencies/all', {
+    const res = await fetch('https://almanassik-alarabi-server-v-01.onrender.com/api/admin/agencies/all', {
       method: 'GET',
       headers: {
         'Authorization': 'Bearer ' + token,
@@ -817,7 +845,7 @@ async function populateAirlinesSelect() {
   select.innerHTML = '<option value="">جاري التحميل...</option>';
   try {
     const token = localStorage.getItem('umrah_admin_token');
-    const res = await fetch('https://almanassik-alarabis-v0-4.onrender.com/api/airlines/all', {
+    const res = await fetch('https://almanassik-alarabi-server-v-01.onrender.com/api/airlines/all', {
       method: 'GET',
       headers: {
         'Authorization': token ? 'Bearer ' + token : '',
@@ -935,7 +963,7 @@ if (addOfferForm) {
       }
 
       // إرسال البيانات كـ JSON
-      const response = await fetch("https://almanassik-alarabis-v0-4.onrender.com/api/offers/add", {
+      const response = await fetch("https://almanassik-alarabi-server-v-01.onrender.com/api/offers/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -1017,7 +1045,7 @@ if (exportBtn) {
   exportBtn.onclick = async function () {
     const lang = localStorage.getItem("umrah_admin_lang") || "ar";
     const token = localStorage.getItem("umrah_admin_token");
-    let url = "https://almanassik-alarabis-v0-4.onrender.com/api/offers/all?lang=" + lang;
+    let url = "https://almanassik-alarabi-server-v-01.onrender.com/api/offers/all?lang=" + lang;
     try {
       const response = await fetch(url, {
         headers: {

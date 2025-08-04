@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="منصة المناسك العربي - اتصل بنا">
+    <meta name="theme-color" content="#004d40">
+    <title>منصة المناسك العربي - اتصل بنا</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/home1.css">
+    <link rel="stylesheet" href="css/call.css">
+    <script src="components/lang.js"></script>
+    <script src="../user/lang/lang_home1.js"></script>
+    <script src="js/call.js"></script>
+</head>
+<body>
+    <div id="top-bar-placeholder"></div>
+    <script>
+      fetch('components/top-bar.html')
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById('top-bar-placeholder').innerHTML = html;
+        });
+    </script>
+    <div class="contact-container">
+      <h2 class="section-title"><span class="icon-animate"><i class="fas fa-headset"></i></span> <span id="contactTitle"></span></h2>
+      <div class="contact-grid" id="contactGrid"></div>
+    </div>
+    <div id="bottom-bar-placeholder"></div>
+    <script src="components/include-bars.js"></script>
+</body>
+</html>

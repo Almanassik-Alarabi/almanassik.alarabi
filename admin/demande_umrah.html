@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
-    <title>إدارة طلبات العمرة | منصة العمرة</title>
+    <title>إدارة طلبات العمرة | منصة المناسك العربي</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -12,6 +12,8 @@
       href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap"
       rel="stylesheet"
     />
+        <script src="js/adminTokenRefresher.js"></script>
+
     <link rel="stylesheet" href="css/demande_umrah.css" />
     <!-- Supabase JS CDN -->
 
@@ -81,23 +83,30 @@
             </select>
             <button id="openAddPilgrimModalBtn" class="btn btn-primary" style="padding: 10px 22px; font-size: 1.1rem; display:flex; align-items:center; gap:7px; margin-right:1.2rem;">
               <i class="fas fa-user-plus"></i>
-              <span>إضافة معتمر</span>
+              <span data-ar="إضافة معتمر" data-en="Add Pilgrim" data-fr="Ajouter un pèlerin">إضافة معتمر</span>
             </button>
           </div>
         </div>
 
         <!-- Display Orders -->
         <section class="orders-list-section">
-          <h2 style="margin-bottom: 1rem;">قائمة طلبات العمرة</h2>
+          <h2 
+            style="margin-bottom: 1rem;" 
+            data-ar="قائمة طلبات العمرة" 
+            data-en="Umrah Requests List" 
+            data-fr="Liste des demandes d'Omra"
+          >
+            قائمة طلبات العمرة
+          </h2>
           <table class="orders-table" id="ordersTable">
             <thead>
               <tr>
-                <th>اسم المعتمر</th>
-                <th>رقم الهاتف</th>
-                <th>اسم الوكالة</th>
-                <th>العرض</th>
-                <th>تاريخ الطلب</th>
-                <th>الإجراءات</th>
+                <th data-ar="اسم المعتمر" data-en="Pilgrim Name" data-fr="Nom du pèlerin">اسم المعتمر</th>
+                <th data-ar="رقم الهاتف" data-en="Phone Number" data-fr="Téléphone">رقم الهاتف</th>
+                <th data-ar="اسم الوكالة" data-en="Agency Name" data-fr="Nom de l'agence">اسم الوكالة</th>
+                <th data-ar="العرض" data-en="Offer" data-fr="Offre">العرض</th>
+                <th data-ar="تاريخ الطلب" data-en="Request Date" data-fr="Date de la demande">تاريخ الطلب</th>
+                <th data-ar="الإجراءات" data-en="Actions" data-fr="Actions">الإجراءات</th>
               </tr>
             </thead>
             <tbody>
@@ -113,47 +122,57 @@
             <h2 style="margin-bottom:1rem; text-align:center;">إضافة معتمر جديد</h2>
             <form id="addBookingForm">
               <div class="form-group">
-                <label for="fullName">اسم المعتمر</label>
-                <input type="text" id="fullName" name="fullName" required />
+                <label for="fullName" data-ar="اسم المعتمر" data-en="Pilgrim Name" data-fr="Nom du pèlerin">اسم المعتمر</label>
+                <input type="text" id="fullName" name="fullName" required 
+                  placeholder="اسم المعتمر"
+                  data-ar-placeholder="اسم المعتمر" data-en-placeholder="Pilgrim Name" data-fr-placeholder="Nom du pèlerin" />
               </div>
               <div class="form-group">
-                <label for="phone">رقم الهاتف</label>
-                <input type="tel" id="phone" name="phone" required />
+                <label for="phone" data-ar="رقم الهاتف" data-en="Phone Number" data-fr="Téléphone">رقم الهاتف</label>
+                <input type="tel" id="phone" name="phone" required 
+                  placeholder="رقم الهاتف"
+                  data-ar-placeholder="رقم الهاتف" data-en-placeholder="Phone Number" data-fr-placeholder="Téléphone" />
               </div>
 
               <div class="form-group">
-                <label for="passportImageFile">صورة الجواز</label>
-                <input type="file" id="passportImageFile" name="passportImageFile" accept="image/*" required />
+                <label for="passportImageFile" data-ar="صورة الجواز" data-en="Passport Image" data-fr="Image du passeport">صورة الجواز</label>
+                <input type="file" id="passportImageFile" name="passportImageFile" accept="image/*" required 
+                  data-ar-placeholder="اختر صورة الجواز" data-en-placeholder="Select passport image" data-fr-placeholder="Sélectionner l'image du passeport" />
                 <div id="passportImageUploadStatus" style="font-size:0.95em;color:#888;margin-top:4px;"></div>
               </div>
 
               <div class="form-group">
-                <label for="roomType">نوع الغرفة</label>
+                <label for="roomType" data-ar="نوع الغرفة" data-en="Room Type" data-fr="Type de chambre">نوع الغرفة</label>
                 <select id="roomType" name="roomType" required>
-                  <option value="">اختر النوع</option>
-                  <option value="مزدوجة">مزدوجة</option>
-                  <option value="ثلاثية">ثلاثية</option>
-                  <option value="رباعية">رباعية</option>
-                  <option value="خماسية">خماسية</option>
+                  <option value="" data-ar="اختر النوع" data-en="Select type" data-fr="Sélectionner le type">اختر النوع</option>
+                  <option value="مزدوجة" data-ar="مزدوجة" data-en="Double" data-fr="Double">مزدوجة</option>
+                  <option value="ثلاثية" data-ar="ثلاثية" data-en="Triple" data-fr="Triple">ثلاثية</option>
+                  <option value="رباعية" data-ar="رباعية" data-en="Quad" data-fr="Quadruple">رباعية</option>
+                  <option value="خماسية" data-ar="خماسية" data-en="Quint" data-fr="Quintuple">خماسية</option>
                 </select>
               </div>
               <div class="form-group">
-                <label for="agencySelect">الوكالة</label>
+                <label for="agencySelect" data-ar="الوكالة" data-en="Agency" data-fr="Agence">الوكالة</label>
                 <select id="agencySelect" name="agencySelect" required>
-                  <option value="">اختر الوكالة</option>
+                  <option value="" data-ar="اختر الوكالة" data-en="Select agency" data-fr="Sélectionner l'agence">اختر الوكالة</option>
                   <!-- JS fills options -->
                 </select>
               </div>
               <div class="form-group">
-                <label for="offerSelect">العرض</label>
+                <label for="offerSelect" data-ar="العرض" data-en="Offer" data-fr="Offre">العرض</label>
                 <select id="offerSelect" name="offerSelect" required disabled>
-                  <option value="">اختر العرض</option>
+                  <option value="" data-ar="اختر العرض" data-en="Select offer" data-fr="Sélectionner l'offre">اختر العرض</option>
                   <!-- JS fills offers when agency selected -->
                 </select>
               </div>
               <div style="display:flex; gap:1rem; align-items:center;">
-                <button type="submit" class="submit-btn" id="addPilgrimSubmitBtn">إضافة معتمر</button>
-                <button type="button" id="cancelAddPilgrimBtn" class="btn btn-danger" style="background:#c0392b; color:#fff; padding:10px 22px; border-radius:8px; border:none; font-size:1rem;">إلغاء</button>
+                <button type="submit" class="submit-btn" id="addPilgrimSubmitBtn">
+                  <i class="fas fa-user-plus"></i>
+                  <span data-ar="إضافة معتمر" data-en="Add Pilgrim" data-fr="Ajouter un pèlerin">إضافة معتمر</span>
+                </button>
+                <button type="button" id="cancelAddPilgrimBtn" class="btn btn-danger" style="background:#c0392b; color:#fff; padding:10px 22px; border-radius:8px; border:none; font-size:1rem;">
+                  <span data-ar="إلغاء" data-en="Cancel" data-fr="Annuler">إلغاء</span>
+                </button>
               </div>
               <div id="bookingFormMessage" style="margin-top:1rem;"></div>
               <div id="bookingFormLoader" style="margin-top:1rem; display:none; text-align:center;">

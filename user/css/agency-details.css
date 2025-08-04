@@ -1,0 +1,499 @@
+
+/* إطار العرض الجديد */
+
+.card_box {
+  width: 100%;
+  max-width: 340px;
+  min-width: 0;
+  min-height: 170px;
+      max-height: 10px;
+
+  border-radius: 20px;
+  background: linear-gradient(160deg, #ffffff 0%, #ffffff 80%, #ffffff 100%);
+  position: relative;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.55);
+  cursor: pointer;
+  transition: all .3s;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.card_box__header-row {
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 24px 18px 0 18px; /* زيادة المسافة العلوية */
+  border-bottom: 1px solid #e0e0e0;
+  background: transparent;
+  min-height: 70px; /* زيادة الارتفاع الأدنى */
+  position: relative;
+  z-index: 2;
+}
+
+
+
+
+
+.card_box__body {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin: 0;
+  color: #333;
+}
+
+/* تاريخ العرض في منتصف البطاقة */
+/* date-box في منتصف البطاقة فقط */
+.card_box .date-box {
+  position: absolute;
+  top: 15px;
+right: -50px;
+  transform: translate(-50%, -50%);
+  align-items: center;
+    display: flex;
+
+}
+
+/* المسافة بين الحرم والفندق أسفل البطاقة يسار */
+.card_box .distance {
+  position: absolute;
+  top: 60px;
+  right: 18px;
+  margin: 0;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 1.1rem;
+  color: #fbc02d;
+  font-weight: bold;
+  z-index: 3;
+}
+
+/* زر التفاصيل أسفل البطاقة في المنتصف */
+
+
+.card_box .details-btn-row {
+  position: absolute;
+  top: 60px;
+  left: 45px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  margin: 0;
+  z-index: 3;
+}
+
+
+
+
+
+.card_box:hover {
+  transform: scale(0.97);
+}
+
+.card_box .charite {
+  position: absolute;
+  overflow: hidden;
+  width: 150px;
+  height: 150px;
+  top: -10px;
+  left: -10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+/* إظهار سعر العرض داخل شريط Premium */
+.card_box .charite::before {
+  content: attr(data-price);
+  position: absolute;
+  width: 150%;
+  height: 40px;
+  background-image: linear-gradient(45deg, #ff6547 0%, #ffb144  51%, #ff7053  100%);
+  transform: rotate(-45deg) translateY(-20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.23);
+  font-size: 1.4em;
+}
+
+.card_box .charite::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  bottom: 0;
+  left: 0;
+  height: 10px;
+  z-index: -1;
+  box-shadow: 140px -140px #cc3f47;
+  background-image: linear-gradient(45deg, #FF512F 0%, #F09819  51%, #FF512F  100%);
+}
+
+.card_box .price-ribbon {
+  position: absolute;
+  top: 18px;
+  right: -32px;
+  left: unset;
+  z-index: 3;
+  background-color: #e64a19;
+  color: #fff;
+  padding: 5px 30px;
+  transform: rotate(-45deg);
+  font-weight: bold;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  width: 120px;
+  text-align: center;
+}
+
+.card_box .header-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 18px 10px 18px;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 0;
+}
+
+
+
+
+
+.card_box .omra-label {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #fbc02d;
+  margin-left: 4px;
+}
+
+.card_box .date-value {
+  font-size: 0.95rem;
+  color: #000000;
+  font-weight: 500;
+}
+
+/* شعار الوكالة أعلى البطاقة يمين فوق الخط مع رفعه قليلاً */
+.card_box .agency-logo {
+  position: absolute;
+  top: 8px;
+  right: 18px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  z-index: 4;
+}
+
+.card_box .agency-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.card_box .map-row {
+  margin-bottom: 12px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.card_box .details-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(247, 172, 11);
+  color: white;
+  border: none;
+  padding: 0px 10px 0px 10px ;
+  border-radius: 7px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,77,64,0.08);
+    top: 1px;
+      min-width: 70px;
+    min-height: 30px;
+}
+.card_box .details-btn:hover {
+  background-color: #00695c;
+  transform: translateY(-2px);
+}
+
+
+/* تاج ذهبي للعروض الذهبية - في منتصف أعلى البطاقة */
+.details-btn-crown {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7em;
+  color: #ffd700; /* لون ذهبي */
+  text-shadow: 0 2px 6px #bfa10088, 0 0px 1px #fffbe6;
+  background: rgba(255,255,255,0.0);
+  border-radius: 50%;
+  padding: 2px 0;
+  /* يمكن استخدام أيقونة FontAwesome أو SVG */
+}
+
+/* مثال إذا كنت تستخدم FontAwesome */
+.details-btn-crown .fa-crown {
+  color: #ffd700;
+  font-size: 1.3em;
+  margin: 0;
+  filter: drop-shadow(0 1px 2px #bfa10055);
+}
+
+
+.offers-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 10px;
+    padding: 0 8px 30px 8px;
+}
+
+
+/* زر GPS أسفل البطاقة يمين */
+.card_box .gps-btn-row {
+  position: absolute;
+  top: 15px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  z-index: 4;
+  padding: 0;
+  transition: background 0.2s;
+  padding: 0px 0px 0px 0px;
+}
+
+.card_box .gps-btn-row .location-btn {
+  color: #ffc609;
+  border: none;
+  border-radius: 50%;
+  width: 0;
+  height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #fbc02d44;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  margin: 0px 0px 0px 10px;
+}
+
+.card_box .gps-btn-row .location-btn:hover {
+  background: #d4af37;
+  color: #5f4f00;
+  transform: scale(1.08);
+}
+.location-name{
+  font-size: 0.9rem;
+  color: #000000;
+  font-weight: 500;
+  margin: 18px 6px 10px 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+    .offers-container {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        max-width: 100vw;
+           padding: 0 8px 600px 8px;
+
+    }
+}
+@media (max-width: 1900px) {
+    .offers-container {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        max-width: 100vw;
+           padding: 0 8px 60px 8px;
+
+    }
+}
+@media (max-width: 600px) {
+    .offers-container {
+        grid-template-columns: 1fr;
+           padding: 0 8px 600px 8px;
+
+    }
+    .card_box {
+        width: 100%;
+        max-width: 99vw;
+        min-width: 0;
+        box-sizing: border-box;
+            max-height: 10px;
+
+    }
+}
+@media (max-width: 480px) {
+    .card_box {
+        width: 100%;
+        max-width: 97vw;
+        min-width: 0;
+        box-sizing: border-box;
+            max-height: 10px;
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+   body, * {
+       font-family: 'Cairo','Tajawal', Arial, sans-serif ;
+    font-weight: 900 !important; /* أقصى سماكة */
+}
+   .agency-details-header {
+      position: relative;
+      width: 100%;
+      height: 220px;
+      background: #f5f5f5;
+      overflow: hidden;
+      border-radius: 0 0 24px 24px;
+      margin-bottom: 30px;
+      top:64px;
+    }
+    .agency-bg-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.7);
+      position: absolute;
+      top: 0; left: 0;
+    }
+    .agency-logo-main {
+        position: absolute;
+        bottom: 0;
+        left: 24px;
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        border: 4px solid #fff;
+        background: #fff;
+        object-fit: contain;
+        z-index: 99;
+        box-shadow: 0 2px 12px #0002;
+    }   
+    .agency-info-card {
+      background: #fff;
+      margin: 60px auto 20px auto;
+      padding: 24px 18px 18px 18px;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px #0001;
+      width: 95%;
+      text-align: center;
+    }
+    .agency-info-card h2 {
+      margin: 0 0 10px 0;
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+/* عرض المعلومات في عمود واحد افتراضياً */
+.agency-info-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px 0;
+  text-align: right;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+.agency-info-list li {
+  margin-bottom: 8px;
+  font-size: 1.1em;
+  color: #444;
+}
+@media (min-width: 700px) {
+  .agency-info-list {
+    grid-template-columns: 1fr 1fr;
+    gap: 0 24px;
+  }
+  .agency-info-list li {
+    margin-bottom: 10px;
+  }
+}
+    .agency-offers-section {
+      margin: 30px auto 0 auto;
+      max-width: 900px;
+    }
+    .offers-title {
+      font-size: 1.3em;
+      font-weight: bold;
+      margin-bottom: 16px;
+      color: #1de9b6;
+      text-align: right;
+    }
+    .offers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      margin-bottom: 100px;
+    }
+    .offer-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px #0001;
+      padding: 16px;
+      text-align: right;
+      border: 1px solid #eee;
+    }
+    .offer-card h4 {
+      margin: 0 0 8px 0;
+      color: #333;
+      font-size: 1.1em;
+    }
+    .offer-card .offer-price {
+      color: #1de9b6;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+    .offer-card .offer-details-btn {
+      display: inline-block;
+      margin-top: 8px;
+      background: #1de9b6;
+      color: #fff;
+      padding: 6px 18px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 1em;
+      transition: background 0.2s;
+    }
+    .offer-card .offer-details-btn:hover {
+      background: #13bfa6;
+    }

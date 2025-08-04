@@ -1,0 +1,236 @@
+:root {
+  --primary: #176a3d;
+  --primary-light: #e6f4ea;
+  --text-primary: #333;
+  --text-secondary: #666;
+  --border-color: #ddd;
+  --bg-color: #f9f9f9;
+  --white: #fff;
+  --admin-bubble: #f0f0f0;
+  --agency-bubble: #e1f0e8;
+  --error-color: #e74c3c;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Cairo', sans-serif;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  direction: rtl;
+}
+
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.chat-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 20px;
+  background-color: var(--white);
+}
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 28px;
+  background: var(--primary-light);
+  border-radius: 12px 12px 0 0;
+  min-height: 70px;
+}
+
+.header-left h1 {
+  font-size: 2rem;
+  color: var(--primary);
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-align: center;
+  width: 100%;
+  margin: 0;
+  line-height: 1.2;
+}
+
+@media (max-width: 600px) {
+  .header {
+    padding-bottom: 16px;
+    margin-bottom: 18px;
+    min-height: 56px;
+  }
+  .header-left h1 {
+    font-size: 1.2rem;
+    padding: 0 8px;
+  }
+}
+
+.messages-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.message-item {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+}
+
+.message-item.admin {
+  align-items: flex-start;
+}
+
+.message-item.agency {
+  align-items: flex-end;
+}
+
+.message-bubble {
+  padding: 12px 16px;
+  border-radius: 18px;
+  margin-bottom: 5px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.message-item.admin .message-bubble {
+  background-color: var(--admin-bubble);
+  border-top-right-radius: 0;
+}
+
+.message-item.agency .message-bubble {
+  background-color: var(--agency-bubble);
+  color: var(--text-primary);
+  border-top-left-radius: 0;
+}
+
+.message-meta {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.chat-input-row {
+  display: flex;
+  padding: 10px 0;
+  border-top: 1px solid var(--border-color);
+}
+
+.chat-input-row input[type="text"] {
+  padding: 12px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.3s;
+}
+
+.chat-input-row input[type="text"]:focus {
+  border-color: var(--primary);
+}
+
+.chat-input-row button {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+
+.chat-input-row button:hover {
+  background-color: #135732;
+}
+
+#chatErrorDiv {
+  color: var(--error-color);
+  text-align: center;
+  margin: 10px 0;
+  font-size: 0.9rem;
+}
+
+/* Style pour la modal d'image */
+#imageModalPopup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  display: none;
+}
+
+#imageModalOverlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .header-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .message-item {
+    max-width: 90%;
+  }
+  
+  .chat-input-row {
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .chat-input-row button {
+    padding: 12px 15px;
+  }
+}
+
+/* Animation pour les nouveaux messages */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.message-item {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Scrollbar personnalisée */
+.messages-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.messages-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.messages-list::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.messages-list::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
