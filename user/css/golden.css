@@ -110,28 +110,22 @@ body, * {
 /* إطار العرض الجديد */
 
 .card_box {
-   width: 100%;
+  width: 100%;
   max-width: 340px;
   min-width: 0;
-  min-height: 170px;
-      max-height: 10px;
-
+  min-height: 180px;
   border-radius: 20px;
-
-  border: 2px solid #bfa13a;
   background: linear-gradient(160deg, #fffbe6 0%, #fbc02d 80%, #bfa13a 100%);
-    opacity: 0;
     animation: fadeInUp 0.6s ease-out forwards;
 
       position: relative;
-  cursor: pointer;
+
+    cursor: pointer;
   transition: all .3s;
   padding: 0;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  box-sizing: border-box;
-  overflow: hidden;
 }
 
 .card_box__header-row {
@@ -174,7 +168,7 @@ right: -50px;
 /* المسافة بين الحرم والفندق أسفل البطاقة يسار */
 .card_box .distance {
   position: absolute;
-  top: 60px;
+  top: 73px;
   right: 18px;
   margin: 0;
   text-align: left;
@@ -190,14 +184,14 @@ right: -50px;
 /* زر التفاصيل أسفل البطاقة في المنتصف */
 .card_box .details-btn-row {
   position: absolute;
-  top: 60px;
+  top: 71px;
   left: 45px;
   transform: translateX(-50%);
   display: flex;
   align-items: flex-end;
   gap: 8px;
   margin: 0;
-  z-index: 3;
+  z-index: 9999; /* اجعل الزر فوق كل العناصر الأخرى */
 }
 
 .card_box .map-row span {
@@ -513,8 +507,7 @@ right: -50px;
   font-size: 0.9rem;
   color: #000000;
   font-weight: 500;
-  margin: 18px 6px 10px 10px;  
-}
+  margin: 5px 5px 5px 5px;}
 
 
 .golden-page-bg {
