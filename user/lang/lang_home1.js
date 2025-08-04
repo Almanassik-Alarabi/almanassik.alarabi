@@ -1,6 +1,6 @@
 window.home1Texts = {
   ar: {
-    landingTitle: "صفحة الهبوط | منصة المناسك العربي",
+    landingTitle: "منصة المناسك العربي",
     goldBtnText: "العروض الذهبية",
     tripsBtnText: "تصفح الرحلات",
     storyTitle: "قصتنا | من ضياع المعلومة إلى ضغطة زر",
@@ -66,7 +66,7 @@ window.home1Texts = {
   fr: {
     goldBtnText: "Offres Dorées",
     tripsBtnText: "Voir les Voyages",
-    landingTitle: "Page d'accueil | Plateforme Manassik Arabi",
+    landingTitle: "Plateforme Manassik Arabi",
     storyTitle: "Notre histoire | De la confusion à un simple clic",
     storyContent: `Un vrai vide pesait sur le cœur du pèlerin au milieu de la multitude d'offres dispersées, d'informations trompeuses et de fausses annonces, ce qui a nui à la crédibilité de nombreuses agences de voyage. C'est ainsi qu'est née la Plateforme Manassik Arabi, pour être le pont intelligent et sûr entre le pèlerin et l'agence, ouvrant ainsi la voie à la numérisation et à la modernisation du secteur de la Omra en Algérie. La plateforme n'était pas qu'une idée, mais une réponse à un besoin urgent, fondée par une équipe d'experts en gestion et de développeurs passionnés par la Omra et le Hajj.\n...Nous ne vendons pas de Omra, nous vous offrons une expérience spirituelle complète, qui commence sur l'écran de votre téléphone et se termine à côté de la Kaaba, sans stress, sans peur, et sans avoir à vous déplacer d'une agence à une autre.\nNotre histoire est celle de la confiance et de la simplicité, où chaque personne souhaitant accomplir la Omra peut commencer son voyage spirituel d'un simple clic.`,
     featuresTitle: "Pourquoi choisir la Plateforme Manassik Arabi ?",
