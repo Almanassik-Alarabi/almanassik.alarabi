@@ -401,6 +401,7 @@ async function getOrdersData() {
 
 async function renderOrdersTable() {
   var orders = await getOrdersData();
+  window.orders = orders;
   // فلترة حسب الحالة
   var status = document.getElementById('statusFilter').value;
   var search = document.getElementById('searchRequests').value.trim().toLowerCase();
@@ -586,6 +587,39 @@ function addOrderActions() {
         created_at: tds[4]?.textContent || '',
         passport_image_url: passportImageUrl
       };
+      // استخراج نوع الرحلة من بيانات الطلب
+      let roomType = '';
+      // إذا كان لديك نافذة orders في الجافاسكريبت، جلب الطلب منها
+      if (window.orders && Array.isArray(window.orders)) {
+        const orderObj = window.orders.find(o => o.id == bookingId);
+        if (orderObj && orderObj.room_type) roomType = orderObj.room_type;
+      }
+      // إذا لم يكن موجوداً، يمكن محاولة جلبه من tr.dataset.roomType إذا أضفته سابقاً
+      if (!roomType && tr.dataset.roomType) {
+        roomType = tr.dataset.roomType;
+      }
+      // ترجمة نوع الرحلة
+      let roomTypeText = '';
+      switch (roomType) {
+        case 'ثنائي':
+        case 'double':
+          roomTypeText = 'ثنائي';
+          break;
+        case 'ثلاثي':
+        case 'triple':
+          roomTypeText = 'ثلاثي';
+          break;
+        case 'رباعي':
+        case 'quad':
+          roomTypeText = 'رباعي';
+          break;
+        case 'خماسي':
+        case 'quint':
+          roomTypeText = 'خماسي';
+          break;
+        default:
+          roomTypeText = roomType || 'غير محدد';
+      }
       // بناء محتوى التفاصيل
       const html = `
         <div style="display:flex;flex-direction:row;gap:24px;direction:rtl;text-align:right;padding:18px 10px 10px 10px;min-width:420px;max-width:700px;align-items:flex-start;">
@@ -596,6 +630,7 @@ function addOrderActions() {
             <div><b>الوكالة:</b> ${details.agency_name}</div>
             <div><b>العرض:</b> ${details.offer_title}</div>
             <div><b>تاريخ الطلب:</b> ${details.created_at}</div>
+            <div><b>نوع الرحلة:</b> ${roomTypeText}</div>
           </div>
           ${details.passport_image_url ? `<div style='flex:1;min-width:220px;max-width:340px;'><b>صورة الجواز:</b><br><img src='${details.passport_image_url}' alt='صورة الجواز' style='width:100%;max-width:320px;max-height:420px;object-fit:contain;border:2px solid #176a3d;border-radius:10px;box-shadow:0 2px 8px #0002;margin-top:6px;'></div>` : ''}
         </div>
