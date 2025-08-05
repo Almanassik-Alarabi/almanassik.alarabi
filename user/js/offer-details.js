@@ -33,13 +33,13 @@ async function fetchOfferDetails() {
                 </div>
             </div>
             <div class="main-content">
-                <div class="offer-image">
-                    <img src="${offer.main_image}" alt="${t.mainImageAlt || 'صورة العرض الرئيسية'}">
+                <div class="offer-image" id="offer-image-container">
+                    <img src="${offer.main_image}" alt="${t.mainImageAlt || 'صورة العرض الرئيسية'}" id="offer-main-image" style="cursor:zoom-in;">
                 </div>
                 <div class="offer-details">
-                    <div class="detail-item"><span class="detail-label">🛫 ${t.flightType || 'نوع الرحلة'}</span><span class="detail-value">${offer.flight_type}</span></div>
-                    <div class="detail-item"><span class="detail-label">📅 ${t.departureDate || 'تاريخ المغادرة'}</span><span class="detail-value">${offer.departure_date}</span></div>
+                    <div class="detail-item"><span class="detail-label">📅 ${t.departureDate || 'تاريخ الرحلة'}</span><span class="detail-value">${offer.departure_date}</span></div>
                     <div class="detail-item"><span class="detail-label">🏠 ${t.returnDate || 'تاريخ العودة'}</span><span class="detail-value">${offer.return_date}</span></div>
+                                        <div class="detail-item"><span class="detail-label">🛫 ${t.flightType || 'نوع الرحلة'}</span><span class="detail-value">${offer.flight_type}</span></div>
                     <div class="detail-item"><span class="detail-label">⏰ ${t.duration || 'مدة الرحلة'}</span><span class="detail-value">${offer.duration_days} ${t.days || 'يوم'}</span></div>
                     <div class="detail-item"><span class="detail-label">📍 ${t.entry || 'نقطة الدخول'}</span><span class="detail-value">${offer.entry}</span></div>
                     <div class="detail-item"><span class="detail-label">📍 ${t.exit || 'نقطة الخروج'}</span><span class="detail-value">${offer.exit}</span></div>
@@ -101,7 +101,7 @@ async function fetchOfferDetails() {
             </div>
             <div id="booking-form-box" style="display:none;margin-top:20px;text-align:center;">
                 <form id="booking-form" style="max-width:400px;margin:auto;background:#fff;padding:20px;border-radius:12px;box-shadow:0 2px 8px #ccc;">
-                    <h3 style="margin-bottom:15px;color:#2d5a2d;">${t.bookingFormTitle || 'استمارة الحجز'}</h3>
+                    <h3 style="margin-bottom:15px;color:#2d5a2d;">${t.bookingFormTitle || 'استمارة طلب الحجز'}</h3>
                     <input type="text" name="full_name" placeholder="${t.fullName || 'الاسم الكامل'}" required style="width:100%;margin-bottom:10px;padding:8px;border-radius:6px;border:1px solid #ccc;">
                     <input type="text" name="phone" placeholder="${t.phone || 'رقم الهاتف'}" required style="width:100%;margin-bottom:10px;padding:8px;border-radius:6px;border:1px solid #ccc;">
 
@@ -109,7 +109,7 @@ async function fetchOfferDetails() {
                     <p>${t.passportImage || 'صورة جواز السفر'} :</p>
                         <input type="file" id="passport-image-input" accept="image/*" placeholder="${t.passportImage || 'صورة جواز السفر'}" required style="width:100%;margin-bottom:10px;">
                     </div>
-                    <button type="submit" class="cta-button" style="width:100%;margin-top:10px;">${t.confirmBooking || 'تأكيد الحجز'}</button>
+                    <button type="submit" class="cta-button" style="width:100%;margin-top:10px;">${t.confirmBooking || 'تأكيد طلب الحجز'}</button>
                     <div id="form-total-price" style="margin-top:10px;font-size:1.2em;color:#2d5a2d;"></div>
                 </form>
                 <div id="booking-result" style="margin-top:15px;"></div>
@@ -119,6 +119,41 @@ async function fetchOfferDetails() {
                 <p style="font-size: 0.9em; margin-top: 10px;">${t.ayahRef || 'سورة الحج - آية 27'}</p>
             </div>
         `; // إغلاق القالب النصي هنا بشكل صحيح
+        // إضافة منطق تكبير الصورة بعد تحميل التفاصيل
+        setTimeout(() => {
+            const img = document.getElementById('offer-main-image');
+            if (!img) return;
+            let zoomed = false;
+            img.addEventListener('click', function() {
+                if (!zoomed) {
+                    img.style.position = 'fixed';
+                    img.style.top = '50%';
+                    img.style.left = '50%';
+                    img.style.transform = 'translate(-50%, -50%) scale(1.2)';
+                    img.style.zIndex = '9999';
+                    img.style.boxShadow = '0 0 40px #0008';
+                    img.style.maxWidth = '90vw';
+                    img.style.maxHeight = '90vh';
+                    img.style.cursor = 'zoom-out';
+                    img.style.background = '#fff';
+                    document.body.style.overflow = 'hidden';
+                    zoomed = true;
+                } else {
+                    img.style.position = '';
+                    img.style.top = '';
+                    img.style.left = '';
+                    img.style.transform = '';
+                    img.style.zIndex = '';
+                    img.style.boxShadow = '';
+                    img.style.maxWidth = '';
+                    img.style.maxHeight = '';
+                    img.style.cursor = 'zoom-in';
+                    img.style.background = '';
+                    document.body.style.overflow = '';
+                    zoomed = false;
+                }
+            });
+        }, 100);
         } catch (e) {
             document.getElementById('dynamic-offer-details').innerHTML = '<div style="color:red">حدث خطأ أثناء جلب التفاصيل: ' + e.message + '</div>';
             console.error('Fetch offer details error:', e);
@@ -148,7 +183,7 @@ function setupOfferInteractions() {
         });
     });
 
-    // زر التخفيض
+    // زر هدية المناسك
     const discountBtn = document.getElementById('discount-btn');
     const discountMsg = document.getElementById('discount-msg');
     discountBtn.addEventListener('click', function() {
@@ -161,14 +196,14 @@ function setupOfferInteractions() {
             finalPrice = selectedPrice - 10000;
             const discountValue = 10000;
             totalPriceBox.innerHTML = `<span style=\"color:#888;text-decoration:line-through;font-size:0.95em;\">${selectedPrice} د.ج</span> <span style=\"color:#2d5a2d;font-weight:bold;\">${finalPrice} د.ج</span> <span style=\"color:#bfa100;font-size:0.95em;\">(${discountValue * 1}- د.ج)</span>`;
-            discountMsg.textContent = '🎁 لقد استفدت من عرض التخفيض!';
+            discountMsg.textContent = '🎁 لقد استفدت من  هدية المناسك!';
             discountBtn.classList.add('selected-discount');
         } else {
-            discountMsg.textContent = 'تم تطبيق التخفيض مسبقاً.';
+            discountMsg.textContent = 'تم تطبيق هدية المناسك مسبقاً.';
             discountBtn.classList.add('selected-discount');
         }
     });
-    // إذا كان التخفيض مطبق بالفعل (مثلاً عند إعادة تحميل الصفحة)
+    // إذا كان هدية المناسك مطبق بالفعل (مثلاً عند إعادة تحميل الصفحة)
     if (discountApplied) {
         discountBtn.classList.add('selected-discount');
     }
@@ -230,7 +265,7 @@ function setupOfferInteractions() {
                 message += '<span style="font-size:2em;">🎉🎁</span><br>';
                 message += '✅ تم إرسال الحجز بنجاح! سيتم الاتصال بك قريباً.';
                 if (discountApplied) {
-                    message += '<br><span style="color:#d4af37;font-size:1.1em;">🎁 لقد استفدت من عرض التخفيض!</span>';
+                    message += '<br><span style="color:#d4af37;font-size:1.1em;">🎁 لقد استفدت من هدية المناسك!</span>';
                 }
                 message += '</div>';
                 bookingResult.innerHTML = message;
@@ -265,7 +300,7 @@ function setupOfferInteractions() {
 // استدعاء الدالة عند تحميل الصفحة
 fetchOfferDetails();
 
-// إضافة CSS ديناميكي لتأثير الزر عند تطبيق التخفيض وتحديد نوع الغرفة
+// إضافة CSS ديناميكي لتأثير الزر عند تطبيق هدية المناسك وتحديد نوع الغرفة
 function injectDynamicStyles() {
     if (document.getElementById('dynamic-offer-style')) return;
     const style = document.createElement('style');
@@ -322,7 +357,7 @@ window.offerDetailsTexts = {
     pageTitle: "تفاصيل العرض",
     pageSubtitle: "رحلة روحانية إلى بيت الله الحرام",
     flightType: "نوع الرحلة",
-    departureDate: "تاريخ المغادرة",
+    departureDate: "تاريخ الرحلة",
     returnDate: "تاريخ العودة",
     duration: "مدة الرحلة",
     days: "يوم",
@@ -337,11 +372,11 @@ window.offerDetailsTexts = {
     quintRoom: "خماسي",
     discountBtn: " هدية المناسك بقيمة 10000 د.ج",
     bookNow: "طلب الحجز",
-    bookingFormTitle: "استمارة الحجز",
+    bookingFormTitle: "استمارة طلب الحجز",
     passportImage:"قم بتحميل صورة جواز السفر",
     fullName: "الاسم الكامل",
     phone: "رقم الهاتف",
-    confirmBooking: "تأكيد الحجز",
+    confirmBooking: "تأكيد طلب الحجز",
     pricingTitle: "أسعار الرحلة",
     servicesTitle: "الخدمات المشمولة في العرض",
     hotelTitle: "الإقامة الفندقية",
