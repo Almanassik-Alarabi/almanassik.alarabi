@@ -1,3 +1,4 @@
+
 // manage_offers.js
 
 // Helper function to handle API requests (supports FormData for file uploads)
@@ -177,11 +178,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // --- أيقونات الخدمات المتاحة ---
   const SERVICE_ICONS = [
-    { key: "visa",    label: "تأشيرة", icon: "🛂" },
-    { key: "meals",   label: "الإطعام", icon: "🍽️" },
+    { key: "visa",    label: "التأشيرة", icon: "🛂" },
+    { key: "guide",   label: "الإرشاد", icon: "🧑‍�" },
+    { key: "meals",   label: "الإطعام", icon: "�️" },
     { key: "transport", label: "النقل", icon: "🚌" },
-    { key: "guide",   label: "الإرشاد", icon: "🧑‍🏫" },
-    { key: "flight",  label: "طيران", icon: "✈️" },
   ];
 
   // --- إدراج أيقونات الخدمات في نموذج إضافة عرض ---
@@ -265,11 +265,10 @@ async function loadAndRenderOffers() {
 
 // --- أيقونات الخدمات المتاحة ---
 const SERVICE_ICONS = [
-  { key: "visa",    label: "تأشيرة", icon: "🛂" },
-  { key: "meals",   label: "الإطعام", icon: "🍽️" },
+  { key: "visa",    label: "التأشيرة", icon: "🛂" },
+  { key: "guide",   label: "الإرشاد", icon: "🧑‍�" },
+  { key: "meals",   label: "الإطعام", icon: "�️" },
   { key: "transport", label: "النقل", icon: "🚌" },
-  { key: "guide",   label: "الإرشاد", icon: "🧑‍🏫" },
-  { key: "flight",  label: "طيران", icon: "✈️" },
 ];
 
 // --- إدراج أيقونات الخدمات في نموذج إضافة عرض (تفاعلية وجميلة) ---
@@ -773,24 +772,21 @@ function getServiceIcons(services) {
     }
   }
   const icons = {
-    visa:    '<span title="تأشيرة" style="margin-left:4px;font-size:1.2em;">🛂</span>',
-    meals:   '<span title="الإطعام" style="margin-left:4px;font-size:1.2em;">🍽️</span>',
+    visa:    '<span title="التأشيرة" style="margin-left:4px;font-size:1.2em;">🛂</span>',
+    guide:   '<span title="الإرشاد" style="margin-left:4px;font-size:1.2em;">🧑‍�</span>',
+    meals:   '<span title="الإطعام" style="margin-left:4px;font-size:1.2em;">�️</span>',
     transport: '<span title="النقل" style="margin-left:4px;font-size:1.2em;">🚌</span>',
-    guide:   '<span title="الإرشاد" style="margin-left:4px;font-size:1.2em;">🧑‍🏫</span>',
-    flight:  '<span title="طيران" style="margin-left:4px;font-size:1.2em;">✈️</span>',
   };
   const keyMap = {
     visa: "visa",
     تأشيرة: "visa",
+    guide: "guide",
+    ارشاد: "guide",
     meals: "meals",
     اطعام: "meals",
     فطور: "meals",
     transport: "transport",
     نقل: "transport",
-    guide: "guide",
-    ارشاد: "guide",
-    طيران: "flight",
-    flight: "flight",
   };
   return Object.keys(services)
     .filter((k) => services[k])
