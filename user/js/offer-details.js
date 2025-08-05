@@ -49,13 +49,12 @@ async function fetchOfferDetails() {
             </div>
             <div class="decorative-pattern"></div>
             <div class="services-section">
-                <h2 class="services-title">${t.servicesTitle || 'الخدمات المشمولة في العرض'}</h2>
+                <h2 class="services-title">الخدمات</h2>
                 <div class="services-grid">
-                    ${offer.services.visa ? `<div class="service-card"><div class="service-icon">📋</div><h3>${t.serviceVisa || 'استخراج الفيزا'}</h3></div>` : ''}
-                    ${offer.services.guide ? `<div class="service-card"><div class="service-icon">🧭</div><h3>${t.serviceGuide || 'مرشد ديني'}</h3></div>` : ''}
-                    ${offer.services.meals ? `<div class="service-card"><div class="service-icon">🍽️</div><h3>${t.serviceMeals || 'الوجبات'}</h3></div>` : ''}
-                    ${offer.services.flight ? `<div class="service-card"><div class="service-icon">✈️</div><h3>${t.serviceFlight || 'الطيران'}</h3></div>` : ''}
-                    ${offer.services.transport ? `<div class="service-card"><div class="service-icon">🚌</div><h3>${t.serviceTransport || 'النقل'}</h3></div>` : ''}
+                    <div class="service-card"><div class="service-icon"><i class="fa-solid fa-passport" style="color:#176a3d;font-size:2em;"></i></div><h3 style="color:#176a3d">التأشيرة</h3></div>
+                    <div class="service-card"><div class="service-icon"><i class="fa-solid fa-user-tie" style="color:#34495e;font-size:2em;"></i></div><h3 style="color:#34495e">الإرشاد</h3></div>
+                    <div class="service-card"><div class="service-icon"><i class="fa-solid fa-utensils" style="color:#f7ca18;font-size:2em;"></i></div><h3 style="color:#f7ca18">الإطعام</h3></div>
+                    <div class="service-card"><div class="service-icon"><i class="fa-solid fa-bus" style="color:#1e824c;font-size:2em;"></i></div><h3 style="color:#1e824c">النقل</h3></div>
                 </div>
             </div>
             <div class="hotel-section">
