@@ -1,517 +1,435 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="منصة المناسك العربي - خدمات حجز العمرة المتكاملة">
-    <meta name="theme-color" content="#004d40">
-    <title>منصة المناسك العربي - الصفحة الرئيسية</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/home1.css">
-    <style>
-      /* بطاقات عصرية مع تحريك دخول ورسوم متحركة */
-      .card-section {
-        background: linear-gradient(135deg, #fffbe6 0%, #f5e6a8 100%);
-        border-radius: 22px;
-        padding: 34px 22px 60px 22px;
-        margin: 34px 0 22px 0;
-        border: 2.5px solid #d4af37;
-        box-shadow: 0 18px 48px -12px rgba(212,175,55,0.18), 0 2px 0 #f5e6a8, inset 0 2px 18px #f5e6a8;
-        position: relative;
-        overflow: hidden;
-        transition: box-shadow 0.3s, border-color 0.3s, transform 0.3s;
-        opacity: 0;
-        transform: translateY(40px) scale(0.98);
-        animation: cardFadeIn 0.8s cubic-bezier(.4,0,.2,1) forwards;
-      }
-      .card-section:not(:last-child)::after {
-        content: '';
-        display: block;
-        height: 2px;
-        width: 80%;
-        margin: 0 auto;
-        background: linear-gradient(90deg, #d4af37 0%, #fffbe6 100%);
-        border-radius: 2px;
-        position: absolute;
-        left: 10%;
-        bottom: -18px;
-        z-index: 2;
-      }
-      .card-section .golden-wave {
-        position: absolute;
-        left: 0; right: 0; bottom: 0;
-        width: 100%;
-        height: 32px;
-        pointer-events: none;
-        z-index: 1;
-      }
-      .card-section:hover {
-        box-shadow: 0 32px 72px -8px rgba(212,175,55,0.22), 0 2px 0 #d4af37, inset 0 2px 18px #d4af37;
-        border-color: #bfa12e;
-        transform: translateY(-4px) scale(1.01) rotate(0deg);
-      }
-      .card-section:hover .icon-animate {
-        color: #bfa12e;
-        filter: drop-shadow(0 2px 8px #d4af37);
-      }
-      .card-section {
-        box-shadow: 0 18px 48px -12px rgba(212,175,55,0.18), 0 2px 0 #f5e6a8, inset 0 2px 18px #f5e6a8;
-      }
-      .card-section:nth-child(1) { animation-delay: 0.1s; }
-      .card-section:nth-child(2) { animation-delay: 0.3s; }
-      .card-section:nth-child(3) { animation-delay: 0.5s; }
-      .card-section:nth-child(4) { animation-delay: 0.7s; }
-      .card-section:nth-child(5) { animation-delay: 0.9s; }
-      .card-section {
-        will-change: transform, opacity;
-      }
-      .card-section:hover {
-        box-shadow: 0 32px 72px -8px rgba(212,175,55,0.22), 0 2px 0 #d4af37;
-        border-color: #bfa12e;
-        transform: translateY(-4px) scale(1.01);
-      }
-      .card-section:hover {
-        box-shadow: 0 18px 56px rgba(212,175,55,0.18);
-        transform: translateY(-4px) scale(1.01);
-      }
-      @keyframes cardFadeIn {
-        to {
-          opacity: 1;
-          transform: translateY(0) scale(1);
+let selectedType = null;
+let selectedPrice = 0;
+let discountApplied = false;
+let offer = null; // تعريف المتغير خارج الدالة
+async function fetchOfferDetails() {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    if (!id) {
+        document.getElementById('dynamic-offer-details').innerHTML = '<div style="color:red">لم يتم تحديد العرض</div>';
+        return;
+    }
+    try {
+        const res = await fetch(`https://almanassik-alarabi-server-v-01.onrender.com/api/user/offers/${id}`);
+        offer = await res.json(); // تعيين العرض للمتغير الخارجي
+        if (offer.error) {
+            document.getElementById('dynamic-offer-details').innerHTML = `<div style='color:red'>${offer.error}</div>`;
+            return;
         }
-      }
-      .section-title {
-        font-size: 1.55rem;
-        color: var(--islamic-green);
-        margin-bottom: 22px;
-        font-family: 'Amiri', serif;
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        position: relative;
-      }
-      .section-title .icon-animate {
-        display: inline-block;
-        font-size: 1.5em;
-        color: var(--golden);
-        margin-left: 7px;
-        animation: iconBounce 1.2s infinite alternate;
-      }
-      @keyframes iconBounce {
-        0% { transform: translateY(0) scale(1); }
-        60% { transform: translateY(-7px) scale(1.12); }
-        100% { transform: translateY(0) scale(1); }
-      }
-      /* شهادات العملاء */
-      .testimonial {
-        background: linear-gradient(90deg, #f5e6a8 0%, #fffbe6 100%);
-        border-radius: 12px;
-        padding: 15px 18px;
-        margin-bottom: 1.2em;
-        box-shadow: 0 2px 10px rgba(212,175,55,0.07);
-        font-size: 1.05em;
-        color: #333;
-        border-right: 4px solid var(--golden);
-        position: relative;
-      }
-      .testimonial strong {
-        color: var(--islamic-green);
-        font-size: 1.08em;
-      }
-      /* FAQ Accordion عصري */
-      .faq-item {
-        margin-bottom: 13px;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        background: #fff;
-        transition: box-shadow 0.2s;
-        border: 1px solid #f5e6a8;
-      }
-      .faq-item.active {
-        box-shadow: 0 8px 24px rgba(0,0,0,0.13);
-        border-color: var(--golden);
-      }
-      .faq-question {
-        background: var(--white);
-        padding: 15px 18px;
-        font-weight: 600;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        cursor: pointer;
-        font-size: 1.13em;
-        color: var(--islamic-green);
-        border-bottom: 1px solid #f0f0f0;
-        transition: background 0.2s;
-        position: relative;
-      }
-      .faq-question i {
-        transition: transform 0.3s;
-      }
-      .faq-item.active .faq-question i {
-        transform: rotate(180deg);
-        color: var(--golden);
-      }
-      .faq-question:hover {
-        background: #f5f5f5;
-      }
-      .faq-answer {
-        background: var(--light-gray);
-        padding: 0 18px;
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.5s cubic-bezier(.4,0,.2,1), padding 0.3s;
-        color: #444;
-        font-size: 1em;
-        line-height: 1.8;
-        white-space: pre-line;
-        display: block;
-        /* لإخفاء شريط التمرير إلا عند الحاجة */
-        scrollbar-width: thin;
-        scrollbar-color: var(--golden) #eee;
-        border-top: 1px solid #f0e0a0;
-        word-break: break-word;
-        direction: inherit;
-        box-sizing: border-box;
-      }
-      .faq-item.active .faq-answer {
-        padding: 15px 18px;
-        max-height: 10000px;
-        overflow-y: auto;
-        /* دعم الإجابات الطويلة جداً */
-        min-height: 40px;
-        /* إظهار شريط تمرير فقط عند الحاجة */
-        scrollbar-width: thin;
-        scrollbar-color: var(--golden) #eee;
-      }
-      @media (max-width: 600px) {
-        .card-section {
-          padding: 13px 3px 38px 3px;
-          margin: 13px 0 18px 0;
-          border-radius: 14px;
-        }
-        .section-title { font-size: 1.18rem; gap: 7px; }
-        .testimonial { padding: 10px 7px; font-size: 0.97em; }
-        .faq-question { font-size: 1em; padding: 11px 10px; }
-        .faq-answer { font-size: 0.95em; padding: 0 10px; }
-        .faq-item.active .faq-answer { padding: 11px 10px; }
-      }
-    </style>
-    <!-- سكريبتات اللغة يجب أن تسبق إدراج الشريط العلوي -->
-    <script src="components/lang.js"></script>
-    <!-- <script src="../user/lang/top-bar.js"></script> -->
-    <script src="../user/lang/lang_home1.js"></script>
-</head>
-<body>
-    <img src="img/home.jpg" alt="خلفية منصة المناسك العربي" class="hero-bg-full" />
-    <div class="overlay-bg"></div>
-
-    <!-- Fixed Top Bar -->
-    <div id="top-bar-placeholder"></div>
-    <script>
-      // إدراج الشريط العلوي ديناميكياً بعد تحميل ملفات اللغة
-      fetch('components/top-bar.html')
-        .then(res => res.text())
-        .then(html => {
-          document.getElementById('top-bar-placeholder').innerHTML = html;
-        });
-    </script>
-
-    <!-- Hero Section -->
-    <section class="hero-section" id="heroSection">
-      <div class="hero-bg" id="heroBg"></div>
-      <div class="hero-overlay"></div>
-      <div class="hero-content" style="margin-bottom:100px;">
-    <h1 class="landing-title" style="font-size:2rem;text-align:center;margin-bottom:0.5em;">🕋✨ <span id="landingTitle"></span></h1>
-        <div class="hero-buttons">
-          <a href="golden.html" class="hero-btn gold-btn">
-            <i class="fas fa-gem"></i>
-            <span id="goldBtnText">العروض الذهبية</span>
-          </a>
-          <a href="offers.html" class="hero-btn green-btn">
-            <i class="fas fa-kaaba"></i>
-            <span id="tripsBtnText">تصفح الرحلات</span>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <main class="main-content" id="mainContent">
-      <section class="card-section" style="margin-top:1.5em;">
-        <h2 class="section-title"><span class="icon-animate"><i class="fas fa-book-open"></i></span> <span id="storyTitle"></span></h2>
-        <div class="story-content" id="storyContent" style="white-space:pre-line;line-height:1.85;font-size:1.08em;color:var(--text-dark);text-align:center;margin-bottom:0.7em;"></div>
-        <div class="golden-wave">
-          <svg viewBox="0 0 400 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 24C50 48 150 0 200 24C250 48 350 0 400 24V48H0V24Z" fill="#f5e6a8"/><path d="M0 36C50 48 150 12 200 36C250 48 350 12 400 36V48H0V36Z" fill="#d4af37"/></svg>
-        </div>
-      </section>
-
-      <section class="card-section">
-        <h2 class="section-title"><span class="icon-animate"><i class="fas fa-star"></i></span> <span id="featuresTitle"></span></h2>
-        <ul class="features-list" id="featuresList" style="padding-right:0;list-style:none;"></ul>
-        <div class="golden-wave">
-          <svg viewBox="0 0 400 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 24C50 48 150 0 200 24C250 48 350 0 400 24V48H0V24Z" fill="#f5e6a8"/><path d="M0 36C50 48 150 12 200 36C250 48 350 12 400 36V48H0V36Z" fill="#d4af37"/></svg>
-        </div>
-      </section>
-
-      <section class="card-section">
-        <h2 class="section-title"><span class="icon-animate"><i class="fas fa-medal"></i></span> <span id="goldenTitle"></span></h2>
-        <div class="golden-block" id="goldenBlock" style="border-radius:18px;padding:22px 12px 18px 12px;background:var(--light-gray);box-shadow:none;position:relative;overflow:hidden;">
-          <!-- سيتم ملء عناصر العرض الذهبي ديناميكياً مع أيقونات وعناوين فرعية -->
-          <!-- موجة ذهبية أسفل البطاقة -->
-          <div class="golden-wave" style="position:absolute;left:0;right:0;bottom:0;width:100%;height:32px;pointer-events:none;z-index:1;">
-            <svg viewBox="0 0 400 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 24C50 48 150 0 200 24C250 48 350 0 400 24V48H0V24Z" fill="#f5e6a8"/><path d="M0 36C50 48 150 12 200 36C250 48 350 12 400 36V48H0V36Z" fill="#d4af37"/></svg>
-          </div>
-        </div>
-      </section>
-
-      <section class="card-section">
-        <h2 class="section-title" id="testimonialsTitle"></h2>
-        <div id="testimonials"></div>
-        <div class="golden-wave">
-          <svg viewBox="0 0 400 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 24C50 48 150 0 200 24C250 48 350 0 400 24V48H0V24Z" fill="#f5e6a8"/><path d="M0 36C50 48 150 12 200 36C250 48 350 12 400 36V48H0V36Z" fill="#d4af37"/></svg>
-        </div>
-      </section>
-
-      <section class="card-section">
-        <h2 class="section-title" id="faqTitle"></h2>
-        <div id="faqs"></div>
-        <div class="golden-wave">
-          <svg viewBox="0 0 400 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 24C50 48 150 0 200 24C250 48 350 0 400 24V48H0V24Z" fill="#f5e6a8"/><path d="M0 36C50 48 150 12 200 36C250 48 350 12 400 36V48H0V36Z" fill="#d4af37"/></svg>
-        </div>
-      </section>
-
-      <!-- Contact Card Section (dynamic, multi-language) -->
-      <section class="card-section" style="margin-bottom:2em;">
-        <h2 class="section-title"><span class="icon-animate"><i class="fas fa-headset"></i></span> <span id="contactTitle"></span></h2>
-        <div class="contact-grid" id="contactGrid"></div>
-      </section>
-    </main>
-
-    <script>
-      fetch('https://almanassik-alarabi-server-v-01.onrender.com/api/site-stats/visit', { method: 'POST' });
-
-      // ربط نصوص الصفحة الرئيسية ديناميكياً
-      function fillHome1Texts() {
-        if (!window.home1Texts) return;
-        const lang = window.getCurrentLang ? window.getCurrentLang() : 'ar';
-        const t = window.home1Texts[lang];
-        // تواصل معنا (ديناميكي)
-        document.getElementById('contactTitle').textContent = t.contactTitle;
-        const contactGrid = document.getElementById('contactGrid');
-        contactGrid.innerHTML = '';
-        t.contactMethods.forEach(method => {
-          const a = document.createElement('a');
-          a.className = 'contact-card';
-          a.href = method.href;
-          a.target = '_blank';
-          a.style.textDecoration = 'none';
-          a.innerHTML = `
-            <span class="contact-icon"><i class="${method.icon}"></i></span>
-            <div class="contact-info">
-              <h3>${method.label}</h3>
-              <p>${method.value}</p>
+        // --- دعم الترجمة ---
+        const lang = localStorage.getItem('lang') || document.documentElement.lang || 'ar';
+        const t = window.offerDetailsTexts && window.offerDetailsTexts[lang] ? window.offerDetailsTexts[lang] : window.offerDetailsTexts['ar'];
+        document.getElementById('dynamic-offer-details').innerHTML = `
+            <div class="header">
+                <h1>🕌 ${offer.title || t.pageTitle} 🕌</h1>
+                <p class="subtitle">${t.pageSubtitle || 'رحلة روحانية إلى بيت الله الحرام'}</p>
             </div>
-          `;
-          contactGrid.appendChild(a);
-        });
-        document.getElementById('landingTitle').textContent = t.landingTitle;
-        // تحديث نص الأزرار الرئيسية
-        var goldBtn = document.getElementById('goldBtnText');
-        if (goldBtn) goldBtn.textContent = t.goldBtnText || '';
-        var tripsBtn = document.getElementById('tripsBtnText');
-        if (tripsBtn) tripsBtn.textContent = t.tripsBtnText || '';
-        document.getElementById('storyTitle').textContent = t.storyTitle;
-        document.getElementById('storyContent').textContent = t.storyContent;
-        document.getElementById('featuresTitle').textContent = t.featuresTitle;
-        // مميزات (عناوين فرعية مع أيقونات جمالية)
-        const featuresList = document.getElementById('featuresList');
-        featuresList.innerHTML = '';
-        // أيقونات جمالية متحركة لكل ميزة حسب العنوان
-        const featureIcons = [
-          'fas fa-eye',         // الشفافية الكاملة
-          'fas fa-user-check',  // سهولة الاستخدام
-          'fas fa-shield-alt',  // عروض حقيقية من وكالات موثوقة
-          'fas fa-gift',        // هدية المناسك العربي
-          'fas fa-sliders-h',   // ترتيب ذكي للعروض
-          'fas fa-credit-card'  // طرق دفع مرنة
-        ];
-        t.features.forEach((f, i) => {
-          const div = document.createElement('div');
-          div.style.display = 'flex';
-          div.style.flexDirection = 'column';
-          div.style.alignItems = 'center';
-          div.style.justifyContent = 'center';
-          div.style.marginBottom = '1.1em';
-          div.innerHTML = `
-            <span class="feature-animate-icon" style="font-size:2em;color:var(--golden);margin-bottom:0.2em;display:inline-block;">
-              <i class="${featureIcons[i] || 'fas fa-star'}"></i>
-            </span>
-            <span style="font-size:1.13em;font-weight:600;text-align:center;line-height:1.7;">${f.title}</span>
-            <span style="font-size:1em;font-weight:400;text-align:center;line-height:1.7;margin-top:0.3em;">${f.text}</span>
-          `;
-          featuresList.appendChild(div);
-        });
-
-        // تحريك جميع الأيقونات معاً
-        document.querySelectorAll('.feature-animate-icon').forEach((el, idx) => {
-          el.style.animation = `iconBounce 1.2s ${0.1 * idx}s infinite alternate`;
-        });
-        // الذهبي (عناوين فرعية مع أيقونات متحركة جمالية)
-        document.getElementById('goldenTitle').textContent = t.goldenTitle;
-        const goldenBlock = document.getElementById('goldenBlock');
-        goldenBlock.innerHTML = '';
-        // تعريف الأيقونات لكل عنصر
-        const goldenIcons = [
-          'fas fa-gem',         // ما هو العرض الذهبي
-          'fas fa-star',        // لماذا العرض الذهبي
-          'fas fa-crown',       // أفضل من كل الجوانب
-          'fas fa-magic',       // كيف تستفيد
-          'fas fa-user-shield'  // لماذا أنت
-        ];
-        // عناصر العرض الذهبي: عناوين فرعية مع أيقونات متحركة
-        const goldenSections = [
-          { icon: goldenIcons[0], title: t.goldenWhat, content: t.goldenWhatContent },
-          { icon: goldenIcons[1], title: t.goldenWhy, content: t.goldenWhyContent },
-          // نقاط "أفضل من كل الجوانب" كعناوين فرعية مع أيقونات
-          { icon: goldenIcons[2], title: t.goldenPointsTitle || '', points: t.goldenPoints },
-          { icon: goldenIcons[3], title: t.goldenHow, content: t.goldenHowContent },
-          { icon: goldenIcons[4], title: t.goldenWhyYou, content: t.goldenWhyYouContent }
-        ];
-        goldenSections.forEach((sec, idx) => {
-          const sectionDiv = document.createElement('div');
-          sectionDiv.style.display = 'flex';
-          sectionDiv.style.flexDirection = 'column';
-          sectionDiv.style.alignItems = 'center';
-          sectionDiv.style.justifyContent = 'center';
-          sectionDiv.style.marginBottom = '1.1em';
-          // أيقونة متحركة
-          sectionDiv.innerHTML = `
-            <span class="golden-animate-icon" style="font-size:2em;color:var(--golden);margin-bottom:0.2em;display:inline-block;">
-              <i class="${sec.icon}"></i>
-            </span>
-            <span style="font-size:1.13em;font-weight:600;text-align:center;line-height:1.7;">${sec.title}</span>
-          `;
-          // محتوى نصي أو نقاط
-          if (sec.points && Array.isArray(sec.points)) {
-            // نقاط "أفضل من كل الجوانب" كعناوين فرعية مع أيقونات
-            const pointsList = document.createElement('ul');
-            pointsList.style.paddingRight = '0';
-            pointsList.style.listStyle = 'none';
-            pointsList.style.marginTop = '0.7em';
-            // أيقونات لكل نقطة
-            const pointIcons = [
-              'fas fa-check-circle',
-              'fas fa-bolt',
-              'fas fa-heart',
-              'fas fa-thumbs-up',
-              'fas fa-hand-holding-usd',
-              'fas fa-award'
-            ];
-            sec.points.forEach((pt, i) => {
-              const li = document.createElement('li');
-              li.style.display = 'flex';
-              li.style.alignItems = 'center';
-              li.style.gap = '8px';
-              li.style.marginBottom = '0.5em';
-              li.innerHTML = `
-                <span class="golden-point-icon" style="font-size:1.2em;color:var(--golden);display:inline-block;animation:iconBounce 1.2s ${0.1 * i}s infinite alternate;">
-                  <i class="${pointIcons[i % pointIcons.length]}"></i>
-                </span>
-                <span style="font-size:1em;">${pt.replace(/✅|✔️|💵|🎁/g, '')}</span>
-              `;
-              pointsList.appendChild(li);
-            });
-            sectionDiv.appendChild(pointsList);
-          } else if (sec.content) {
-            const p = document.createElement('p');
-            p.style.textAlign = 'center';
-            p.style.margin = '0.7em 0 0.2em 0';
-            p.textContent = sec.content;
-            sectionDiv.appendChild(p);
-          }
-          goldenBlock.appendChild(sectionDiv);
-        });
-        // تحريك جميع أيقونات العرض الذهبي معاً
-        document.querySelectorAll('.golden-animate-icon').forEach((el, idx) => {
-          el.style.animation = `iconBounce 1.2s ${0.1 * idx}s infinite alternate`;
-        });
-        // شهادات
-        document.getElementById('testimonialsTitle').textContent = t.testimonialsTitle;
-        const testimonials = document.getElementById('testimonials');
-        testimonials.innerHTML = '';
-        t.testimonials.forEach(tm => {
-          const div = document.createElement('div');
-          div.className = 'testimonial';
-          // استخدم الصور الثابتة prs1.jpeg, prs2.jpeg, prs3.jpeg حسب الترتيب
-          const fixedImgs = ['prs1.jpeg', 'prs2.jpeg', 'prs3.jpeg'];
-          const idx = testimonials.childElementCount % fixedImgs.length;
-          const imgSrc = 'img/' + fixedImgs[idx];
-          div.innerHTML = `
-            <div style="display:flex;align-items:center;gap:13px;">
-              <div style="width:64px;height:64px;display:flex;align-items:center;justify-content:center;">
-                <div style="width:54px;height:54px;background:#fffbe6;border:2px solid #d4af37;box-shadow:0 2px 8px #f5e6a8;display:flex;align-items:center;justify-content:center;overflow:hidden;">
-                  <img src="${imgSrc}" alt="${tm.name}" style="width:44px;height:44px;object-fit:cover;border-radius:0;">
+            <div class="agency-info">
+                <img src="${offer.agencies.logo_url}" alt="شعار الوكالة" class="agency-logo">
+                <div class="agency-details">
+                    <h2>${offer.agencies.name}</h2>
+                    <p>${t.agencyDesc || 'وكالة سفر معتمدة لتنظيم رحلات العمرة والحج'}</p>
+                    <a href="https://www.google.com/maps/search/?api=1&query=${offer.agencies.latitude},${offer.agencies.longitude}" target="_blank" style="color:#1976d2;text-decoration:underline;">${t.agencyMap || 'موقع الوكالة على الخريطة'}</a>
                 </div>
-              </div>
-              <div>
-                <strong style="font-size:1.08em;color:var(--islamic-green);">${tm.name}</strong>
-                <div style="font-size:1em;color:#333;margin-top:2px;">${tm.text}</div>
-              </div>
             </div>
-          `;
-          div.style.marginBottom = '1em';
-          testimonials.appendChild(div);
-        });
-        // الأسئلة الشائعة
-        document.getElementById('faqTitle').textContent = t.faqTitle;
-        const faqs = document.getElementById('faqs');
-        faqs.innerHTML = '';
-        t.faqs.forEach((faq, idx) => {
-          const qDiv = document.createElement('div');
-          qDiv.className = 'faq-item';
-          qDiv.innerHTML = `<div class='faq-question'>${faq.q} <i class="fas fa-chevron-down"></i></div><div class='faq-answer'>${faq.a}</div>`;
-          faqs.appendChild(qDiv);
-        });
-        // تفعيل إظهار/إخفاء الأجوبة بشكل ديناميكي مع حركة سلسة
-        document.querySelectorAll('.faq-item').forEach(item => {
-          const question = item.querySelector('.faq-question');
-          const answer = item.querySelector('.faq-answer');
-          answer.style.maxHeight = '0';
-          answer.style.display = 'block';
-          item.classList.remove('active');
-          question.onclick = function() {
-            const isActive = item.classList.contains('active');
-            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
-            if (!isActive) {
-              item.classList.add('active');
+            <div class="main-content">
+                <div class="offer-image" id="offer-image-container">
+                    <img src="${offer.main_image}" alt="${t.mainImageAlt || 'صورة العرض الرئيسية'}" id="offer-main-image" style="cursor:zoom-in;">
+                </div>
+                <div class="offer-details">
+                    <div class="detail-item"><span class="detail-label">📅 ${t.departureDate || 'تاريخ الرحلة'}</span><span class="detail-value">${offer.departure_date}</span></div>
+                    <div class="detail-item"><span class="detail-label">🏠 ${t.returnDate || 'تاريخ العودة'}</span><span class="detail-value">${offer.return_date}</span></div>
+                                        <div class="detail-item"><span class="detail-label">🛫 ${t.flightType || 'نوع الرحلة'}</span><span class="detail-value">${offer.flight_type}</span></div>
+                    <div class="detail-item"><span class="detail-label">⏰ ${t.duration || 'مدة الرحلة'}</span><span class="detail-value">${offer.duration_days} ${t.days || 'يوم'}</span></div>
+                    <div class="detail-item"><span class="detail-label">📍 ${t.entry || 'نقطة الدخول'}</span><span class="detail-value">${offer.entry}</span></div>
+                    <div class="detail-item"><span class="detail-label">📍 ${t.exit || 'نقطة الخروج'}</span><span class="detail-value">${offer.exit}</span></div>
+                    <div class="detail-item"><span class="detail-label">🏨 ${t.hotelName || 'اسم الفندق'}</span><span class="detail-value">${offer.hotel_name}</span></div>
+                    <div class="detail-item"><span class="detail-label">📏 ${t.hotelDistance || 'المسافة من الحرم'}</span><span class="detail-value">${offer.hotel_distance} ${t.km || 'كم'}</span></div>
+                </div>
+            </div>
+            <div class="decorative-pattern"></div>
+            <div class="services-section">
+                <h2 class="services-title">${t.servicesTitle || 'الخدمات المشمولة في العرض'}</h2>
+                <div class="services-grid">
+                    ${offer.services.visa ? `<div class="service-card"><div class="service-icon">📋</div><h3>${t.serviceVisa || 'استخراج الفيزا'}</h3></div>` : ''}
+                    ${offer.services.guide ? `<div class="service-card"><div class="service-icon">🧭</div><h3>${t.serviceGuide || 'مرشد ديني'}</h3></div>` : ''}
+                    ${offer.services.meals ? `<div class="service-card"><div class="service-icon">🍽️</div><h3>${t.serviceMeals || 'الوجبات'}</h3></div>` : ''}
+                    ${offer.services.flight ? `<div class="service-card"><div class="service-icon">✈️</div><h3>${t.serviceFlight || 'الطيران'}</h3></div>` : ''}
+                    ${offer.services.transport ? `<div class="service-card"><div class="service-icon">🚌</div><h3>${t.serviceTransport || 'النقل'}</h3></div>` : ''}
+                </div>
+            </div>
+            <div class="hotel-section">
+                <h2 class="hotel-title">🏨 ${t.hotelTitle || 'الإقامة الفندقية'}</h2>
+                ${offer.hotel_images && offer.hotel_images.length ? `<img src="${offer.hotel_images[0]}" alt="${t.hotelImageAlt || 'صورة الفندق'}" class="hotel-image">` : ''}
+                <div class="detail-item"><span class="detail-label">${t.hotelName || 'اسم الفندق'}</span><span class="detail-value">${offer.hotel_name}</span></div>
+                <div class="detail-item"><span class="detail-label">${t.hotelDistance2 || t.hotelDistance || 'المسافة من الحرم المكي'}</span><span class="detail-value">${offer.hotel_distance} ${t.km || 'كيلومتر'}</span></div>
+            </div>
+            <div class="pricing-section" id="interactive-pricing">
+                <h2 class="pricing-title">💰 ${t.pricingTitle || 'أسعار الرحلة'}</h2>
+                <div class="pricing-grid" id="room-type-grid">
+                    <div class="price-card" data-type="double" data-price="${offer.price_double}">
+                        <div class="price-icon">👤👤</div>
+                        <div class="price-type">${t.doubleRoom || 'ثنائي'}</div>
+                        <div class="price-amount">${offer.price_double} ${t.dzd || 'Dz'}</div>
+                    </div>
+                    <div class="price-card" data-type="triple" data-price="${offer.price_triple}">
+                        <div class="price-icon">👤👤👤</div>
+                        <div class="price-type">${t.tripleRoom || 'ثلاثي'}</div>
+                        <div class="price-amount">${offer.price_triple} ${t.dzd || 'Dz'}</div>
+                    </div>
+                    <div class="price-card" data-type="quad" data-price="${offer.price_quad}">
+                        <div class="price-icon">👤👤👤👤</div>
+                        <div class="price-type">${t.quadRoom || 'رباعي'}</div>
+                        <div class="price-amount">${offer.price_quad} ${t.dzd || 'Dz'}</div>
+                    </div>
+                    <div class="price-card" data-type="quint" data-price="${offer.price_quint}">
+                        <div class="price-icon">👤👤👤👤👤</div>
+                        <div class="price-type">${t.quintRoom || 'خماسي'}</div>
+                        <div class="price-amount">${offer.price_quint} ${t.dzd || 'Dz'}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="decorative-pattern"></div>
+            <div id="total-price-box" style="margin:20px 0;font-size:1.3em;color:#2d5a2d;font-weight:bold;text-align:center;"></div>
+            <div id="discount-msg" style="color:#d4af37;text-align:center;font-weight:bold;"></div>
+            <div style="display:flex;justify-content:center;gap:20px;margin-bottom:20px;">
+                <button id="discount-btn" class="cta-button gift-btn" style="background:rgba(212,175,55,0.12);color:#2d5a2d;position:relative;overflow:hidden;">
+                    <span class="gift-icon">🎁</span> <span>${t.discountBtn || ' هدية المناسك بقيمة 10000 د.ج'}</span>
+                    <span class="gift-anim" style="display:none;"></span>
+                </button>
+                <button id="booking-btn" class="cta-button">${t.bookNow || 'الحجز الآن'}</button>
+            </div>
+            <div id="booking-form-box" style="display:none;margin-top:20px;text-align:center;">
+                <form id="booking-form" style="max-width:400px;margin:auto;background:#fff;padding:20px;border-radius:12px;box-shadow:0 2px 8px #ccc;">
+                    <h3 style="margin-bottom:15px;color:#2d5a2d;">${t.bookingFormTitle || 'استمارة طلب الحجز'}</h3>
+                    <input type="text" name="full_name" placeholder="${t.fullName || 'الاسم الكامل'}" required style="width:100%;margin-bottom:10px;padding:8px;border-radius:6px;border:1px solid #ccc;">
+                    <input type="text" name="phone" placeholder="${t.phone || 'رقم الهاتف'}" required style="width:100%;margin-bottom:10px;padding:8px;border-radius:6px;border:1px solid #ccc;">
+
+                    <div id="passport-image-preview" style="margin-top:10px;">
+                    <p>${t.passportImage || 'صورة جواز السفر'} :</p>
+                        <input type="file" id="passport-image-input" accept="image/*" placeholder="${t.passportImage || 'صورة جواز السفر'}" required style="width:100%;margin-bottom:10px;">
+                    </div>
+                    <button type="submit" class="cta-button" style="width:100%;margin-top:10px;">${t.confirmBooking || 'تأكيد طلب الحجز'}</button>
+                    <div id="form-total-price" style="margin-top:10px;font-size:1.2em;color:#2d5a2d;"></div>
+                </form>
+                <div id="booking-result" style="margin-top:15px;"></div>
+            </div>
+            <div style="text-align: center; margin-top: 30px; color: #2d5a2d; font-style: italic;">
+                <p>"وَأَذِّن فِي النَّاسِ بِالْحَجِّ يَأْتُوكَ رِجَالًا وَعَلَىٰ كُلِّ ضَامِرٍ يَأْتِينَ مِن كُلِّ فَجٍّ عَمِيقٍ"</p>
+                <p style="font-size: 0.9em; margin-top: 10px;">${t.ayahRef || 'سورة الحج - آية 27'}</p>
+            </div>
+        `; // إغلاق القالب النصي هنا بشكل صحيح
+        // إضافة منطق تكبير الصورة بعد تحميل التفاصيل
+        setTimeout(() => {
+            const img = document.getElementById('offer-main-image');
+            if (!img) return;
+            let zoomed = false;
+            img.addEventListener('click', function() {
+                if (!zoomed) {
+                    img.style.position = 'fixed';
+                    img.style.top = '50%';
+                    img.style.left = '50%';
+                    img.style.transform = 'translate(-50%, -50%) scale(1.2)';
+                    img.style.zIndex = '9999';
+                    img.style.boxShadow = '0 0 40px #0008';
+                    img.style.maxWidth = '90vw';
+                    img.style.maxHeight = '90vh';
+                    img.style.cursor = 'zoom-out';
+                    img.style.background = '#fff';
+                    document.body.style.overflow = 'hidden';
+                    zoomed = true;
+                } else {
+                    img.style.position = '';
+                    img.style.top = '';
+                    img.style.left = '';
+                    img.style.transform = '';
+                    img.style.zIndex = '';
+                    img.style.boxShadow = '';
+                    img.style.maxWidth = '';
+                    img.style.maxHeight = '';
+                    img.style.cursor = 'zoom-in';
+                    img.style.background = '';
+                    document.body.style.overflow = '';
+                    zoomed = false;
+                }
+            });
+        }, 100);
+        } catch (e) {
+            document.getElementById('dynamic-offer-details').innerHTML = '<div style="color:red">حدث خطأ أثناء جلب التفاصيل: ' + e.message + '</div>';
+            console.error('Fetch offer details error:', e);
+        }
+    }
+
+
+// إضافة منطق التفاعل بعد تحميل تفاصيل العرض
+function setupOfferInteractions() {
+    // اختيار نوع الغرفة
+    const priceCards = document.querySelectorAll('.price-card');
+    const totalPriceBox = document.getElementById('total-price-box');
+    let finalPrice = 0;
+    priceCards.forEach(card => {
+        card.addEventListener('click', function() {
+            priceCards.forEach(c => c.classList.remove('selected-room'));
+            this.classList.add('selected-room');
+            selectedType = this.getAttribute('data-type');
+            selectedPrice = parseInt(this.getAttribute('data-price'));
+            finalPrice = selectedPrice - (discountApplied ? 10000 : 0);
+            if (discountApplied) {
+                const discountValue = 10000;
+                totalPriceBox.innerHTML = `<span style=\"color:#888;text-decoration:line-through;font-size:0.95em;\">${selectedPrice} د.ج</span> <span style=\"color:#2d5a2d;font-weight:bold;\">${finalPrice} د.ج</span> <span style=\"color:#bfa100;font-size:0.95em;\">(${discountValue * 1} د .ج)</span>`;
+            } else {
+                totalPriceBox.textContent = `السعر الإجمالي: ${finalPrice} د.ج`;
             }
-          };
         });
-      }
-      // عند تحميل الصفحة أو تغيير اللغة
-      document.addEventListener('DOMContentLoaded', fillHome1Texts);
-      window.addEventListener('storage', fillHome1Texts);
-    </script>
+    });
 
-    <!-- يتم استدعاء الشريط السفلي من ملف خارجي -->
-      <!-- Fixed Bottom Navigation -->
-    <div id="bottom-bar-placeholder"></div>
-
-    <!-- Scroll to Top Button تم حذفه -->
-  
-    <script src="components/include-bars.js"></script>
-    <script src="js/home1.js"></script>
-    <script>
-    // تأثير التمويه عند التمرير
-    window.addEventListener('scroll', function() {
-        if(window.scrollY > 10) {
-            document.body.classList.add('scrolled');
+    // زر هدية المناسك
+    const discountBtn = document.getElementById('discount-btn');
+    const discountMsg = document.getElementById('discount-msg');
+    discountBtn.addEventListener('click', function() {
+        if (!selectedType) {
+            discountMsg.textContent = 'يرجى اختيار نوع الغرفة أولاً.';
+            return;
+        }
+        if (!discountApplied) {
+            discountApplied = true;
+            finalPrice = selectedPrice - 10000;
+            const discountValue = 10000;
+            totalPriceBox.innerHTML = `<span style=\"color:#888;text-decoration:line-through;font-size:0.95em;\">${selectedPrice} د.ج</span> <span style=\"color:#2d5a2d;font-weight:bold;\">${finalPrice} د.ج</span> <span style=\"color:#bfa100;font-size:0.95em;\">(${discountValue * 1}- د.ج)</span>`;
+            discountMsg.textContent = '🎁 لقد استفدت من  هدية المناسك!';
+            discountBtn.classList.add('selected-discount');
         } else {
-            document.body.classList.remove('scrolled');
+            discountMsg.textContent = 'تم تطبيق هدية المناسك مسبقاً.';
+            discountBtn.classList.add('selected-discount');
         }
     });
-    </script>
-</body>
-</html>
+    // إذا كان هدية المناسك مطبق بالفعل (مثلاً عند إعادة تحميل الصفحة)
+    if (discountApplied) {
+        discountBtn.classList.add('selected-discount');
+    }
+
+    // زر الحجز
+    const bookingBtn = document.getElementById('booking-btn');
+    const bookingFormBox = document.getElementById('booking-form-box');
+    bookingBtn.addEventListener('click', function() {
+        if (!selectedType) {
+            discountMsg.textContent = 'يرجى اختيار نوع الغرفة أولاً.';
+            return;
+        }
+        bookingFormBox.style.display = 'block';
+        discountMsg.textContent = '';
+        // تحديث المبلغ الإجمالي في الاستمارة
+        document.getElementById('form-total-price').textContent = `المبلغ الإجمالي: ${finalPrice} د.ج`;
+    });
+
+    // إرسال الاستمارة
+    const bookingForm = document.getElementById('booking-form');
+    const bookingResult = document.getElementById('booking-result');
+    const passportInput = document.getElementById('passport-image-input');
+    bookingForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        bookingResult.textContent = 'جاري إرسال الحجز...';
+        const full_name = bookingForm.full_name.value;
+        const phone = bookingForm.phone.value;
+        const file = passportInput.files[0];
+        const formData = new FormData();
+        formData.append('offer_id', offer.id);
+        formData.append('full_name', full_name);
+        formData.append('phone', phone);
+        formData.append('room_type', selectedType);
+        formData.append('discount_applied', discountApplied); // إرسال قيمة منطقية مباشرة
+        // إضافة السعر السابق وقيمة الهدية
+        let priceBeforeDiscount = selectedPrice;
+        let discountValue = discountApplied ? 10000 : 0;
+        let finalPrice = discountApplied ? (selectedPrice - 10000) : selectedPrice;
+        formData.append('price_before_discount', priceBeforeDiscount);
+        formData.append('discount', discountValue);
+        formData.append('final_price', finalPrice);
+        if (file) {
+            formData.append('passport_image', file, file.name); // إضافة صورة الجواز إذا وجدت
+        }
+        try {
+            const res = await fetch('https://almanassik-alarabi-server-v-01.onrender.com/api/user/offers/bookings', {
+                method: 'POST',
+                body: formData
+            });
+            // تحقق من حالة الاستجابة
+            if (!res.ok) {
+                const errorText = await res.text();
+                bookingResult.textContent = `❌ خطأ في الاستجابة من الخادم: ${res.status} - ${errorText}`;
+                return;
+            }
+            const result = await res.json();
+            if (result.success) {
+                let message = '<div style="color:#2d5a2d;font-size:1.2em;font-weight:bold;">';
+                message += '<span style="font-size:2em;">🎉🎁</span><br>';
+                message += '✅ تم إرسال الحجز بنجاح! سيتم الاتصال بك قريباً.';
+                if (discountApplied) {
+                    message += '<br><span style="color:#d4af37;font-size:1.1em;">🎁 لقد استفدت من هدية المناسك!</span>';
+                }
+                message += '</div>';
+                bookingResult.innerHTML = message;
+                bookingForm.reset();
+                // تجهيز كائن الحجز بكافة الحقول المطلوبة
+                const booking = result.booking;
+                booking.offer_title = offer.title;
+                booking.final_price = finalPrice;
+                booking.price_before_discount = priceBeforeDiscount;
+                booking.discount = discountValue;
+                booking.persons = 1;
+                // تنسيق التاريخ للعرض العربي
+                if (booking.created_at) {
+                    const dateObj = new Date(booking.created_at);
+                    booking.bookingDate = dateObj.toLocaleDateString('ar-SA');
+                }
+                const bookingJson = JSON.stringify(booking);
+                const encodedBooking = encodeURIComponent(bookingJson);
+                setTimeout(function() {
+                    window.location.href = `booking-success.html?booking=${encodedBooking}`;
+                }, 2500);
+            } else {
+                bookingResult.textContent = `❌ خطأ أثناء إرسال الحجز: ${result.error || ''} ${(result.details || '')}`;
+            }
+        } catch (err) {
+            bookingResult.textContent = `❌ خطأ في الاتصال بالخادم: ${err.message}`;
+            console.error('تفاصيل الخطأ في الاتصال:', err);
+        }
+    });
+}
+
+// استدعاء الدالة عند تحميل الصفحة
+fetchOfferDetails();
+
+// إضافة CSS ديناميكي لتأثير الزر عند تطبيق هدية المناسك وتحديد نوع الغرفة
+function injectDynamicStyles() {
+    if (document.getElementById('dynamic-offer-style')) return;
+    const style = document.createElement('style');
+    style.id = 'dynamic-offer-style';
+    style.innerHTML = `
+        #discount-btn.selected-discount, #discount-btn.selected-discount:focus {
+            background: linear-gradient(90deg, #ffe082 0%, #fff8e1 100%) !important;
+            color: #bfa100 !important;
+            border: 2px solid #d4af37 !important;
+            box-shadow: 0 0 10px #ffe08299;
+            font-weight: bold;
+            outline: none;
+        }
+        .price-card.selected-room {
+            border: 2px solid #1976d2 !important;
+            background: #e3f2fd !important;
+            box-shadow: 0 0 8px #1976d255;
+            font-weight: bold;
+            color: #1976d2;
+            position: relative;
+        }
+        .price-card.selected-room::after {
+            content: "✓";
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            color: #388e3c;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+    `;
+    document.head.appendChild(style);
+}
+injectDynamicStyles();
+
+// بعد جلب التفاصيل، فعل التفاعلات
+window.addEventListener('DOMContentLoaded', () => {
+    // ننتظر قليلاً حتى يتم تحميل التفاصيل
+    setTimeout(setupOfferInteractions, 700);
+});
+
+if (window.setLanguage) {
+    const origSetLanguage = window.setLanguage;
+    window.setLanguage = function(lang) {
+        origSetLanguage(lang);
+        // إعادة بناء تفاصيل العرض وتفعيل الأحداث بعد تغيير اللغة
+        fetchOfferDetails();
+        setTimeout(setupOfferInteractions, 700);
+    };
+}
+
+window.offerDetailsTexts = {
+  ar: {
+    pageTitle: "تفاصيل العرض",
+    pageSubtitle: "رحلة روحانية إلى بيت الله الحرام",
+    flightType: "نوع الرحلة",
+    departureDate: "تاريخ الرحلة",
+    returnDate: "تاريخ العودة",
+    duration: "مدة الرحلة",
+    days: "يوم",
+    entry: "نقطة الدخول",
+    exit: "نقطة الخروج",
+    hotelName: "اسم الفندق",
+    hotelDistance: "المسافة من الحرم",
+    km: "كم",
+    doubleRoom: "ثنائي",
+    tripleRoom: "ثلاثي",
+    quadRoom: "رباعي",
+    quintRoom: "خماسي",
+    discountBtn: " هدية المناسك بقيمة 10000 د.ج",
+    bookNow: "طلب الحجز",
+    bookingFormTitle: "استمارة طلب الحجز",
+    passportImage:"قم بتحميل صورة جواز السفر",
+    fullName: "الاسم الكامل",
+    phone: "رقم الهاتف",
+    confirmBooking: "تأكيد طلب الحجز",
+    pricingTitle: "أسعار الرحلة",
+    servicesTitle: "الخدمات المشمولة في العرض",
+    hotelTitle: "الإقامة الفندقية",
+    ayahRef: "سورة الحج - آية 27",
+    serviceVisa: "استخراج الفيزا",
+    serviceVisaDesc: "خدمة استخراج التأشيرة",
+    serviceGuide: "مرشد ديني",
+    serviceGuideDesc: "مرشد متخصص للإرشاد",
+    serviceMeals: "الوجبات",
+    serviceMealsDesc: "وجبات متنوعة وشهية",
+    serviceFlight: "الطيران",
+    serviceFlightDesc: "تذاكر الطيران ذهاب وإياب",
+    serviceTransport: "النقل",
+    serviceTransportDesc: "النقل الداخلي المريح",
+  },
+  fr: {
+    pageTitle: "Détails de l'offre",
+    pageSubtitle: "Voyage spirituel à la Mecque",
+    flightType: "Type de vol",
+    departureDate: "Date de départ",
+    returnDate: "Date de retour",
+    duration: "Durée du voyage",
+    days: "jour",
+    entry: "Point d'entrée",
+    exit: "Point de sortie",
+    hotelName: "Nom de l'hôtel",
+    hotelDistance: "Distance de la mosquée",
+    km: "km",
+    doubleRoom: "Double",
+    tripleRoom: "Triple",
+    quadRoom: "Quadruple",
+    quintRoom: "Quintuple",
+    discountBtn: "Cadeau de rites d'une valeur de 10000 DZD",
+    bookNow: "Demander la réservation",
+    bookingFormTitle: "Formulaire de réservation",
+        passportImage:"Téléchargez une photo du passeport",
+
+    fullName: "Nom complet",
+    phone: "Numéro de téléphone",
+    confirmBooking: "Confirmer la réservation",
+    pricingTitle: "Prix du voyage",
+    servicesTitle: "Services inclus dans l'offre",
+    hotelTitle: "Hébergement à l'hôtel",
+    ayahRef: "Sourate Al-Hajj - Verset 27",
+    serviceVisa: "Obtention du visa",
+    serviceVisaDesc: "Service d'obtention du visa",
+    serviceGuide: "Guide religieux",
+    serviceGuideDesc: "Guide spécialisé pour l'orientation",
+    serviceMeals: "Repas",
+    serviceMealsDesc: "Repas variés et délicieux",
+    serviceFlight: "Vol",
+    serviceFlightDesc: "Billets d'avion aller-retour",
+    serviceTransport: "Transport",
+    serviceTransportDesc: "Transport intérieur confortable",
+  }
+};
