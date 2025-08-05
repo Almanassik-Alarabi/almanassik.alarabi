@@ -529,12 +529,10 @@ exportOffersBtn && (exportOffersBtn.onclick = async function() {
 
 // --- الخدمات (services) ---
 const servicesList = [
-  { key: 'الاطعام', icon: 'fa-utensils', color: '#f7ca18' },
-  { key: 'مواصلات', icon: 'fa-bus', color: '#1e824c' },
-  { key: 'مرشد', icon: 'fa-user-tie', color: '#34495e' },
-{ key: 'تأشيرة الطيران', icon: 'fa-passport', color: '#16a085' },
-  { key: 'النقل', icon: 'fa-mosque', color: '#176a3d' },
-  { key: 'تأمين صحي', icon: 'fa-briefcase-medical', color: '#e67e22' },
+  { key: 'التأشيرة', icon: 'fa-passport', color: '#176a3d' },
+  { key: 'الإرشاد', icon: 'fa-user-tie', color: '#34495e' },
+  { key: 'الإطعام', icon: 'fa-utensils', color: '#f7ca18' },
+  { key: 'النقل', icon: 'fa-bus', color: '#1e824c' },
 ];
 
 const servicesIconsContainer = document.getElementById('servicesIconsContainer');
